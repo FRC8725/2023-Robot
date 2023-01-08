@@ -54,6 +54,7 @@ public class SwerveModule {
         turningMotor = new LazyTalonFX(turningMotorId, turningGearRatio);
         configTurningMotor(turningMotorReversed);
 
+
 //         turning Motor configuration
 
         turningPIDController = new PIDController(SwerveModuleConstants.kPTurning, SwerveModuleConstants.kITurning, SwerveModuleConstants.kDTurning);
