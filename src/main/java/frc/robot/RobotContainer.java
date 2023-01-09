@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,33 +22,33 @@ import frc.robot.commands.SwerveJoystickCmd;
 public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
-    private final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem();
+    private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
     private final GamepadJoystick m_swerveJoystick = new GamepadJoystick(0);
     
-    
-    private final Field2d m_field = new Field2d();
-    private final SendableChooser<Command> autoCommand;
-
+    private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
     public RobotContainer() {
         m_swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
                 m_swerveSubsystem,
-                () -> m_swerveJoystick.get_LStickY(),
+                m_swerveJoystick::get_LStickY,
                 () -> -m_swerveJoystick.get_LStickX(),
                 () -> -m_swerveJoystick.get_RStickX(),
                 () -> !m_swerveJoystick.btn_A.getAsBoolean()));
         configureButtonBindings();
-        autoCommand = new SendableChooser<>();
-        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
-        SmartDashboard.putData(autoCommand);
+        putToDashboard();
     }
 
     private void configureButtonBindings() {
        m_swerveJoystick.btn_X.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
     }
 
+    private void putToDashboard() {
+        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
+        SmartDashboard.putData(autoCommand);
+    }
+
     public Command getAutonomousCommand() {
-        SmartDashboard.putData(m_field);
+        SmartDashboard.putData(m_swerveSubsystem.getfield2d());
         m_swerveSubsystem.resetEncoders();
         return autoCommand.getSelected();
     }

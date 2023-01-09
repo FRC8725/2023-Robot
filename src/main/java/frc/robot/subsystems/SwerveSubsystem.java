@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+// import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +17,14 @@ import frc.robot.RobotMap.DriverPort;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class SwerveSubsystem extends SubsystemBase {
+
+    private final static SwerveSubsystem instance = new SwerveSubsystem();
+
+    public static SwerveSubsystem getInstance() {
+        return instance;
+    }
+
+    // private Vision cam = Vision.getInstace();
 
     private final SwerveModule frontLeft = new SwerveModule(
             DriverPort.kFrontLeftDriveMotorPort,
@@ -53,12 +63,12 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[] {
+    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),
         backLeft.getPosition(),
         backRight.getPosition()
-      });
+      }, new Pose2d());
     private final Field2d m_field = new Field2d();
 
     public SwerveSubsystem() {
@@ -69,7 +79,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 resetEncoders();
             } catch (Exception e) {
             }
-        }).start();
+        }).start(); 
     }
 
     public void zeroHeading() {
@@ -85,16 +95,27 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return odometer.getPoseMeters();
+        //return odometer.getPoseMeters();
+        return SwerveEstimator.getEstimatedPosition();
+    }
+
+    public Field2d getfield2d() {
+        return m_field;
+    }
+
+    public void updateWithVision(Pose2d pose, double time) {
+        SwerveEstimator.addVisionMeasurement(pose, time);
     }
 
     public void resetOdometry(Pose2d pose) {
-        odometer.resetPosition(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
+        SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
     }
 
     @Override
     public void periodic() {
-        odometer.update(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
+        SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition()});
+        // Pair<Pose2d, Double> res = cam.getEstimatedGlobalPose(SwerveEstimator.getEstimatedPosition());
+        // if (res.getFirst() != null) SwerveEstimator.addVisionMeasurement(res.getFirst(), res.getSecond());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putData(m_field);
