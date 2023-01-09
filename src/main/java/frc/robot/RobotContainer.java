@@ -30,10 +30,12 @@ public class RobotContainer
     public RobotContainer() {
         m_swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
                 m_swerveSubsystem,
-                m_swerveJoystick::get_LStickY,
+                () -> m_swerveJoystick.get_LStickY(),
                 () -> -m_swerveJoystick.get_LStickX(),
                 () -> -m_swerveJoystick.get_RStickX(),
-                () -> !m_swerveJoystick.btn_A.getAsBoolean()));
+                () -> !m_swerveJoystick.getRawButton(1),
+                () -> m_swerveJoystick.getRawButton(6),
+                () -> !m_swerveJoystick.getRawButton(2)));
         configureButtonBindings();
         putToDashboard();
     }
