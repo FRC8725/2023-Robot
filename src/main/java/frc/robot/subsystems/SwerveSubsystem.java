@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -52,7 +54,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    // private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),

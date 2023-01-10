@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -36,9 +39,9 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = 0.58;
+        public static final double kTrackWidth = Units.inchesToMeters(26);
         // Distance between right and left wheels
-        public static final double kWheelBase = 0.58;
+        public static final double kWheelBase = Units.inchesToMeters(26);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -89,12 +92,26 @@ public final class Constants {
         public static final double kPYController = 0.12;
         public static final double kPThetaController = 0.8;
 
+        public static final TrapezoidProfile.Constraints kDriveControllerConstraints = //
+                new TrapezoidProfile.Constraints(
+                        kMaxSpeedMetersPerSecond,
+                        kMaxAccelerationMetersPerSecondSquared);
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
     }
 
+    public static final class VisionConstants{
+        public static final Transform3d Photon2Robot = new Transform3d(
+                new Translation3d(-DriveConstants.kWheelBase/2, 0, 0.5),
+                new Rotation3d());
+        public static final Transform3d Robot2Photon = Photon2Robot.inverse();
+        public static final Transform3d Tag2Goal =
+                new Transform3d(
+                        new Translation3d(1.5, 0, 0),
+                        new Rotation3d(0, 0, Math.PI));
+    }
 
     public static final class Elevator {
         //public static final double winchEncoderPositionFactor = 1./45;
