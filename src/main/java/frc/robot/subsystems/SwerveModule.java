@@ -22,16 +22,12 @@ public class SwerveModule {
 
     private final LazyTalonFX driveMotor, turningMotor;
 
-    private PIDController turningPIDController;
+    private final PIDController turningPIDController;
 
     private final CANCoder absoluteEncoder;
-    private final CANCoderConfiguration absoluteEncoderConfiguration;
 
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetAngle;
-
-    private final double driveGearRatio = SwerveModuleConstants.kDriveMotorGearRatio;
-    private final double turningGearRatio = SwerveModuleConstants.kTurningMotorGearRatio;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
@@ -39,7 +35,7 @@ public class SwerveModule {
         this.absoluteEncoderOffsetAngle = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderId);
-        absoluteEncoderConfiguration = new CANCoderConfiguration();
+        CANCoderConfiguration absoluteEncoderConfiguration = new CANCoderConfiguration();
         
         absoluteEncoderConfiguration.sensorTimeBase = SensorTimeBase.Per100Ms_Legacy;
         absoluteEncoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
@@ -48,9 +44,11 @@ public class SwerveModule {
         absoluteEncoder.configAllSettings(absoluteEncoderConfiguration);
         absoluteEncoder.setPositionToAbsolute();
 
+        double driveGearRatio = SwerveModuleConstants.kDriveMotorGearRatio;
         driveMotor = new LazyTalonFX(driveMotorId, driveGearRatio);
         configDriveMotor(driveMotorReversed);
 
+        double turningGearRatio = SwerveModuleConstants.kTurningMotorGearRatio;
         turningMotor = new LazyTalonFX(turningMotorId, turningGearRatio);
         configTurningMotor(turningMotorReversed);
 

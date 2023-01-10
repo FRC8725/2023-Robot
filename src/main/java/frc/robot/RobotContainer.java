@@ -5,16 +5,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.CorrectPosition;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.vision.AprilTag;
 import org.photonvision.PhotonCamera;
+import frc.robot.commands.Teleop.SwerveJoystickCmd;
 
 
 /**
@@ -29,14 +28,11 @@ public class RobotContainer
     private final PhotonCamera photonCamera = new PhotonCamera("");
 
     // The robot's subsystems and commands are defined here...
-    private final SwerveSubsystem m_swerveSubsystem = new SwerveSubsystem();
     private final AprilTag m_aprilTag = new AprilTag(photonCamera);
+    private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
     private final GamepadJoystick m_swerveJoystick = new GamepadJoystick(0);
     
-    
-    private final Field2d m_field = new Field2d();
-    private final SendableChooser<Command> autoCommand;
-
+    private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
 
     public RobotContainer() {
@@ -45,11 +41,11 @@ public class RobotContainer
                 () -> m_swerveJoystick.get_LStickY(),
                 () -> -m_swerveJoystick.get_LStickX(),
                 () -> -m_swerveJoystick.get_RStickX(),
-                () -> !m_swerveJoystick.btn_A.getAsBoolean()));
+                () -> !m_swerveJoystick.btn_topL.getAsBoolean(),
+                () -> m_swerveJoystick.btn_topR.getAsBoolean()
+        ));
         configureButtonBindings();
-        autoCommand = new SendableChooser<>();
-        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
-        SmartDashboard.putData(autoCommand);
+        putToDashboard();
     }
 
     private void configureButtonBindings() {
@@ -59,8 +55,13 @@ public class RobotContainer
         m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, m_aprilTag, 2));
     }
 
+    private void putToDashboard() {
+        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
+        SmartDashboard.putData(autoCommand);
+    }
+
     public Command getAutonomousCommand() {
-        SmartDashboard.putData(m_field);
+        SmartDashboard.putData(m_swerveSubsystem.getfield2d());
         m_swerveSubsystem.resetEncoders();
         return autoCommand.getSelected();
     }

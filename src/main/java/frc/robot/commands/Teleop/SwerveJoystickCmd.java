@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Teleop;
 
 import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -14,17 +14,18 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> fieldOrientedFunction;
+    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-            Supplier<Boolean> fieldOrientedFunction) {
+    Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
+    Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.fieldOrientedFunction = fieldOrientedFunction;
+        this.decreaseSpeedFunction = decreaseSpeedFunction;
         this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
@@ -48,15 +49,15 @@ public class SwerveJoystickCmd extends CommandBase {
         ySpeed = Math.abs(ySpeed) > Constants.Joystick.kDeadband ? ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > Constants.Joystick.kDeadband ? turningSpeed : 0.0;
 
-//        if (xSpeed == 0 && ySpeed == 0 && turningSpeed == 0) {
-//           this.swerveSubsystem.stopModules();
-//           return;
-//        }
+        if (xSpeed == 0 && ySpeed == 0 && turningSpeed == 0) {
+           this.swerveSubsystem.stopModules();
+           return;
+        }
 
         // 3. Make the driving smoother
-        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? 0.2 : 1.);
+        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? 0.2 : 1.);
+        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * (decreaseSpeedFunction.get() ? 0.2 : 1.);
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;

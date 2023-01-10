@@ -8,7 +8,6 @@ public class GamepadJoystick extends Joystick {
         super(port);
     }
 
-    // setting Button
     public Trigger btn_X = new JoystickButton(this, 1);
     public Trigger btn_A = new JoystickButton(this, 2);
     public Trigger btn_B = new JoystickButton(this, 3);
