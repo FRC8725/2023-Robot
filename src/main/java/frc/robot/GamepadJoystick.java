@@ -9,6 +9,19 @@ public class GamepadJoystick extends Joystick {
     }
 
     // setting Button
+    public int btn_X_port =  1;
+    public int btn_A_port =  2;
+    public int btn_B_port =  3;
+    public int btn_Y_port =  4;
+
+    public int btn_topL_port = 5;
+    public int btn_topR_port = 6;
+    public int btn_triggerL_port = 7;
+    public int btn_triggerR_port = 8;
+
+    public int btn_Start_port = 9;
+    public int btn_Back_port = 10;
+
     public Trigger btn_X = new JoystickButton(this, 1);
     public Trigger btn_A = new JoystickButton(this, 2);
     public Trigger btn_B = new JoystickButton(this, 3);

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Teleop;
 
 import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -14,13 +14,13 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction, returnPositionFunction;
+    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction, returnPositionFunction, OnedirectionFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
     Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
     Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction,
-    Supplier<Boolean> returnPositionFunction) {
+    Supplier<Boolean> returnPositionFunction, Supplier<Boolean> OnedirectionFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
@@ -28,6 +28,7 @@ public class SwerveJoystickCmd extends CommandBase {
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.decreaseSpeedFunction = decreaseSpeedFunction;
         this.returnPositionFunction = returnPositionFunction;
+        this.OnedirectionFunction = OnedirectionFunction;
         this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
@@ -54,6 +55,14 @@ public class SwerveJoystickCmd extends CommandBase {
         if (xSpeed == 0 && ySpeed == 0 && turningSpeed == 0 && returnPositionFunction.get()) {
            this.swerveSubsystem.stopModules();
            return;
+        }
+
+        if (OnedirectionFunction.get()) {
+            if (xSpeed > ySpeed) {
+                ySpeed = 0;
+            } else {
+                xSpeed = 0;
+            }
         }
 
         // 3. Make the driving smoother
