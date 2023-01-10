@@ -1,4 +1,4 @@
-package frc.robot.commands.Teleop;
+package frc.robot.commands;
 
 import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
