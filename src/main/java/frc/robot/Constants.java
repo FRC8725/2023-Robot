@@ -113,6 +113,12 @@ public final class Constants {
                         new Rotation3d(0, 0, Math.PI));
     }
 
+    public static final class Balance {
+        public static int kPBalance = 1;
+        public static int kIBalance = 0;
+        public static int kDBalance = 0;
+    }
+
     public static final class Elevator {
         //public static final double winchEncoderPositionFactor = 1./45;
         //public static final double elevatorEncoderPositionFactor = 1./30;

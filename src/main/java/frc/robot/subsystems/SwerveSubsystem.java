@@ -2,10 +2,7 @@ package frc.robot.subsystems;
 
 
 import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI;
-// import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,7 +23,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return instance;
     }
 
-    // private Vision cam = Vision.getInstace();
 
     private final SwerveModule frontLeft = new SwerveModule(
             DriverPort.kFrontLeftDriveMotorPort,
@@ -66,10 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[] {
-        frontLeft.getPosition(),
-        frontRight.getPosition(),
-        backLeft.getPosition(),
-        backRight.getPosition()
+        frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
       }, new Pose2d());
     private final Field2d m_field = new Field2d();
 
@@ -97,8 +90,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        //return odometer.getPoseMeters();
         return SwerveEstimator.getEstimatedPosition();
+    }
+
+    public double getPeach() {
+        return gyro.getPitch();
     }
 
     public Field2d getfield2d() {
@@ -116,8 +112,6 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition()});
-        // Pair<Pose2d, Double> res = cam.getEstimatedGlobalPose(SwerveEstimator.getEstimatedPosition());
-        // if (res.getFirst() != null) SwerveEstimator.addVisionMeasurement(res.getFirst(), res.getSecond());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putData(m_field);

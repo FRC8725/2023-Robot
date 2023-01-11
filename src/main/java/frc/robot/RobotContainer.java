@@ -14,6 +14,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
 import org.photonvision.PhotonCamera;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.BalanceCmd;
 
 
 /**
@@ -53,6 +54,7 @@ public class RobotContainer
         m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, m_visionManager, 0));
         m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, m_visionManager, 1));
         m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, m_visionManager, 2));
+        m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
     }
 
     private void putToDashboard() {
