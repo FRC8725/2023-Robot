@@ -93,7 +93,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return SwerveEstimator.getEstimatedPosition();
     }
 
-    public double getPeach() {
+    public double getPitch() {
         return gyro.getPitch();
     }
 
