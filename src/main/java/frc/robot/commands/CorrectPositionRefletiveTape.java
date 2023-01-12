@@ -1,10 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -17,7 +14,7 @@ import frc.robot.subsystems.VisionManager;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 
-public class CorrectPosition extends CommandBase {
+public class CorrectPositionRefletiveTape extends CommandBase {
 
     private SwerveSubsystem swerveSubsystem;
     private ProfiledPIDController xController, yController, thetaController;
@@ -28,7 +25,7 @@ public class CorrectPosition extends CommandBase {
     // 1 stand for middle
     // 2 stand for right side
 
-    public CorrectPosition(SwerveSubsystem swerveSubsystem, int whereChase) {
+    public CorrectPositionRefletiveTape(SwerveSubsystem swerveSubsystem, int whereChase) {
         // 0 stand for left side
         // 1 stand for middle
         // 2 stand for right side
@@ -52,12 +49,12 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        VisionManager.setLED(true);
+        VisionManager.setLED(false);
     }
 
     @Override
     public void execute() {
-        Transform3d relativePos = VisionManager.getAprilTagRelative();
+        Transform3d relativePos = VisionManager.getReflectiveTapeRelative();
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
                 swerveSubsystem.getPose().getY(),
@@ -66,19 +63,7 @@ public class CorrectPosition extends CommandBase {
         );
         var camPose = robotPose.transformBy(VisionConstants.Photon2Robot);
         var targetPose = camPose.transformBy(relativePos);
-        Transform3d tag2goal = new Transform3d();
-
-        // Change the place we want to go.
-        switch (whereChase) {
-            case 0:
-                tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, 1, 0), new Rotation3d()));
-                break;
-            case 2:
-                tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, -1, 0), new Rotation3d()));
-                break;
-            default:
-                tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, 0, 0), new Rotation3d()));
-        }
+        Transform3d tag2goal = new Transform3d().plus(new Transform3d(new Translation3d(-1, 0, 0), new Rotation3d()));
 
         var goalPose = targetPose.transformBy(VisionConstants.Tag2Goal).toPose2d();
 

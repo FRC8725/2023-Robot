@@ -1,12 +1,13 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+
+import java.util.List;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -28,8 +29,8 @@ public final class Constants {
         public static final double kDriveMotorGearRatio = 1 / 8.14;
         public static final double kTurningMotorGearRatio = 7. / 150.;
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
+        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
         public static final double kWheelCircumference = kWheelDiameterMeters * 2 * Math.PI;
         public static final double kPTurning = .4;
@@ -65,7 +66,7 @@ public final class Constants {
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
-        
+
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetAngle = 178.9453;
         public static final double kFrontRightDriveAbsoluteEncoderOffsetAngle = 133.0664;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetAngle = 121.99219;
@@ -102,9 +103,9 @@ public final class Constants {
                         kMaxAngularAccelerationRadiansPerSecondSquared);
     }
 
-    public static final class VisionConstants{
+    public static final class VisionConstants {
         public static final Transform3d Photon2Robot = new Transform3d(
-                new Translation3d(-DriveConstants.kWheelBase/2, 0, 0.5),
+                new Translation3d(-DriveConstants.kWheelBase / 2, 0, 0.5),
                 new Rotation3d());
         public static final Transform3d Robot2Photon = Photon2Robot.inverse();
         public static final Transform3d Tag2Goal =
@@ -114,9 +115,25 @@ public final class Constants {
     }
 
     public static final class Balance {
-        public static int kPBalance = 1;
-        public static int kIBalance = 0;
-        public static int kDBalance = 0;
+        public static final int kPBalance = 1;
+        public static final int kIBalance = 0;
+        public static final int kDBalance = 0;
+    }
+
+    public static final class FieldConstants {
+        public static final AprilTag aprilTag1 = new AprilTag(1, new Pose3d(new Pose2d(Units.inchesToMeters(610.77), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(180))));
+        public static final AprilTag aprilTag2 = new AprilTag(2, new Pose3d(new Pose2d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Rotation2d.fromDegrees(180))));
+        public static final AprilTag aprilTag3 = new AprilTag(3, new Pose3d(new Pose2d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Rotation2d.fromDegrees(180))));
+        public static final AprilTag aprilTag4 = new AprilTag(4, new Pose3d(new Pose2d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Rotation2d.fromDegrees(180))));
+        public static final AprilTag aprilTag5 = new AprilTag(5, new Pose3d(new Pose2d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag6 = new AprilTag(6, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag7 = new AprilTag(7, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag8 = new AprilTag(8, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(0))));
+        public static final double length = Units.feetToMeters(54.27083);
+        public static final double width = Units.feetToMeters(26.2916);
+        public static final AprilTagFieldLayout atfl = new AprilTagFieldLayout(
+                List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag4, aprilTag5, aprilTag6, aprilTag7, aprilTag8),
+                FieldConstants.length, FieldConstants.width);
     }
 
     public static final class Elevator {

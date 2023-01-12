@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.function.Supplier;
 
 public class SwerveJoystickCmd extends CommandBase {
 
@@ -18,8 +19,8 @@ public class SwerveJoystickCmd extends CommandBase {
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-    Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-    Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction) {
+                             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
+                             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
@@ -50,8 +51,8 @@ public class SwerveJoystickCmd extends CommandBase {
         turningSpeed = Math.abs(turningSpeed) > Constants.Joystick.kDeadband ? turningSpeed : 0.0;
 
         if (xSpeed == 0 && ySpeed == 0 && turningSpeed == 0) {
-           this.swerveSubsystem.stopModules();
-           return;
+            this.swerveSubsystem.stopModules();
+            return;
         }
 
         // 3. Make the driving smoother

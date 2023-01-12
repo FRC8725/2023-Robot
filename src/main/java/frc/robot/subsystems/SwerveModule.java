@@ -2,20 +2,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
-import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix.sensors.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.LazyTalonFX;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
-import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap;
 
 public class SwerveModule {
@@ -30,13 +25,13 @@ public class SwerveModule {
     private final double absoluteEncoderOffsetAngle;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
-        
+                        int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+
         this.absoluteEncoderOffsetAngle = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
         absoluteEncoder = new CANCoder(absoluteEncoderId);
         CANCoderConfiguration absoluteEncoderConfiguration = new CANCoderConfiguration();
-        
+
         absoluteEncoderConfiguration.sensorTimeBase = SensorTimeBase.Per100Ms_Legacy;
         absoluteEncoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         absoluteEncoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
@@ -74,6 +69,7 @@ public class SwerveModule {
         turningMotor.setNeutralMode(NeutralMode.Brake);
         turningMotor.setInverted(reversed);
     }
+
     public double getDrivePosition() {
         return driveMotor.getPositionAsRad();
     }
@@ -130,26 +126,26 @@ public class SwerveModule {
 
 
     public void stop() {
-    driveMotor.set(ControlMode.PercentOutput, 0);
+        driveMotor.set(ControlMode.PercentOutput, 0);
 
         switch (turningMotor.getDeviceID()) {
             case (RobotMap.DriverPort.kFrontLeftTurningMotorPort):
             case (RobotMap.DriverPort.kBackRightTurningMotorPort):
-                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), -Math.PI/4));
+                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), -Math.PI / 4));
                 break;
             case (RobotMap.DriverPort.kFrontRightTurningMotorPort):
             case (RobotMap.DriverPort.kBackLeftTurningMotorPort):
-                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), Math.PI/4));
+                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), Math.PI / 4));
                 break;
         }
 
 //        turningMotor.set(0);
     }
 
-    public void putDashboard () {
+    public void putDashboard() {
         SmartDashboard.putNumber("ABS angle " + absoluteEncoder.getDeviceID(), getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Abs Position " + absoluteEncoder.getDeviceID(), absoluteEncoder.getAbsolutePosition());
-       // SmartDashboard.putNumber("Position " + absoluteEncoder.getDeviceID(), absoluteEncoder.getPosition());
+        // SmartDashboard.putNumber("Position " + absoluteEncoder.getDeviceID(), absoluteEncoder.getPosition());
 //       SmartDashboard.putNumber("Turing position " + turningMotor.getDeviceID(), turningMotor.getPositionAsDegrees());
     }
 }

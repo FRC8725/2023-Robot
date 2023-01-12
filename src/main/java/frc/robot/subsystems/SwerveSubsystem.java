@@ -2,28 +2,23 @@ package frc.robot.subsystems;
 
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.RobotMap.DriverPort;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 public class SwerveSubsystem extends SubsystemBase {
 
     private final static SwerveSubsystem instance = new SwerveSubsystem();
-
-    public static SwerveSubsystem getInstance() {
-        return instance;
-    }
-
-
     private final SwerveModule frontLeft = new SwerveModule(
             DriverPort.kFrontLeftDriveMotorPort,
             DriverPort.kFrontLeftTurningMotorPort,
@@ -32,7 +27,6 @@ public class SwerveSubsystem extends SubsystemBase {
             DriverPort.kFrontLeftDriveAbsoluteEncoderPort,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
-        
     private final SwerveModule frontRight = new SwerveModule(
             DriverPort.kFrontRightDriveMotorPort,
             DriverPort.kFrontRightTurningMotorPort,
@@ -41,7 +35,6 @@ public class SwerveSubsystem extends SubsystemBase {
             DriverPort.kFrontRightDriveAbsoluteEncoderPort,
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
-
     private final SwerveModule backLeft = new SwerveModule(
             DriverPort.kBackLeftDriveMotorPort,
             DriverPort.kBackLeftTurningMotorPort,
@@ -50,7 +43,6 @@ public class SwerveSubsystem extends SubsystemBase {
             DriverPort.kBackLeftDriveAbsoluteEncoderPort,
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
-
     private final SwerveModule backRight = new SwerveModule(
             DriverPort.kBackRightDriveMotorPort,
             DriverPort.kBackRightTurningMotorPort,
@@ -59,13 +51,11 @@ public class SwerveSubsystem extends SubsystemBase {
             DriverPort.kBackRightDriveAbsoluteEncoderPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
-
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[] {
-        frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
-      }, new Pose2d());
+    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[]{
+            frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
+    }, new Pose2d());
     private final Field2d m_field = new Field2d();
-
     public SwerveSubsystem() {
         new Thread(() -> {
             try {
@@ -74,7 +64,11 @@ public class SwerveSubsystem extends SubsystemBase {
                 resetEncoders();
             } catch (Exception e) {
             }
-        }).start(); 
+        }).start();
+    }
+
+    public static SwerveSubsystem getInstance() {
+        return instance;
     }
 
     public void zeroHeading() {
@@ -106,12 +100,12 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
+        SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
     }
 
     @Override
     public void periodic() {
-        SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[] {frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition()});
+        SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition()});
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putData(m_field);
