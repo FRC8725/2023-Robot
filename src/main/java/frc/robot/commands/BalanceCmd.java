@@ -28,7 +28,7 @@ public class BalanceCmd extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(controller.calculate(m_swerveSubsystem.getPeach(), 0), 0, 0)));
+    m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(controller.calculate(m_swerveSubsystem.getPitch(), 0), 0, 0)));
 
   }
 
