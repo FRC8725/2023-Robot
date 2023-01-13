@@ -14,7 +14,10 @@ import frc.robot.commands.CorrectPosition;
 import frc.robot.commands.CorrectPositionRefletiveTape;
 import frc.robot.commands.SwerveJoystickCmd;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import frc.robot.commands.auto.Barrel;
+=======
+>>>>>>> 637b9602b97092e1f4b52eb9c053ac32cba35d75
 =======
 >>>>>>> 637b9602b97092e1f4b52eb9c053ac32cba35d75
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
