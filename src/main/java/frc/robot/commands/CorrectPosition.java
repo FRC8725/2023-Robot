@@ -52,7 +52,7 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        VisionManager.setLED(true);
+        VisionManager.setLED(false);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class CorrectPosition extends CommandBase {
                 tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, 0, 0), new Rotation3d()));
         }
 
-        var goalPose = targetPose.transformBy(VisionConstants.Tag2Goal).toPose2d();
+        var goalPose = targetPose.transformBy(tag2goal).toPose2d();
 
         xController.setGoal(goalPose.getX());
         yController.setGoal(goalPose.getY());

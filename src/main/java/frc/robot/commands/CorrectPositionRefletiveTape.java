@@ -20,17 +20,9 @@ public class CorrectPositionRefletiveTape extends CommandBase {
     private ProfiledPIDController xController, yController, thetaController;
 
     private PhotonTrackedTarget lastTarget;
-    private final int whereChase;
-    // 0 stand for left side
-    // 1 stand for middle
-    // 2 stand for right side
 
-    public CorrectPositionRefletiveTape(SwerveSubsystem swerveSubsystem, int whereChase) {
-        // 0 stand for left side
-        // 1 stand for middle
-        // 2 stand for right side
+    public CorrectPositionRefletiveTape(SwerveSubsystem swerveSubsystem) {
         this.swerveSubsystem = swerveSubsystem;
-        this.whereChase = whereChase;
         addRequirements(swerveSubsystem);
 
         // Controller Settings
@@ -49,7 +41,7 @@ public class CorrectPositionRefletiveTape extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        VisionManager.setLED(false);
+        VisionManager.setLED(true);
     }
 
     @Override
@@ -93,5 +85,6 @@ public class CorrectPositionRefletiveTape extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
+        VisionManager.setLED(false);
     }
 }

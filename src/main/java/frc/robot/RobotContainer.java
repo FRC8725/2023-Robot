@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.BalanceCmd;
 import frc.robot.commands.CorrectPosition;
+import frc.robot.commands.CorrectPositionRefletiveTape;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
@@ -48,7 +49,8 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        m_swerveJoystick.btn_A.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
+        m_swerveJoystick.btn_topR.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
+        m_swerveJoystick.btn_A.whileTrue(new CorrectPositionRefletiveTape(m_swerveSubsystem));
         m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0));
         m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1));
         m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2));
