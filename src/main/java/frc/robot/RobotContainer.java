@@ -13,6 +13,8 @@ import frc.robot.commands.BalanceCmd;
 import frc.robot.commands.CorrectPosition;
 import frc.robot.commands.CorrectPositionRefletiveTape;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.auto.Barrel;
+import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
 import org.photonvision.PhotonCamera;
@@ -44,6 +46,9 @@ public class RobotContainer {
                 () -> !m_swerveJoystick.btn_topL.getAsBoolean(),
                 () -> m_swerveJoystick.btn_topR.getAsBoolean()
         ));
+        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
+        autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
+        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
         configureButtonBindings();
         putToDashboard();
     }

@@ -53,6 +53,7 @@ public class VisionManager extends SubsystemBase {
     }
 
     static public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+        camera.setPipelineIndex(0);
         estimator.setReferencePose(prevEstimatedRobotPose);
 
         double currentTime = Timer.getFPGATimestamp();
@@ -70,8 +71,7 @@ public class VisionManager extends SubsystemBase {
     }
 
     static public void setLED(boolean isOn) {
-        if (isOn) camera.setLED(VisionLEDMode.kOn);
-        else camera.setLED(VisionLEDMode.kOff);
+        camera.setLED(isOn? VisionLEDMode.kOn: VisionLEDMode.kOff);
     }
 
     @Override
