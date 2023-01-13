@@ -27,6 +27,7 @@ public class VisionManager extends SubsystemBase {
     static RobotPoseEstimator estimator = new RobotPoseEstimator(FieldConstants.atfl, RobotPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, List.of(new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot)));
 
     public VisionManager() {
+        camera.setDriverMode(false);
     }
 
     static public Transform3d getAprilTagRelative() {

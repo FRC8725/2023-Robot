@@ -88,7 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getPitch() {
-        return gyro.getPitch();
+        return gyro.getRoll();
     }
 
     public Field2d getfield2d() {
@@ -105,7 +105,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition()});
+        SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putData(m_field);
@@ -114,6 +114,7 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.putDashboard();
         frontLeft.putDashboard();
         frontRight.putDashboard();
+        SmartDashboard.putNumber("gyro Pitch", getPitch());
     }
 
     public void stopModules() {

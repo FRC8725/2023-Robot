@@ -115,9 +115,9 @@ public final class Constants {
     }
 
     public static final class Balance {
-        public static final int kPBalance = 1;
-        public static final int kIBalance = 0;
-        public static final int kDBalance = 0;
+        public static final double kPBalance = 0.1;
+        public static final double kIBalance = .0;
+        public static final double kDBalance = .0;
     }
 
     public static final class FieldConstants {

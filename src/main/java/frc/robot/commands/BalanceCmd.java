@@ -23,6 +23,7 @@ public class BalanceCmd extends CommandBase {
     public BalanceCmd(SwerveSubsystem swerveSubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_swerveSubsystem = swerveSubsystem;
+        controller.setTolerance(6);
         addRequirements(swerveSubsystem);
     }
 
@@ -35,8 +36,17 @@ public class BalanceCmd extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(controller.calculate(m_swerveSubsystem.getPitch(), 0), 0, 0)));
-
+        if (m_swerveSubsystem.getPitch() > 8)m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(-0.7, 0, 0)));
+        else if (m_swerveSubsystem.getPitch() < -8)m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(0.7, 0, 0)));
+        else m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(-controller.calculate(m_swerveSubsystem.getPitch(), 0), 0, 0)));
+        // if (Math.abs(m_swerveSubsystem.getRoll()) > 10.) {
+        //     m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates( new ChassisSpeeds(0.05, 0, 0)));
+        //     passed = true;
+        // } else if (Math.abs(m_swerveSubsystem.getRoll()) < 10. && passed) {
+        //     m_swerveSubsystem.stopModules();
+        // } else {
+        //     m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(0.2, 0, 0)));
+        // }
     }
 
     // Called once the command ends or is interrupted.
@@ -48,6 +58,6 @@ public class BalanceCmd extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

@@ -49,7 +49,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        m_swerveJoystick.btn_topR.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
+        m_swerveJoystick.btn_triggerR.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
         m_swerveJoystick.btn_A.whileTrue(new CorrectPositionRefletiveTape(m_swerveSubsystem));
         m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0));
         m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1));
