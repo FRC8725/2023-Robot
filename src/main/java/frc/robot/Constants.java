@@ -114,10 +114,12 @@ public final class Constants {
                         new Rotation3d(0, 0, Math.PI));
     }
 
-    public static final class Balance {
-        public static final double kPBalance = 0.1;
+    public static final class BalanceConstants {
+        public static final double kPBalance = 0.05;
         public static final double kIBalance = .0;
         public static final double kDBalance = .0;
+        public static final double xSpeedMax = .4;
+        public static final double xSpeedThreshold = 2;
     }
 
     public static final class FieldConstants {
