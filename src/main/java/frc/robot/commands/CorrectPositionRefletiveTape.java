@@ -51,11 +51,7 @@ public class CorrectPositionRefletiveTape extends CommandBase {
     @Override
     public void execute() {
         Transform2d relativePos = visionManager.getReflectiveTapeRelative();
-        var robotPose = new Pose2d(
-                swerveSubsystem.getPose().getX(),
-                swerveSubsystem.getPose().getY(),
-                new Rotation2d(swerveSubsystem.getPose().getRotation().getRadians())
-        );
+        var robotPose = swerveSubsystem.getPose();
         var camPose = robotPose.transformBy(
                 new Transform2d(VisionConstants.Robot2Photon.getTranslation().toTranslation2d(), new Rotation2d()));
         var targetPose = camPose.transformBy(relativePos);

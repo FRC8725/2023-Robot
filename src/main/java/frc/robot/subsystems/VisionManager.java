@@ -5,7 +5,6 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.common.hardware.VisionLEDMode;
@@ -14,7 +13,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.FieldConstants;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +45,7 @@ public class VisionManager extends SubsystemBase {
         Transform2d bestCameraToTarget = new Transform2d();
         if (result.hasTargets()) {
             target = result.getBestTarget();
-            double distance = (FieldConstants.kReflectiveTrapeLowTargetHeight-VisionConstants.kPhotonLensHeightMeters)/Math.tan(target.getPitch());
+            double distance = (FieldConstants.kReflectiveTrapeTargetHeight -VisionConstants.kPhotonLensHeightMeters)/Math.tan(target.getPitch());
             bestCameraToTarget = new Transform2d(new Translation2d(distance, Rotation2d.fromDegrees(target.getYaw())), new Rotation2d());
         }
         return bestCameraToTarget;

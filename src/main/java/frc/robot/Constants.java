@@ -140,13 +140,10 @@ public final class Constants {
                 List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag6, aprilTag7, aprilTag8),
                 FieldConstants.length, FieldConstants.width);
 
-        public static final double kReflectiveTrapeLowTargetHeight = 0.6;
-        public static final double kReflectiveTrapeHighTargetHeight = 0.8;
+        public static final double kReflectiveTrapeTargetHeight = 0.6;
     }
 
     public static final class ElevatorConstants {
-        //public static final double winchEncoderPositionFactor = 1./45;
-//        public static final double elevatorEncoderPositionFactor = 1./30;
         public static final double kElevatorGearRatio = 1./9;
 
         public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(2);
