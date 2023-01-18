@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class VisionManager extends SubsystemBase {
 
-    static PhotonCamera camera = new PhotonCamera("");
+    static PhotonCamera camera = new PhotonCamera("OV5647");
     static PhotonPipelineResult result;
     // Pair<PhotonCamera, Transform3d> campair = new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot);
     static RobotPoseEstimator estimator = new RobotPoseEstimator(FieldConstants.atfl, RobotPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, List.of(new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot)));

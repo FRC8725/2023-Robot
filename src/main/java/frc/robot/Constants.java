@@ -40,9 +40,9 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(26);
+        public static final double kTrackWidth = Units.inchesToMeters(24);
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(26);
+        public static final double kWheelBase = Units.inchesToMeters(24);
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -140,19 +140,49 @@ public final class Constants {
                 FieldConstants.length, FieldConstants.width);
     }
 
-    public static final class Elevator {
+    public static final class ElevatorConstants {
         //public static final double winchEncoderPositionFactor = 1./45;
-        //public static final double elevatorEncoderPositionFactor = 1./30;
+//        public static final double elevatorEncoderPositionFactor = 1./30;
+        public static final double kElevatorGearRatio = 1./9;
 
-        //public static final double kpWinch = .1;
-        //public static final double kiWinch = .0;
-        //public static final double kdWinch = .0;
+        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(2);
+        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
+        public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
+        public static final double kArmReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
+        public static final double kPIDElevatorPositionTolerance = .1;
+        public static final double kPIDArmPositionTolerance = .1;
+        public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
 
-        //public static final double kpElevator = .5;
-        //public static final double kiElevator = 0;
-        //public static final double kdElevator = 0;
+        public static final double kIntakeGearRatio = 1;
+        public static final double kWristGearRatio = 1./27;
+        public static final double kArmGearRatio = 1./9;
 
-        //public static final double releaseWinchSetpoint = .4;
-        //public static final double upper = .5;
+        public static final double kPElevator = .5;
+        public static final double kIElevator = 0;
+        public static final double kDElevator = 0;
+
+        public static final double kPWrist = .5;
+        public static final double kIWrist = 0;
+        public static final double kDWrist = 0;
+
+        public static final double kPArm = .5;
+        public static final double kIArm = 0;
+        public static final double kDArm = 0;
+
+        public static final double kIntakeSpeed = .5;
+
+        public static final double kWristAbsoluteEncoderOffsetAngle = 0;
+
+        public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI/2;
+        public static final double kMaxWristAngularAccelerationRadiansPerSecond = 1;
+
+        public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
+        public static final double kMaxArmHeight = Units.inchesToMeters(40);
+
+        public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
+                new TrapezoidProfile.Constraints(
+                        kMaxWristAngularSpeedRadiansPerSecond,
+                        kMaxWristAngularAccelerationRadiansPerSecond);
+
     }
 }

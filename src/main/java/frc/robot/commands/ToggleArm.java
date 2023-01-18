@@ -1,0 +1,15 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Pneumatics;
+
+
+public class ToggleArm extends CommandBase {
+
+    public ToggleArm() {}
+
+    @Override
+    public void initialize() {
+        Pneumatics.getInstance().toggleArm();
+    }
+}

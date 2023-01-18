@@ -1,4 +1,4 @@
-package frc.robot.lib;
+package frc.lib;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
