@@ -18,19 +18,27 @@ public class AutoConfigEstimator extends CommandBase {
     ArrayList<AprilTag> atList;
     SwerveSubsystem m_swerveSubsystem;
 
-    public AutoConfigEstimator(SwerveSubsystem swervesubsystem) {
+    VisionManager visionManager;
+
+    public AutoConfigEstimator(SwerveSubsystem swervesubsystem, VisionManager visionManager) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_swerveSubsystem = swervesubsystem;
         addRequirements(m_swerveSubsystem);
+        this.visionManager = visionManager;
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        if (VisionManager.hasTarget()) {
-            m_swerveSubsystem.updateWithVision(VisionManager.getEstimatedGlobalPose(m_swerveSubsystem.getPose()).getFirst(),
-                    VisionManager.getEstimatedGlobalPose(m_swerveSubsystem.getPose()).getSecond());
+        if (visionManager.hasTarget()) {
+            m_swerveSubsystem.updateWithVision(visionManager.getEstimatedGlobalPose(m_swerveSubsystem.getPose()).getFirst(),
+                    visionManager.getEstimatedGlobalPose(m_swerveSubsystem.getPose()).getSecond());
 
         }
+    }
+    
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }

@@ -21,27 +21,17 @@ import java.util.Optional;
 
 public class VisionManager extends SubsystemBase {
 
-    static PhotonCamera camera = new PhotonCamera("OV5647");
-    static PhotonPipelineResult result;
+    PhotonCamera camera = new PhotonCamera("OV5647");
+    PhotonPipelineResult result = new PhotonPipelineResult();
     // Pair<PhotonCamera, Transform3d> campair = new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot);
-    static RobotPoseEstimator estimator = new RobotPoseEstimator(FieldConstants.atfl, RobotPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, List.of(new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot)));
+    RobotPoseEstimator estimator = new RobotPoseEstimator(FieldConstants.atfl, RobotPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, List.of(new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot)));
 
     public VisionManager() {
         camera.setDriverMode(false);
+        camera.setLED(VisionLEDMode.kOff);
     }
 
-    static public Transform3d getAprilTagRelative() {
-        camera.setPipelineIndex(0);
-        PhotonTrackedTarget target;
-        Transform3d bestCameraToTarget = new Transform3d();
-        if (result.hasTargets()) {
-            target = result.getBestTarget();
-            bestCameraToTarget = target.getBestCameraToTarget();
-        }
-        return bestCameraToTarget;
-    }
-
-    static public Transform3d getReflectiveTapeRelative() {
+    public Transform3d getAprilTagRelative() {
         camera.setPipelineIndex(1);
         PhotonTrackedTarget target;
         Transform3d bestCameraToTarget = new Transform3d();
@@ -52,7 +42,18 @@ public class VisionManager extends SubsystemBase {
         return bestCameraToTarget;
     }
 
-    static public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    public Transform3d getReflectiveTapeRelative() {
+        camera.setPipelineIndex(0);
+        PhotonTrackedTarget target;
+        Transform3d bestCameraToTarget = new Transform3d();
+        if (result.hasTargets()) {
+            target = result.getBestTarget();
+            bestCameraToTarget = target.getBestCameraToTarget();
+        }
+        return bestCameraToTarget;
+    }
+
+    public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
         camera.setPipelineIndex(0);
         estimator.setReferencePose(prevEstimatedRobotPose);
 
@@ -66,11 +67,11 @@ public class VisionManager extends SubsystemBase {
         }
     }
 
-    static public boolean hasTarget() {
+    public boolean hasTarget() {
         return result.hasTargets();
     }
 
-    static public void setLED(boolean isOn) {
+    public void setLED(boolean isOn) {
         camera.setLED(isOn? VisionLEDMode.kOn: VisionLEDMode.kOff);
     }
 

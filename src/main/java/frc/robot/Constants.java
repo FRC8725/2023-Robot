@@ -176,8 +176,10 @@ public final class Constants {
         public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWristAngularAccelerationRadiansPerSecond = 1;
 
+        public static final double kMinElevatorHeight = Units.inchesToMeters(1);
         public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
         public static final double kMaxArmHeight = Units.inchesToMeters(40);
+        public static final double kMinArmHeight = Units.inchesToMeters(1);
 
         public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
                 new TrapezoidProfile.Constraints(

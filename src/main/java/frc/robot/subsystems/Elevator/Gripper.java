@@ -45,9 +45,8 @@ public class Gripper extends SubsystemBase {
         absoluteEncoder.configAllSettings(absoluteEncoderConfiguration);
         absoluteEncoder.setPositionToAbsolute();
 
+        wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kIWrist, ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
-        wristProfiledPIDController.setPID(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kIWrist);
-        wristProfiledPIDController.setConstraints(ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.reset(getAbsoluteEncoderRad());
     }
 

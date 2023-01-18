@@ -6,10 +6,19 @@ import frc.robot.subsystems.Pneumatics;
 
 public class ToggleGripperOpen extends CommandBase {
 
-    public ToggleGripperOpen() {}
+    Pneumatics pneumatics;
+
+    public ToggleGripperOpen(Pneumatics pneumatics) {
+        this.pneumatics = pneumatics;
+    }
 
     @Override
     public void initialize() {
-        Pneumatics.getInstance().toggleGripperOpen();
+        pneumatics.toggleGripperOpen();
+    }
+    
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }

@@ -1,8 +1,5 @@
 package frc.robot;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 public class RobotMap {
 
     public static class DriverPort {
@@ -37,7 +34,11 @@ public class RobotMap {
         public static final int kArmLimitSwitch = 1;
 
         // Pneumatics
-        public static final int[] kWinchReleaseDoubleSolenoid = {0, 1};
+        public static final int[] kWinchReleaseDoubleSolenoid = {14, 15};
         public static final int[] kGripperReleaseDoubleSolenoid = {2, 3};
+    }
+
+    public static class PneumaticsPort {
+        public static final int kREVPHPort = 19;
     }
 }

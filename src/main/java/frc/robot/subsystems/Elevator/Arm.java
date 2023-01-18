@@ -47,7 +47,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void setSetpoint(double setpoint) {
-        if (setpoint < ElevatorConstants.kMaxArmHeight) return;
+        if (setpoint > ElevatorConstants.kMaxArmHeight || setpoint < ElevatorConstants.kMinArmHeight) return;
         isPIDControlled = true;
         armPIDController.setSetpoint(setpoint);
     }

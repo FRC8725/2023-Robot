@@ -40,12 +40,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void reset() {
-        elevator.setSetpoint(.15);
-        arm.setSetpoint(.15);
+        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
+        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         gripper.setWristSetpoint(0);
         Timer.delay(1.5);
-        elevator.set(-.1);
-        arm.set(-.1);
+        elevator.set(-.08);
+        arm.set(-.08);
     }
 
     public void setElevatorSetpoint(double setpoint) {

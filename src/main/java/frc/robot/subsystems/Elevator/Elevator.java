@@ -46,7 +46,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setSetpoint(double setpoint) {
-        if (setpoint > ElevatorConstants.kMaxElevatorHeight) return;
+        if (setpoint > ElevatorConstants.kMaxElevatorHeight || setpoint < ElevatorConstants.kMinElevatorHeight) return;
         isPIDControlled = true;
         elevatorPIDController.setSetpoint(setpoint);
     }

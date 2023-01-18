@@ -13,7 +13,10 @@ import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionManager;
+
 import org.photonvision.PhotonCamera;
 
 
@@ -30,8 +33,10 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
     private final ElevatorSubsystem m_elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private final Pneumatics m_pneumatics = Pneumatics.getInstance();
     private final GamepadJoystick m_swerveJoystick = new GamepadJoystick(0);
     private final GamepadJoystick m_elevatorJoystick = new GamepadJoystick(1);
+    private final VisionManager m_visionManager = new VisionManager();
 
     private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
@@ -53,22 +58,22 @@ public class RobotContainer {
         ));
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
         autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
-        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
+        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem, m_visionManager));
         configureButtonBindings();
         putToDashboard();
     }
 
     private void configureButtonBindings() {
         m_swerveJoystick.btn_triggerR.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
-        m_swerveJoystick.btn_A.whileTrue(new CorrectPositionRefletiveTape(m_swerveSubsystem));
-        m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0));
-        m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1));
-        m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2));
+        m_swerveJoystick.btn_A.whileTrue(new CorrectPositionRefletiveTape(m_swerveSubsystem, m_visionManager));
+        m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0, m_visionManager));
+        m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1, m_visionManager));
+        m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2, m_visionManager));
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
         m_elevatorJoystick.btn_triggerL.toggleOnTrue(new RunGripper(m_elevatorSubsystem));
-        m_elevatorJoystick.btn_topL.onTrue(new ToggleArm());
-        m_elevatorJoystick.btn_topR.onTrue(new ToggleArm());
+        m_elevatorJoystick.btn_topL.onTrue(new ToggleGripperOpen(m_pneumatics));
+        m_elevatorJoystick.btn_topR.onTrue(new ToggleArm(m_pneumatics));
         m_elevatorJoystick.btn_A.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
     }
 

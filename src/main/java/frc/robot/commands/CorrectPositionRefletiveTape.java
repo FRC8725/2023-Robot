@@ -21,7 +21,9 @@ public class CorrectPositionRefletiveTape extends CommandBase {
 
     private PhotonTrackedTarget lastTarget;
 
-    public CorrectPositionRefletiveTape(SwerveSubsystem swerveSubsystem) {
+    private VisionManager visionManager;
+
+    public CorrectPositionRefletiveTape(SwerveSubsystem swerveSubsystem, VisionManager visionManager) {
         this.swerveSubsystem = swerveSubsystem;
         addRequirements(swerveSubsystem);
 
@@ -34,6 +36,8 @@ public class CorrectPositionRefletiveTape extends CommandBase {
         yController.setTolerance(.2);
         thetaController.setTolerance(Units.degreesToRadians(3));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        this.visionManager = visionManager;
     }
 
     @Override
@@ -41,12 +45,12 @@ public class CorrectPositionRefletiveTape extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        VisionManager.setLED(true);
+        visionManager.setLED(true);
     }
 
     @Override
     public void execute() {
-        Transform3d relativePos = VisionManager.getReflectiveTapeRelative();
+        Transform3d relativePos = visionManager.getReflectiveTapeRelative();
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
                 swerveSubsystem.getPose().getY(),
@@ -79,12 +83,12 @@ public class CorrectPositionRefletiveTape extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return !VisionManager.hasTarget();
+        return !visionManager.hasTarget();
     }
 
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
-        VisionManager.setLED(false);
+        visionManager.setLED(false);
     }
 }

@@ -10,17 +10,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.AutoConfigEstimator;
 import frc.robot.commands.BalanceCmd;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionManager;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
 
-    public RightOneGamePieceAndBalance(SwerveSubsystem m_swerveSubsystem) {
+    public RightOneGamePieceAndBalance(SwerveSubsystem m_swerveSubsystem, VisionManager visionManager) {
 
 //        this.m_swerveSubsystem = m_swerveSubsystem;
 
@@ -33,7 +35,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 "Right2Middle", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("configEstimator", new AutoConfigEstimator(m_swerveSubsystem));
+        eventMap.put("configEstimator", new AutoConfigEstimator(m_swerveSubsystem, visionManager));
         eventMap.put("balance", new BalanceCmd(m_swerveSubsystem));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

@@ -6,10 +6,19 @@ import frc.robot.subsystems.Pneumatics;
 
 public class ToggleArm extends CommandBase {
 
-    public ToggleArm() {}
+    Pneumatics pneumatics;
+
+    public ToggleArm(Pneumatics pneumatics) {
+        this.pneumatics = pneumatics;
+    }
 
     @Override
     public void initialize() {
-        Pneumatics.getInstance().toggleArm();
+        pneumatics.toggleArm();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }
