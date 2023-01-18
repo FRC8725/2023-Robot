@@ -50,18 +50,19 @@ public class CorrectPositionRefletiveTape extends CommandBase {
 
     @Override
     public void execute() {
-        Transform3d relativePos = visionManager.getReflectiveTapeRelative();
-        var robotPose = new Pose3d(
+        Transform2d relativePos = visionManager.getReflectiveTapeRelative();
+        var robotPose = new Pose2d(
                 swerveSubsystem.getPose().getX(),
                 swerveSubsystem.getPose().getY(),
-                0.0,
-                new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
+                new Rotation2d(swerveSubsystem.getPose().getRotation().getRadians())
         );
-        var camPose = robotPose.transformBy(VisionConstants.Photon2Robot);
+        var camPose = robotPose.transformBy(
+                new Transform2d(VisionConstants.Robot2Photon.getTranslation().toTranslation2d(), new Rotation2d()));
         var targetPose = camPose.transformBy(relativePos);
-        Transform3d tag2goal = new Transform3d().plus(new Transform3d(new Translation3d(-1, 0, 0), new Rotation3d()));
+        Transform2d tag2goal = new Transform2d(VisionConstants.Tag2Goal.getTranslation().toTranslation2d(), new Rotation2d())
+                .plus(new Transform2d(new Translation2d(-1, 0), new Rotation2d()));
 
-        var goalPose = targetPose.transformBy(VisionConstants.Tag2Goal).toPose2d();
+        var goalPose = targetPose.transformBy(tag2goal);
 
         xController.setGoal(goalPose.getX());
         yController.setGoal(goalPose.getY());

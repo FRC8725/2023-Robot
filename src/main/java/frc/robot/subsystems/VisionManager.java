@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +14,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.FieldConstants;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,13 +41,14 @@ public class VisionManager extends SubsystemBase {
         return bestCameraToTarget;
     }
 
-    public Transform3d getReflectiveTapeRelative() {
+    public Transform2d getReflectiveTapeRelative() {
         camera.setPipelineIndex(0);
         PhotonTrackedTarget target;
-        Transform3d bestCameraToTarget = new Transform3d();
+        Transform2d bestCameraToTarget = new Transform2d();
         if (result.hasTargets()) {
             target = result.getBestTarget();
-            bestCameraToTarget = target.getBestCameraToTarget();
+            double distance = (FieldConstants.kReflectiveTrapeLowTargetHeight-VisionConstants.kPhotonLensHeightMeters)/Math.tan(target.getPitch());
+            bestCameraToTarget = new Transform2d(new Translation2d(distance, Rotation2d.fromDegrees(target.getYaw())), new Rotation2d());
         }
         return bestCameraToTarget;
     }

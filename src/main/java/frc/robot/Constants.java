@@ -112,6 +112,7 @@ public final class Constants {
                 new Transform3d(
                         new Translation3d(1.5, 0, 0),
                         new Rotation3d(0, 0, Math.PI));
+        public static final double kPhotonLensHeightMeters = .6;
     }
 
     public static final class BalanceConstants {
@@ -138,6 +139,9 @@ public final class Constants {
         public static final AprilTagFieldLayout atfl = new AprilTagFieldLayout(
                 List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag6, aprilTag7, aprilTag8),
                 FieldConstants.length, FieldConstants.width);
+
+        public static final double kReflectiveTrapeLowTargetHeight = 0.6;
+        public static final double kReflectiveTrapeHighTargetHeight = 0.8;
     }
 
     public static final class ElevatorConstants {
@@ -148,7 +152,7 @@ public final class Constants {
         public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(2);
         public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
         public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
-        public static final double kArmReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
+        public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
         public static final double kPIDElevatorPositionTolerance = .1;
         public static final double kPIDArmPositionTolerance = .1;
         public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;

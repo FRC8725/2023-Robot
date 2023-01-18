@@ -65,7 +65,7 @@ public class CorrectPosition extends CommandBase {
                 0.0,
                 new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
         );
-        var camPose = robotPose.transformBy(VisionConstants.Photon2Robot);
+        var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
         var targetPose = camPose.transformBy(relativePos);
         Transform3d tag2goal = new Transform3d();
 
