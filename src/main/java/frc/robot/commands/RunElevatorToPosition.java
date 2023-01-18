@@ -19,4 +19,9 @@ public class RunElevatorToPosition extends CommandBase {
     public void initialize() {
         elevatorSubsystem.setElevatorSetpoint(position);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }
