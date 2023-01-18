@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -87,7 +86,7 @@ public class SwerveSubsystem extends SubsystemBase {
         return SwerveEstimator.getEstimatedPosition();
     }
 
-    public double getPitch() {
+    public double getRoll() {
         return gyro.getRoll();
     }
 
@@ -114,7 +113,7 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.putDashboard();
         frontLeft.putDashboard();
         frontRight.putDashboard();
-        SmartDashboard.putNumber("gyro Pitch", getPitch());
+        SmartDashboard.putNumber("gyro Pitch", getRoll());
     }
 
     public void stopModules() {

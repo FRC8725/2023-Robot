@@ -36,8 +36,8 @@ public class BalanceCmd extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (Math.abs(m_swerveSubsystem.getPitch()) > 8)m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.copySign(0.6, -m_swerveSubsystem.getPitch()), 0, 0)));
-        else m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, -controller.calculate(m_swerveSubsystem.getPitch(), 0)), 0, 0)));
+        if (Math.abs(m_swerveSubsystem.getRoll()) > 8)m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.copySign(0.6, -m_swerveSubsystem.getRoll()), 0, 0)));
+        else m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, -controller.calculate(m_swerveSubsystem.getRoll(), 0)), 0, 0)));
     }
 
     // Called once the command ends or is interrupted.
@@ -49,6 +49,6 @@ public class BalanceCmd extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(m_swerveSubsystem.getPitch()) < BalanceConstants.xSpeedThreshold;
+        return Math.abs(m_swerveSubsystem.getRoll()) < BalanceConstants.xSpeedThreshold;
     }
 }
