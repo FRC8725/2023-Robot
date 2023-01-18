@@ -14,14 +14,20 @@ public class Pneumatics extends SubsystemBase {
     Compressor compressor;
 
     DoubleSolenoid winchReleaser;
+    DoubleSolenoid gripperIntrance;
 
 
     private Pneumatics() {
-        compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
-        int forwardChannel= RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[0];
+        PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
+        compressor = new Compressor(0, moduleType);
+        int forwardChannel = RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[0];
         int reverseChannel = RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[1];
-        winchReleaser = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, forwardChannel, reverseChannel);
+        winchReleaser = new DoubleSolenoid(moduleType, forwardChannel, reverseChannel);
         winchReleaser.set(DoubleSolenoid.Value.kReverse);
+        forwardChannel = RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[0];
+        reverseChannel = RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[1];
+        gripperIntrance = new DoubleSolenoid(moduleType, forwardChannel, reverseChannel);
+        gripperIntrance.set(DoubleSolenoid.Value.kReverse);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -36,6 +42,10 @@ public class Pneumatics extends SubsystemBase {
 
     public void toggleArm() {
         winchReleaser.toggle();
+    }
+
+    public void toggleGripperOpen() {
+        gripperIntrance.toggle();
     }
 
 }

@@ -38,5 +38,6 @@ public class RobotMap {
 
         // Pneumatics
         public static final int[] kWinchReleaseDoubleSolenoid = {0, 1};
+        public static final int[] kGripperReleaseDoubleSolenoid = {2, 3};
     }
 }

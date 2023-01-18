@@ -67,6 +67,7 @@ public class RobotContainer {
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
         m_elevatorJoystick.btn_triggerL.toggleOnTrue(new RunGripper(m_elevatorSubsystem));
+        m_elevatorJoystick.btn_topL.onTrue(new ToggleArm());
         m_elevatorJoystick.btn_topR.onTrue(new ToggleArm());
         m_elevatorJoystick.btn_A.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
     }
