@@ -53,8 +53,7 @@ public class CorrectPositionReflectiveTape2d extends CommandBase {
             swerveSubsystem.getPose().getY(),
             new Rotation2d(swerveSubsystem.getPose().getRotation().getRadians())
     );
-    var camPose = robotPose.transformBy(
-            new Transform2d(VisionConstants.Robot2Photon.getTranslation().toTranslation2d(), new Rotation2d()));
+    var camPose = robotPose.transformBy(new Transform2d(VisionConstants.Robot2Photon.getTranslation().toTranslation2d(), new Rotation2d()));
     var targetPose = camPose.transformBy(relativePos);
     Transform2d tag2goal = new Transform2d(VisionConstants.Tag2Goal.getTranslation().toTranslation2d(), new Rotation2d())
             .plus(new Transform2d(new Translation2d(-5, 0), new Rotation2d()));
@@ -65,11 +64,10 @@ public class CorrectPositionReflectiveTape2d extends CommandBase {
     yController.setGoal(goalPose.getY());
 
     var xSpeed = xController.calculate(robotPose.getX());
-    var ySpeed = yController.calculate(robotPose.getY()) * 2;
+    var ySpeed = yController.calculate(robotPose.getY());
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());
-
 
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 

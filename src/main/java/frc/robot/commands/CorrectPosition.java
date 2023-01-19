@@ -93,7 +93,7 @@ public class CorrectPosition extends CommandBase {
         thetaController.setGoal(goalPose.getRotation().getRadians());
 
         var xSpeed = xController.calculate(robotPose.getX());
-        var ySpeed = yController.calculate(robotPose.getY()) * 2;
+        var ySpeed = yController.calculate(robotPose.getY());
         var turningSpeed = thetaController.calculate(swerveSubsystem.getPose().getRotation().getRadians());
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
