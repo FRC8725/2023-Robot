@@ -44,6 +44,18 @@ public class VisionManager extends SubsystemBase {
         return bestCameraToTarget;
     }
 
+    public Transform2d getReflectiveTapeRelative2d() {
+        camera.setPipelineIndex(0);
+        PhotonTrackedTarget target;
+        Transform2d bestCameraToTarget = new Transform2d();
+        if (result.hasTargets()) {
+            target = result.getBestTarget();
+            double distance = (FieldConstants.kReflectiveTrapeTargetHeight - VisionConstants.kPhotonLensHeightMeters)/Math.tan(target.getPitch());
+            bestCameraToTarget = new Transform2d(new Translation2d(distance, Rotation2d.fromDegrees(target.getYaw())), new Rotation2d());
+        }
+        return bestCameraToTarget;
+    }
+
     public Transform3d getReflectiveTapeRelative() {
         camera.setLED(VisionLEDMode.kOn);
         camera.setPipelineIndex(0);
@@ -51,8 +63,8 @@ public class VisionManager extends SubsystemBase {
         Transform3d bestCameraToTarget = new Transform3d();
         if (result.hasTargets()) {
             target = result.getBestTarget();
-            double distance = (FieldConstants.kReflectiveTrapeTargetHeight -VisionConstants.kPhotonLensHeightMeters)/Math.tan(Units.degreesToRadians(target.getPitch()));
-            bestCameraToTarget = new Transform3d(new Translation3d(distance, new Rotation3d()), new Rotation3d());
+            double distance = (FieldConstants.kReflectiveTrapeTargetHeight - VisionConstants.kPhotonLensHeightMeters)/Math.tan(Units.degreesToRadians(target.getPitch()));
+            bestCameraToTarget = new Transform3d(new Translation3d(distance, new Rotation3d()), new Rotation3d(0, 0, Units.degreesToRadians(-target.getYaw())));
             SmartDashboard.putNumber("Distance", distance);
         }
         return bestCameraToTarget;

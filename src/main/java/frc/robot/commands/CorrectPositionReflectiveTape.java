@@ -5,27 +5,23 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 
-public class CorrectPositionRefletiveTape extends CommandBase {
+public class CorrectPositionReflectiveTape extends CommandBase {
 
-    private SwerveSubsystem swerveSubsystem;
-    private ProfiledPIDController xController, yController, thetaController;
+    final private SwerveSubsystem swerveSubsystem;
+    final private ProfiledPIDController xController, yController, thetaController;
 
-    private PhotonTrackedTarget lastTarget;
 
-    private VisionManager visionManager;
+    final private VisionManager visionManager;
 
-    public CorrectPositionRefletiveTape(SwerveSubsystem swerveSubsystem, VisionManager visionManager) {
+    public CorrectPositionReflectiveTape(SwerveSubsystem swerveSubsystem, VisionManager visionManager) {
         this.swerveSubsystem = swerveSubsystem;
         addRequirements(swerveSubsystem);
 

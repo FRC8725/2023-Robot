@@ -33,7 +33,6 @@ public class AutoConfigEstimator extends CommandBase {
         if (visionManager.hasTarget()) {
             m_swerveSubsystem.updateWithVision(visionManager.getEstimatedGlobalPose(m_swerveSubsystem.getPose()).getFirst(),
                     visionManager.getEstimatedGlobalPose(m_swerveSubsystem.getPose()).getSecond());
-
         }
     }
     
