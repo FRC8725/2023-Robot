@@ -53,12 +53,17 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
+        visionManager.getAprilTagRelative();
+        visionManager.setDriverMode(false);
     }
 
     @Override
     public void execute() {
         Transform3d relativePos = visionManager.getAprilTagRelative();
-        if (!visionManager.hasTarget()) return;
+        if (!visionManager.hasTarget()) {
+            //swerveSubsystem.stopModules(); 
+            return;
+        }
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
                 swerveSubsystem.getPose().getY(),
@@ -88,7 +93,7 @@ public class CorrectPosition extends CommandBase {
         thetaController.setGoal(goalPose.getRotation().getRadians());
 
         var xSpeed = xController.calculate(robotPose.getX());
-        var ySpeed = yController.calculate(robotPose.getY());
+        var ySpeed = yController.calculate(robotPose.getY()) * 2;
         var turningSpeed = thetaController.calculate(swerveSubsystem.getPose().getRotation().getRadians());
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -109,5 +114,6 @@ public class CorrectPosition extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
+        visionManager.setDriverMode(true);
     }
 }

@@ -37,11 +37,17 @@ public class CorrectPositionReflectiveTape2d extends CommandBase {
   public void initialize() {
     xController.reset(swerveSubsystem.getPose().getX());
     yController.reset(swerveSubsystem.getPose().getY());
+    visionManager.getReflectiveTapeRelative2d();
+    visionManager.setDriverMode(false);
   }
 
   @Override
   public void execute() {
     Transform2d relativePos = visionManager.getReflectiveTapeRelative2d();
+    if (!visionManager.hasTarget()) {
+      swerveSubsystem.stopModules();
+      return;
+    }
     var robotPose = new Pose2d(
             swerveSubsystem.getPose().getX(),
             swerveSubsystem.getPose().getY(),
@@ -51,7 +57,7 @@ public class CorrectPositionReflectiveTape2d extends CommandBase {
             new Transform2d(VisionConstants.Robot2Photon.getTranslation().toTranslation2d(), new Rotation2d()));
     var targetPose = camPose.transformBy(relativePos);
     Transform2d tag2goal = new Transform2d(VisionConstants.Tag2Goal.getTranslation().toTranslation2d(), new Rotation2d())
-            .plus(new Transform2d(new Translation2d(-1, 0), new Rotation2d()));
+            .plus(new Transform2d(new Translation2d(-5, 0), new Rotation2d()));
 
     var goalPose = targetPose.transformBy(tag2goal);
 
@@ -59,7 +65,7 @@ public class CorrectPositionReflectiveTape2d extends CommandBase {
     yController.setGoal(goalPose.getY());
 
     var xSpeed = xController.calculate(robotPose.getX());
-    var ySpeed = yController.calculate(robotPose.getY());
+    var ySpeed = yController.calculate(robotPose.getY()) * 2;
 
     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());
@@ -73,11 +79,12 @@ public class CorrectPositionReflectiveTape2d extends CommandBase {
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    return !visionManager.hasTarget();
+    return false;
   }
 
   @Override
   public void end(boolean interrupted) {
+    visionManager.setDriverMode(true);
     swerveSubsystem.stopModules();
   }
 }

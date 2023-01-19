@@ -28,12 +28,10 @@ public class VisionManager extends SubsystemBase {
     PhotonPoseEstimator estimator = new PhotonPoseEstimator(FieldConstants.atfl, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
 
     public VisionManager() {
-        camera.setDriverMode(false);
-        camera.setLED(VisionLEDMode.kOff);
+        camera.setDriverMode(true);
     }
 
     public Transform3d getAprilTagRelative() {
-        camera.setLED(VisionLEDMode.kOff);
         camera.setPipelineIndex(1);
         PhotonTrackedTarget target;
         Transform3d bestCameraToTarget = new Transform3d();
@@ -51,13 +49,12 @@ public class VisionManager extends SubsystemBase {
         if (result.hasTargets()) {
             target = result.getBestTarget();
             double distance = (FieldConstants.kReflectiveTrapeTargetHeight - VisionConstants.kPhotonLensHeightMeters)/Math.tan(target.getPitch());
-            bestCameraToTarget = new Transform2d(new Translation2d(distance, Rotation2d.fromDegrees(target.getYaw())), new Rotation2d());
+            bestCameraToTarget = new Transform2d(new Translation2d(distance, new Rotation2d()), Rotation2d.fromDegrees(-target.getYaw()));
         }
         return bestCameraToTarget;
     }
 
     public Transform3d getReflectiveTapeRelative() {
-        camera.setLED(VisionLEDMode.kOn);
         camera.setPipelineIndex(0);
         PhotonTrackedTarget target;
         Transform3d bestCameraToTarget = new Transform3d();
@@ -71,7 +68,6 @@ public class VisionManager extends SubsystemBase {
     }
 
     public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        camera.setLED(VisionLEDMode.kOff);
         camera.setPipelineIndex(1);
         estimator.setReferencePose(prevEstimatedRobotPose);
 
@@ -87,6 +83,10 @@ public class VisionManager extends SubsystemBase {
 
     public boolean hasTarget() {
         return result.hasTargets();
+    }
+
+    public void setDriverMode(boolean driverMode) {
+        camera.setDriverMode(driverMode);
     }
 
     @Override
