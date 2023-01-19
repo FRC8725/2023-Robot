@@ -53,12 +53,12 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        visionManager.setLED(false);
     }
 
     @Override
     public void execute() {
         Transform3d relativePos = visionManager.getAprilTagRelative();
+        if (!visionManager.hasTarget()) return;
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
                 swerveSubsystem.getPose().getY(),
@@ -103,7 +103,7 @@ public class CorrectPosition extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return !visionManager.hasTarget();
+        return false;
     }
 
     @Override

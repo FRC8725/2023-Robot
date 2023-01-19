@@ -19,7 +19,6 @@ public class BackToInitial extends CommandBase {
     SwerveSubsystem swerveSubsystem;
 
     ProfiledPIDController xController, yController, thetaController;
-    VisionManager visionManager;
     Pose2d initialPose;
 
     public BackToInitial(SwerveSubsystem swerveSubsystem, Pose2d initialPose) {
@@ -49,7 +48,6 @@ public class BackToInitial extends CommandBase {
 
     @Override
     public void execute() {
-        Transform2d relativePos = visionManager.getReflectiveTapeRelative();
         var robotPose = swerveSubsystem.getPose();
         var goalPose = robotPose.transformBy(
                 new Transform2d(initialPose.getTranslation(), new Rotation2d()));

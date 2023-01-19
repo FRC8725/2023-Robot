@@ -89,9 +89,9 @@ public final class Constants {
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
-        public static final double kPXController = 0.12;
-        public static final double kPYController = 0.12;
-        public static final double kPThetaController = 0.8;
+        public static final double kPXController = 1;
+        public static final double kPYController = 1;
+        public static final double kPThetaController = 1.2;
 
         public static final TrapezoidProfile.Constraints kDriveControllerConstraints = //
                 new TrapezoidProfile.Constraints(
@@ -140,7 +140,7 @@ public final class Constants {
                 List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag6, aprilTag7, aprilTag8),
                 FieldConstants.length, FieldConstants.width);
 
-        public static final double kReflectiveTrapeTargetHeight = 0.6;
+        public static final double kReflectiveTrapeTargetHeight = 0.8;
     }
 
     public static final class ElevatorConstants {

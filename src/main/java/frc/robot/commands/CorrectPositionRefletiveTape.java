@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -45,20 +47,24 @@ public class CorrectPositionRefletiveTape extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        visionManager.setLED(true);
     }
 
     @Override
     public void execute() {
-        Transform2d relativePos = visionManager.getReflectiveTapeRelative();
-        var robotPose = swerveSubsystem.getPose();
-        var camPose = robotPose.transformBy(
-                new Transform2d(VisionConstants.Robot2Photon.getTranslation().toTranslation2d(), new Rotation2d()));
+        Transform3d relativePos = visionManager.getReflectiveTapeRelative();
+        if (!visionManager.hasTarget()) return;
+        var robotPose = new Pose3d(
+                swerveSubsystem.getPose().getX(),
+                swerveSubsystem.getPose().getY(),
+                0.0,
+                new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
+        );
+        var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
         var targetPose = camPose.transformBy(relativePos);
-        Transform2d tag2goal = new Transform2d(VisionConstants.Tag2Goal.getTranslation().toTranslation2d(), new Rotation2d())
-                .plus(new Transform2d(new Translation2d(-1, 0), new Rotation2d()));
+        Transform3d tag2goal = VisionConstants.Tag2Goal
+                .plus(new Transform3d(new Translation3d(-1, 0, 0), new Rotation3d()));
 
-        var goalPose = targetPose.transformBy(tag2goal);
+        var goalPose = targetPose.transformBy(tag2goal).toPose2d();
 
         xController.setGoal(goalPose.getX());
         yController.setGoal(goalPose.getY());
@@ -80,12 +86,11 @@ public class CorrectPositionRefletiveTape extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return !visionManager.hasTarget();
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
-        visionManager.setLED(false);
     }
 }
