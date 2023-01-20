@@ -21,7 +21,7 @@ public final class Constants {
 
     public static final class Joystick {
 
-        public static final double kDeadband = 0.3;
+        public static final double kDeadband = 0.2;
     }
 
     public static final class SwerveModuleConstants {
@@ -81,6 +81,8 @@ public final class Constants {
                 kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+        public static final double kDecreaseDrivingSpeedFactor = .25;
+        public static final double kDecreaseTurningSpeedFactor = .6;
     }
 
     public static final class AutoConstants {
@@ -110,9 +112,10 @@ public final class Constants {
         public static final Transform3d Robot2Photon = Photon2Robot.inverse();
         public static final Transform3d Tag2Goal =
                 new Transform3d(
-                        new Translation3d(1.5, 0, 0),
+                        new Translation3d(Units.inchesToMeters(16.113), 0, 0),
                         new Rotation3d(0, 0, Math.PI));
-        public static final double kPhotonLensHeightMeters = .6;
+        public static final Transform3d GoalMid2Left = new Transform3d(new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
+        public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
     }
 
     public static final class BalanceConstants {

@@ -27,9 +27,7 @@ public class VisionManager extends SubsystemBase {
     // Pair<PhotonCamera, Transform3d> campair = new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot);
     PhotonPoseEstimator estimator = new PhotonPoseEstimator(FieldConstants.atfl, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
 
-    public VisionManager() {
-        camera.setDriverMode(true);
-    }
+    public VisionManager() {}
 
     public Transform3d getAprilTagRelative() {
         camera.setPipelineIndex(1);
@@ -42,16 +40,15 @@ public class VisionManager extends SubsystemBase {
         return bestCameraToTarget;
     }
 
-    public Transform2d getReflectiveTapeRelative2d() {
+    public double getReflectiveTapeRelativeYawRads() {
         camera.setPipelineIndex(0);
         PhotonTrackedTarget target;
-        Transform2d bestCameraToTarget = new Transform2d();
+        double angle = 0;
         if (result.hasTargets()) {
             target = result.getBestTarget();
-            double distance = (FieldConstants.kReflectiveTrapeTargetHeight - VisionConstants.kPhotonLensHeightMeters)/Math.tan(Units.degreesToRadians(target.getPitch()));
-            bestCameraToTarget = new Transform2d(new Translation2d(distance, new Rotation2d()), Rotation2d.fromDegrees(-target.getYaw()));
+            angle = -Units.degreesToRadians(target.getYaw());
         }
-        return bestCameraToTarget;
+        return angle;
     }
 
     public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
@@ -76,8 +73,14 @@ public class VisionManager extends SubsystemBase {
         camera.setDriverMode(driverMode);
     }
 
+    boolean isFirstConnected = false;
     @Override
     public void periodic() {
+        if (!camera.isConnected()) return;
+        if (isFirstConnected) {
+            camera.setDriverMode(true);
+            isFirstConnected = true;
+        }
         result = camera.getLatestResult();
     }
 }

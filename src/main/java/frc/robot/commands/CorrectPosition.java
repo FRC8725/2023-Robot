@@ -14,7 +14,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 public class CorrectPosition extends CommandBase {
@@ -24,6 +23,8 @@ public class CorrectPosition extends CommandBase {
 
     private VisionManager visionManager;
     private final int whereChase;
+
+    private Transform3d lastTarget;
     // 0 stand for left side
     // 1 stand for middle
     // 2 stand for right side
@@ -46,6 +47,7 @@ public class CorrectPosition extends CommandBase {
         thetaController.setTolerance(Units.degreesToRadians(3));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.visionManager = visionManager;
+        lastTarget = new Transform3d();
     }
 
     @Override
@@ -60,10 +62,8 @@ public class CorrectPosition extends CommandBase {
     @Override
     public void execute() {
         Transform3d relativePos = visionManager.getAprilTagRelative();
-        if (!visionManager.hasTarget()) {
-            //swerveSubsystem.stopModules(); 
-            return;
-        }
+        if (!visionManager.hasTarget()) relativePos = lastTarget;
+
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
                 swerveSubsystem.getPose().getY(),
@@ -77,13 +77,13 @@ public class CorrectPosition extends CommandBase {
         // Change the place we want to go.
         switch (whereChase) {
             case 0:
-                tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, 1, 0), new Rotation3d()));
+                tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Left);
                 break;
             case 2:
-                tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, -1, 0), new Rotation3d()));
+                tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Right);
                 break;
             default:
-                tag2goal = VisionConstants.Tag2Goal.plus(new Transform3d(new Translation3d(0, 0, 0), new Rotation3d()));
+                tag2goal = VisionConstants.Tag2Goal;
         }
 
         var goalPose = targetPose.transformBy(tag2goal).toPose2d();

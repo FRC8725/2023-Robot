@@ -56,9 +56,9 @@ public class SwerveJoystickCmd extends CommandBase {
         }
 
         // 3. Make the driving smoother
-        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? 0.2 : 1.);
-        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? 0.2 : 1.);
-        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * (decreaseSpeedFunction.get() ? 0.2 : 1.);
+        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? DriveConstants.kDecreaseDrivingSpeedFactor : 1.);
+        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? DriveConstants.kDecreaseDrivingSpeedFactor : 1.);
+        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * (decreaseSpeedFunction.get() ? DriveConstants.kDecreaseTurningSpeedFactor : 1.);
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
