@@ -51,7 +51,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWristAbsoluteEncoderOffsetAngle;
+        double measurement = absoluteEncoder.getDistance()-ElevatorConstants.kWristAbsoluteEncoderOffsetAngle;
         return measurement/180*Math.PI;
     }
 

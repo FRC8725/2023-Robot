@@ -46,7 +46,7 @@ public class Winch extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWinchAbsoluteEncoderOffsetAngle;
+        double measurement = absoluteEncoder.getDistance()-ElevatorConstants.kWinchAbsoluteEncoderOffsetAngle;
         return measurement/180*Math.PI;
     }
 
