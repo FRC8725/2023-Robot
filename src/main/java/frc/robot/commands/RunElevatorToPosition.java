@@ -7,17 +7,30 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class RunElevatorToPosition extends CommandBase {
 
     ElevatorSubsystem elevatorSubsystem;
-    double position;
+    double elevatorPosition;
+    double armPosition;
+    double winchAngle;
+    double wristAngle;
 
-    public RunElevatorToPosition(ElevatorSubsystem elevatorSubsystem, double position) {
+    public RunElevatorToPosition(ElevatorSubsystem elevatorSubsystem,
+                                 double elevatorPosition,
+                                 double armPosition,
+                                 double winchAngle,
+                                 double wristAngle) {
         this.elevatorSubsystem = elevatorSubsystem;
-        this.position = position;
+        this.elevatorPosition = elevatorPosition;
+        this.armPosition = armPosition;
+        this.winchAngle = winchAngle;
+        this.wristAngle = wristAngle;
         addRequirements(elevatorSubsystem);
     }
 
     @Override
     public void initialize() {
-        elevatorSubsystem.setElevatorSetpoint(position);
+        elevatorSubsystem.setElevatorSetpoint(elevatorPosition);
+        elevatorSubsystem.setArmSetpoint(armPosition);
+        elevatorSubsystem.setWinchSetpoint(winchAngle);
+        elevatorSubsystem.setWristSetpoint(wristAngle);
     }
 
     @Override

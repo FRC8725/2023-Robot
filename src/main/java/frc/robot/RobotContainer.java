@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
@@ -74,7 +75,7 @@ public class RobotContainer {
 
         m_elevatorJoystick.btn_triggerL.toggleOnTrue(new RunGripper(m_elevatorSubsystem));
         m_elevatorJoystick.btn_topL.onTrue(new ToggleGripperOpen(m_pneumatics));
-        m_elevatorJoystick.btn_triggerR.whileTrue(new InstantCommand(m_elevatorSubsystem::setGripperHorizontal));
+        m_elevatorJoystick.btn_triggerR.whileFalse(new RepeatCommand(new InstantCommand(m_elevatorSubsystem::setGripperHorizontal)));
         m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
     }
 
