@@ -54,7 +54,8 @@ public class RobotContainer {
                 m_elevatorSubsystem,
                 () -> m_elevatorJoystick.get_LStickY(),
                 () -> m_elevatorJoystick.get_RStickY(),
-                () -> m_elevatorJoystick.get_RStickX()
+                () -> m_elevatorJoystick.get_RStickX(),
+                () -> m_elevatorJoystick.get_LStickX()
         ));
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
         autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
@@ -73,8 +74,7 @@ public class RobotContainer {
 
         m_elevatorJoystick.btn_triggerL.toggleOnTrue(new RunGripper(m_elevatorSubsystem));
         m_elevatorJoystick.btn_topL.onTrue(new ToggleGripperOpen(m_pneumatics));
-        m_elevatorJoystick.btn_topR.onTrue(new ToggleArm(m_pneumatics));
-        m_elevatorJoystick.btn_A.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
+        m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
     }
 
     private void putToDashboard() {

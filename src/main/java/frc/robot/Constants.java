@@ -153,13 +153,17 @@ public final class Constants {
         public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
         public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
         public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
+        public static final double kWinchReelDiameterMeters = Units.inchesToMeters(2);
+        public static final double kWinchReelCircumferenceMeters = kWinchReelDiameterMeters * Math.PI;
         public static final double kPIDElevatorPositionTolerance = .1;
         public static final double kPIDArmPositionTolerance = .1;
         public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
+        public static final double kPIDWinchAngularToleranceRads = 10./180* Math.PI;
 
         public static final double kIntakeGearRatio = 1;
         public static final double kWristGearRatio = 1./27;
         public static final double kArmGearRatio = 1./9;
+        public static final double kWinchGearRatio = 1./25;
 
         public static final double kPElevator = .5;
         public static final double kIElevator = 0;
@@ -173,22 +177,35 @@ public final class Constants {
         public static final double kIArm = 0;
         public static final double kDArm = 0;
 
+        public static final double kPWinch = .5;
+        public static final double kIWinch = 0;
+        public static final double kDWinch = 0;
+
         public static final double kIntakeSpeed = .5;
 
         public static final double kWristAbsoluteEncoderOffsetAngle = 0;
+        public static final double kWinchAbsoluteEncoderOffsetAngle = 0;
 
         public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWristAngularAccelerationRadiansPerSecond = 1;
+        public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI/2;
+        public static final double kMaxWinchAngularAccelerationRadiansPerSecond = 1;
 
         public static final double kMinElevatorHeight = Units.inchesToMeters(1);
         public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
         public static final double kMaxArmHeight = Units.inchesToMeters(40);
         public static final double kMinArmHeight = Units.inchesToMeters(1);
+        public static final double kMaxWinchAngle = Units.degreesToRadians(90);
+        public static final double kMinWinchAngle = Units.degreesToRadians(4);
 
         public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
                 new TrapezoidProfile.Constraints(
                         kMaxWristAngularSpeedRadiansPerSecond,
                         kMaxWristAngularAccelerationRadiansPerSecond);
 
+        public static final TrapezoidProfile.Constraints kWinchControllerConstraints = //
+                new TrapezoidProfile.Constraints(
+                        kMaxWinchAngularSpeedRadiansPerSecond,
+                        kMaxWinchAngularAccelerationRadiansPerSecond);
     }
 }

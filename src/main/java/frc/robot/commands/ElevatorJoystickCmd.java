@@ -13,15 +13,18 @@ public class ElevatorJoystickCmd extends CommandBase {
     Supplier<Double> elevatorSpdFunction;
     Supplier<Double> armSpdFunction;
     Supplier<Double> wristSpdFunction;
+    Supplier<Double> winchSpdFunction;
 
     public ElevatorJoystickCmd(ElevatorSubsystem elevatorSubsystem,
                                Supplier<Double> elevatorSpdFunction,
                                Supplier<Double> armSpdFunction,
-                               Supplier<Double> wristSpdFunction) {
+                               Supplier<Double> wristSpdFunction,
+                               Supplier<Double> winchSpdFunction) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.elevatorSpdFunction = elevatorSpdFunction;
         this.armSpdFunction = armSpdFunction;
         this.wristSpdFunction = wristSpdFunction;
+        this.winchSpdFunction = winchSpdFunction;
         addRequirements(elevatorSubsystem);
     }
 
@@ -40,6 +43,9 @@ public class ElevatorJoystickCmd extends CommandBase {
         double wristSpeed = wristSpdFunction.get();
         wristSpeed = Math.abs(wristSpeed) > Constants.Joystick.kDeadband ? wristSpeed : 0;
         elevatorSubsystem.setWristSpeed(wristSpeed);
+        double winchSpeed = wristSpdFunction.get();
+        winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband ? winchSpeed : 0;
+        elevatorSubsystem.setWinchSpeed(winchSpeed);
     }
 
     @Override

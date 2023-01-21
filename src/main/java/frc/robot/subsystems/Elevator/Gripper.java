@@ -34,7 +34,7 @@ public class Gripper extends SubsystemBase {
         rightMotor.setInverted(true);
         intakeMotorGroup = new MotorControllerGroup(leftMotor, rightMotor);
 
-        wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kArmGearRatio);
+        wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
 
         absoluteEncoder = new CANCoder(ElevatorPort.kWristAbsoluteEncoder);
         CANCoderConfiguration absoluteEncoderConfiguration = new CANCoderConfiguration();

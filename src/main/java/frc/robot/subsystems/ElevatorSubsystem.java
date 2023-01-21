@@ -7,6 +7,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator.Arm;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.Gripper;
+import frc.robot.subsystems.Elevator.Winch;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -20,22 +21,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final Gripper gripper;
     private final Elevator elevator;
     private final Arm arm;
+    private final Winch winch;
 
     private ElevatorSubsystem() {
         elevator = Elevator.getInstance();
         gripper = Gripper.getInstance();
         arm = Arm.getInstance();
+        winch = Winch.getInstance();
     }
 
     @Override
     public void periodic() {
         if(elevator.getLimitSwitch()) {
             elevator.zeroEncoder();
-            elevator.setSetpoint(.15);
+            elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         }
         if(arm.getLimitSwitch()) {
             arm.zeroEncoder();
-            arm.setSetpoint(.15);
+            arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         }
     }
 
@@ -43,6 +46,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         gripper.setWristSetpoint(0);
+        winch.setSetpoint(0);
         Timer.delay(1.5);
         elevator.set(-.08);
         arm.set(-.08);
@@ -50,6 +54,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setElevatorSetpoint(double setpoint) {
         elevator.setSetpoint(setpoint);
+    }
+
+    public void setArmSetpoint(double setpoint) {
+        arm.setSetpoint(setpoint);
+    }
+
+    public void setWristSetpoint(double setpoint) {
+        gripper.setWristSetpoint(setpoint);
+    }
+
+    public void setWinchSetpoint(double setpoint) {
+        winch.setSetpoint(setpoint);
     }
 
     public void setElevatorSpeed(double speed) {
@@ -63,6 +79,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void setWristSpeed(double speed) {
         gripper.setWristSetpoint(gripper.getWristSetpoint() + speed);
     }
+    public void setWinchSpeed(double speed) {
+        winch.setSetpoint(winch.getSetpoint() + speed);
+    }
 
     public void runIntake(boolean run) {
         gripper.runIntake(run?ElevatorConstants.kIntakeSpeed: 0);
@@ -72,6 +91,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         arm.set(0);
         elevator.set(0);
         gripper.stop();
+        winch.stop();
     }
 }
 
