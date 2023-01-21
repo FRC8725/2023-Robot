@@ -193,10 +193,10 @@ public final class Constants {
 
         public static final double kMinElevatorHeight = Units.inchesToMeters(1);
         public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
-        public static final double kMaxArmHeight = Units.inchesToMeters(40);
         public static final double kMinArmHeight = Units.inchesToMeters(1);
-        public static final double kMaxWinchAngle = Units.degreesToRadians(90);
+        public static final double kMaxArmHeight = Units.inchesToMeters(40);
         public static final double kMinWinchAngle = Units.degreesToRadians(4);
+        public static final double kMaxWinchAngle = Units.degreesToRadians(80);
 
         public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
                 new TrapezoidProfile.Constraints(

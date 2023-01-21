@@ -3,9 +3,14 @@ package frc.robot.subsystems.Elevator;
 
 import com.ctre.phoenix.sensors.*;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.Constants.ElevatorConstants;
@@ -23,11 +28,7 @@ public class Winch extends SubsystemBase {
     LazySparkMax winchMotor;
 
     ProfiledPIDController winchProfiledPIDController;
-    CANCoder absoluteEncoder;
-
-    // Elevator factors
-    boolean isPIDControlled = false;
-    double speed = 0;
+    DutyCycleEncoder absoluteEncoder;
 
     private Winch() {
         winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
@@ -35,14 +36,8 @@ public class Winch extends SubsystemBase {
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
         winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
 
-        absoluteEncoder = new CANCoder(ElevatorPort.kWinchAbsoluteEncoder);
-        CANCoderConfiguration absoluteEncoderConfiguration = new CANCoderConfiguration();
-        absoluteEncoderConfiguration.sensorTimeBase = SensorTimeBase.Per100Ms_Legacy;
-        absoluteEncoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-        absoluteEncoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-        absoluteEncoder.configFactoryDefault();
-        absoluteEncoder.configAllSettings(absoluteEncoderConfiguration);
-        absoluteEncoder.setPositionToAbsolute();
+        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
+        absoluteEncoder.setDistancePerRotation(360);
     }
 
     @Override

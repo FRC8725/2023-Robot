@@ -28,12 +28,12 @@ public class RobotMap {
         public static final int kRightIntakeMotor = 17;
         public static final int kWinchMotor = 19;
 
-        public static final int kWristAbsoluteEncoder = 18;
-        public static final int kWinchAbsoluteEncoder = 20;
 
         // DIO
         public static final int kElevatorLimitSwitch = 0;
         public static final int kArmLimitSwitch = 1;
+        public static final int kWristAbsoluteEncoder = 2;
+        public static final int kWinchAbsoluteEncoder = 3;
 
         // Pneumatics
         public static final int[] kWinchReleaseDoubleSolenoid = {14, 15};

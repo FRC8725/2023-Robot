@@ -74,6 +74,7 @@ public class RobotContainer {
 
         m_elevatorJoystick.btn_triggerL.toggleOnTrue(new RunGripper(m_elevatorSubsystem));
         m_elevatorJoystick.btn_topL.onTrue(new ToggleGripperOpen(m_pneumatics));
+        m_elevatorJoystick.btn_triggerR.whileTrue(new InstantCommand(m_elevatorSubsystem::setGripperHorizontal));
         m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
     }
 

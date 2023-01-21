@@ -4,6 +4,7 @@ package frc.robot.subsystems.Elevator;
 import com.ctre.phoenix.sensors.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
@@ -26,7 +27,7 @@ public class Gripper extends SubsystemBase {
 
     ProfiledPIDController wristProfiledPIDController;
 
-    CANCoder absoluteEncoder;
+    DutyCycleEncoder absoluteEncoder;
 
     private Gripper() {
         leftMotor = new LazyTalonFX(ElevatorPort.kLeftIntakeMotor, ElevatorConstants.kIntakeGearRatio);
@@ -36,14 +37,8 @@ public class Gripper extends SubsystemBase {
 
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
 
-        absoluteEncoder = new CANCoder(ElevatorPort.kWristAbsoluteEncoder);
-        CANCoderConfiguration absoluteEncoderConfiguration = new CANCoderConfiguration();
-        absoluteEncoderConfiguration.sensorTimeBase = SensorTimeBase.Per100Ms_Legacy;
-        absoluteEncoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-        absoluteEncoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-        absoluteEncoder.configFactoryDefault();
-        absoluteEncoder.configAllSettings(absoluteEncoderConfiguration);
-        absoluteEncoder.setPositionToAbsolute();
+        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
+        absoluteEncoder.setDistancePerRotation(360);
 
         wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kIWrist, ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
@@ -65,7 +60,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public void setWristSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, 0, Math.PI);
+        setpoint = MathUtil.clamp(setpoint, -Math.PI, Math.PI);
         wristProfiledPIDController.setGoal(setpoint);
     }
 

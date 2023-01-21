@@ -83,6 +83,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         winch.setSetpoint(winch.getSetpoint() + speed);
     }
 
+    public void setGripperHorizontal() {
+        gripper.setWristSetpoint(-winch.getSetpoint());
+    }
+
     public void runIntake(boolean run) {
         gripper.runIntake(run?ElevatorConstants.kIntakeSpeed: 0);
     }
