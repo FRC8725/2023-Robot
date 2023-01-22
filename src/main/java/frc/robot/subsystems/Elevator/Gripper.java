@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Elevator;
 
 
-import com.ctre.phoenix.sensors.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -38,10 +37,11 @@ public class Gripper extends SubsystemBase {
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
-        absoluteEncoder.setDistancePerRotation(360);
+        absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
 
-        wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kIWrist, ElevatorConstants.kWristControllerConstraints);
+        wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
+        wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
         wristProfiledPIDController.reset(getAbsoluteEncoderRad());
     }
 
@@ -51,8 +51,8 @@ public class Gripper extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getDistance()-ElevatorConstants.kWristAbsoluteEncoderOffsetAngle;
-        return measurement/180*Math.PI;
+        double measurement = absoluteEncoder.getAbsolutePosition();
+        return measurement*2*Math.PI;
     }
 
     public void runIntake(double speed) {
@@ -60,7 +60,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public void setWristSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, -Math.PI, Math.PI);
+        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWristAngle, ElevatorConstants.kMaxWristAngle);
         wristProfiledPIDController.setGoal(setpoint);
     }
 

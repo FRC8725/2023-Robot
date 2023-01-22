@@ -1,16 +1,10 @@
 package frc.robot.subsystems.Elevator;
 
 
-import com.ctre.phoenix.sensors.*;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.Constants.ElevatorConstants;
@@ -35,9 +29,10 @@ public class Winch extends SubsystemBase {
         winchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
         winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
+        winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
-        absoluteEncoder.setDistancePerRotation(360);
+        absoluteEncoder.setPositionOffset(ElevatorConstants.kWinchAbsoluteEncoderOffset);
     }
 
     @Override
@@ -46,8 +41,8 @@ public class Winch extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getDistance()-ElevatorConstants.kWinchAbsoluteEncoderOffsetAngle;
-        return measurement/180*Math.PI;
+        double measurement = absoluteEncoder.getAbsolutePosition();
+        return measurement*2*Math.PI;
     }
 
     public void setSetpoint(double setpoint) {

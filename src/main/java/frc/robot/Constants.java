@@ -153,8 +153,6 @@ public final class Constants {
         public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
         public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
         public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
-        public static final double kWinchReelDiameterMeters = Units.inchesToMeters(2);
-        public static final double kWinchReelCircumferenceMeters = kWinchReelDiameterMeters * Math.PI;
         public static final double kPIDElevatorPositionTolerance = .1;
         public static final double kPIDArmPositionTolerance = .1;
         public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
@@ -183,8 +181,8 @@ public final class Constants {
 
         public static final double kIntakeSpeed = .5;
 
-        public static final double kWristAbsoluteEncoderOffsetAngle = 0;
-        public static final double kWinchAbsoluteEncoderOffsetAngle = 0;
+        public static final double kWristAbsoluteEncoderOffset = 0;
+        public static final double kWinchAbsoluteEncoderOffset = 0;
 
         public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWristAngularAccelerationRadiansPerSecond = 1;
@@ -195,8 +193,10 @@ public final class Constants {
         public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
         public static final double kMinArmHeight = Units.inchesToMeters(1);
         public static final double kMaxArmHeight = Units.inchesToMeters(40);
-        public static final double kMinWinchAngle = Units.degreesToRadians(4);
-        public static final double kMaxWinchAngle = Units.degreesToRadians(80);
+        public static final double kMinWinchAngle = Units.degreesToRadians(0);
+        public static final double kMaxWinchAngle = Units.degreesToRadians(90);
+        public static final double kMinWristAngle = Units.degreesToRadians(-90);
+        public static final double kMaxWristAngle = Units.degreesToRadians(90);
 
         public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
                 new TrapezoidProfile.Constraints(
