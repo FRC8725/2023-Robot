@@ -24,6 +24,15 @@ public class RunElevatorToPosition extends CommandBase {
         this.wristAngle = wristAngle;
         addRequirements(elevatorSubsystem);
     }
+    public RunElevatorToPosition(ElevatorSubsystem elevatorSubsystem,
+                                 double[] elevatorPose) {
+        this.elevatorSubsystem = elevatorSubsystem;
+        this.elevatorPosition = elevatorPose[0];
+        this.armPosition = elevatorPose[1];
+        this.winchAngle = elevatorPose[2];
+        this.wristAngle = elevatorPose[3];
+        addRequirements(elevatorSubsystem);
+    }
 
     @Override
     public void initialize() {

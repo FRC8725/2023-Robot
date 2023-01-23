@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
+import frc.robot.Constants.PoseConstants;
 
 import org.photonvision.PhotonCamera;
 
@@ -74,9 +76,14 @@ public class RobotContainer {
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
         m_elevatorJoystick.btn_triggerL.toggleOnTrue(new RunGripper(m_elevatorSubsystem));
-        m_elevatorJoystick.btn_topL.onTrue(new ToggleGripperOpen(m_pneumatics));
+        m_elevatorJoystick.btn_topL.onTrue(new ToggleGripperOpen(m_pneumatics, m_elevatorSubsystem));
         m_elevatorJoystick.btn_triggerR.whileFalse(new RepeatCommand(new InstantCommand(m_elevatorSubsystem::setGripperHorizontal)));
         m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
+        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
+        m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
+        m_elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
+        m_elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));
+        m_elevatorJoystick.btn_Start.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kInitElevatorPose));
     }
 
     private void putToDashboard() {

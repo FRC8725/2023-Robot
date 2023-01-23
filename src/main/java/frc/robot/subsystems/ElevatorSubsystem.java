@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator.Arm;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.Gripper;
@@ -46,8 +49,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void reset() {
         elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         arm.setSetpoint(ElevatorConstants.kMinArmHeight);
-        gripper.setWristSetpoint(0);
-        winch.setSetpoint(0);
+        gripper.setWristSetpoint(-Math.PI);
+        winch.setSetpoint(Math.PI);
         Timer.delay(1.5);
         elevator.set(-.08);
         arm.set(-.08);
@@ -89,8 +92,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         gripper.setWristSetpoint(-winch.getSetpoint());
     }
 
-    public void runIntake(boolean run) {
-        gripper.runIntake(run?ElevatorConstants.kIntakeSpeed: 0);
+    public void runIntake(boolean run, boolean isInverted) {
+        double speed = ElevatorConstants.kIntakeSpeed * (isInverted? -1: 1);
+        gripper.runIntake(run?speed: 0);
+    }
+
+    public boolean getIntakeSwitch() {
+        return gripper.getIntakeLimitSwitch();
     }
 
     public void stop() {

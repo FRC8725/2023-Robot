@@ -51,5 +51,10 @@ public class Pneumatics extends SubsystemBase {
         gripperIntrance.toggle();
     }
 
+    public boolean getGripperStatus() {
+        // true is open
+        return gripperIntrance.get() != DoubleSolenoid.Value.kForward;
+    }
+
 }
 

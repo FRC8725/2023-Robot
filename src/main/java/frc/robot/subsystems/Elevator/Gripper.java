@@ -3,6 +3,7 @@ package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +28,7 @@ public class Gripper extends SubsystemBase {
     ProfiledPIDController wristProfiledPIDController;
 
     DutyCycleEncoder absoluteEncoder;
+    DigitalInput limitSwitch;
 
     private Gripper() {
         leftMotor = new LazyTalonFX(ElevatorPort.kLeftIntakeMotor, ElevatorConstants.kIntakeGearRatio);
@@ -43,6 +45,8 @@ public class Gripper extends SubsystemBase {
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
         wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
         wristProfiledPIDController.reset(getAbsoluteEncoderRad());
+
+        limitSwitch = new DigitalInput(ElevatorPort.kGripperLimitSwitch);
     }
 
     @Override
@@ -57,6 +61,10 @@ public class Gripper extends SubsystemBase {
 
     public void runIntake(double speed) {
         intakeMotorGroup.set(MathUtil.clamp(speed, -1, 1));
+    }
+
+    public boolean getIntakeLimitSwitch() {
+        return limitSwitch.get();
     }
 
     public void setWristSetpoint(double setpoint) {

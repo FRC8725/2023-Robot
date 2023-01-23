@@ -15,22 +15,22 @@ public class RunGripper extends CommandBase {
 
     @Override
     public void initialize() {
-        elevatorSubsystem.runIntake(false);
+        elevatorSubsystem.runIntake(false, false);
     }
 
     @Override
     public void execute() {
-        elevatorSubsystem.runIntake(true);
+        elevatorSubsystem.runIntake(true, false);
     }
 
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return elevatorSubsystem.getIntakeSwitch();
     }
 
     @Override
     public void end(boolean interrupted) {
-        elevatorSubsystem.runIntake(false);
+        elevatorSubsystem.runIntake(false, false);
     }
 }

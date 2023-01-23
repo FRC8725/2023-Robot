@@ -208,4 +208,13 @@ public final class Constants {
                         kMaxWinchAngularSpeedRadiansPerSecond,
                         kMaxWinchAngularAccelerationRadiansPerSecond);
     }
+
+    public static final class PoseConstants {
+        // Position Order: Elevator Arm Winch Wrist
+        public static final double[] kLowElevatorPose = {0, 0, 0, 0};
+        public static final double[] kMidElevatorPose = {0, 0, 0, 0};
+        public static final double[] kHighElevatorPose = {0, 0, 0, 0};
+        public static final double[] kLoadingZoneElevatorPose = {0, 0, 0, 0};
+        public static final double[] kInitElevatorPose = {0, 0, 0, 0};
+    }
 }

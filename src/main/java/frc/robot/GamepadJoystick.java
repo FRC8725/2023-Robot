@@ -14,8 +14,8 @@ public class GamepadJoystick extends Joystick {
     public Trigger btn_topR = new JoystickButton(this, 6);
     public Trigger btn_triggerL = new JoystickButton(this, 7);
     public Trigger btn_triggerR = new JoystickButton(this, 8);
-    public Trigger btn_Start = new JoystickButton(this, 9);
-    public Trigger btn_Back = new JoystickButton(this, 10);
+    public Trigger btn_Back = new JoystickButton(this, 9);
+    public Trigger btn_Start = new JoystickButton(this, 10);
     // setting POVButton
     public POVButton POV_North = new POVButton(this, 0);
     public POVButton POV_NorthEast = new POVButton(this, 45);
