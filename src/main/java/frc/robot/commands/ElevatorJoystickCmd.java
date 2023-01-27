@@ -35,7 +35,7 @@ public class ElevatorJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         var elevatorSpeed = elevatorSpdFunction.get();
-        elevatorSpeed = Math.abs(elevatorSpeed) > Constants.Joystick.kDeadband ? elevatorSpeed : 0.0;
+        elevatorSpeed = Math.abs(elevatorSpeed) > Constants.Joystick.kDeadband ? elevatorSpeed * 0.02 : 0.0;
         elevatorSubsystem.setElevatorSpeed(elevatorSpeed);
         var armSpeed = armSpdFunction.get();
         armSpeed = Math.abs(armSpeed) > Constants.Joystick.kDeadband ? armSpeed : 0;

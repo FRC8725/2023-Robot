@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.Constants.ElevatorConstants;
@@ -44,10 +45,14 @@ public class Elevator extends SubsystemBase {
             else speed = MathUtil.clamp(elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters)), -1, 1);
         }
         elevatorMotor.set(speed);
+        SmartDashboard.putNumber("elevator speed", elevatorMotor.get());
+        SmartDashboard.putNumber("elevator position rad", elevatorMotor.getPositionAsRad());
+        SmartDashboard.putNumber("elevator setpoint", elevatorPIDController.getSetpoint());
+        SmartDashboard.putBoolean("limitSwitch", getLimitSwitch());
     }
 
     public void setSetpoint(double setpoint) {
-        if (setpoint > ElevatorConstants.kMaxElevatorHeight && setpoint < ElevatorConstants.kMinElevatorHeight) return;
+        if (setpoint > ElevatorConstants.kMaxElevatorHeight || setpoint < ElevatorConstants.kMinElevatorHeight) return;
         isPIDControlled = true;
         elevatorPIDController.setSetpoint(setpoint);
     }

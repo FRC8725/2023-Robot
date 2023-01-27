@@ -164,7 +164,7 @@ public final class Constants {
         public static final double kWinchGearRatio = 1./25;
 
         public static final double kPElevator = 1;
-        public static final double kIElevator = 0;
+        public static final double kIElevator = 0.1;
         public static final double kDElevator = 0;
 
         public static final double kPWrist = .5;
@@ -189,8 +189,9 @@ public final class Constants {
         public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWinchAngularAccelerationRadiansPerSecond = 1;
 
-        public static final double kMinElevatorHeight = Units.inchesToMeters(5);
-        public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
+        public static final double kMinElevatorHeight = 0;
+        public static final double kresetElevatorHeight = Units.inchesToMeters(5);
+        public static final double kMaxElevatorHeight = 1;
         public static final double kMinArmHeight = Units.inchesToMeters(1);
         public static final double kMaxArmHeight = Units.inchesToMeters(40);
         public static final double kMinWinchAngle = Units.degreesToRadians(0);
