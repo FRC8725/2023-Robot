@@ -38,13 +38,13 @@ public class ElevatorJoystickCmd extends CommandBase {
         elevatorSpeed = Math.abs(elevatorSpeed) > Constants.Joystick.kDeadband ? elevatorSpeed * 0.02 : 0.0;
         elevatorSubsystem.setElevatorSpeed(elevatorSpeed);
         var armSpeed = armSpdFunction.get();
-        armSpeed = Math.abs(armSpeed) > Constants.Joystick.kDeadband * 0.02 ? armSpeed : 0;
+        armSpeed = Math.abs(armSpeed) > Constants.Joystick.kDeadband ? armSpeed * 0.02 : 0;
         elevatorSubsystem.setArmSpeed(armSpeed);
         var wristSpeed = wristSpdFunction.get();
-        wristSpeed = Math.abs(wristSpeed) > Constants.Joystick.kDeadband * 0.02 ? wristSpeed : 0;
+        wristSpeed = Math.abs(wristSpeed) > Constants.Joystick.kDeadband ? wristSpeed * 0.02 : 0;
         elevatorSubsystem.setWristSpeed(wristSpeed);
         var winchSpeed = wristSpdFunction.get();
-        winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband * 0.02 ? winchSpeed : 0;
+        winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband ? winchSpeed * 0.02: 0;
         elevatorSubsystem.setWinchSpeed(winchSpeed);
     }
 
