@@ -163,7 +163,7 @@ public final class Constants {
         public static final double kArmGearRatio = 1./9;
         public static final double kWinchGearRatio = 1./25;
 
-        public static final double kPElevator = .5;
+        public static final double kPElevator = 1;
         public static final double kIElevator = 0;
         public static final double kDElevator = 0;
 

@@ -39,9 +39,9 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (isPIDControlled && !atSetpoint()) {
-            if (!atSetpoint())speed = MathUtil.clamp(elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters)), -1, 1);
-            else speed = 0;
+        if (isPIDControlled) {
+            if (atSetpoint()) speed = 0;
+            else speed = MathUtil.clamp(elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters)), -1, 1);
         }
         elevatorMotor.set(speed);
     }

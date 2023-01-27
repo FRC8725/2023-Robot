@@ -40,8 +40,9 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (isPIDControlled || !atSetpoint()) {
-            speed = MathUtil.clamp(armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters)), -1, 1);
+        if (isPIDControlled) {
+            if (atSetpoint()) speed = 0;
+            else speed = MathUtil.clamp(armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters)), -1, 1);
         }
         armMotor.set(speed);
     }

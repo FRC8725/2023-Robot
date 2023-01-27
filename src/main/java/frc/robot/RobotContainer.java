@@ -53,13 +53,13 @@ public class RobotContainer {
                 () -> !m_swerveJoystick.btn_topL.getAsBoolean(),
                 () -> m_swerveJoystick.btn_topR.getAsBoolean()
         ));
-        //m_elevatorSubsystem.setDefaultCommand(new ElevatorJoystickCmd(
-        //        m_elevatorSubsystem,
-        //        () -> m_elevatorJoystick.get_LStickY(),
-        //        () -> m_elevatorJoystick.get_RStickY(),
-        //        () -> m_elevatorJoystick.get_RStickX(),
-        //        () -> m_elevatorJoystick.get_LStickX()
-        //));
+        m_elevatorSubsystem.setDefaultCommand(new ElevatorJoystickCmd(
+                m_elevatorSubsystem,
+                () -> m_elevatorJoystick.get_LStickY(),
+                () -> m_elevatorJoystick.get_RStickY(),
+                () -> m_elevatorJoystick.get_RStickX(),
+                () -> m_elevatorJoystick.get_LStickX()
+        ));
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
         autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
         autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem, m_visionManager));

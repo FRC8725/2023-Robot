@@ -70,17 +70,21 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setElevatorSpeed(double speed) {
+        if(speed == 0) return;
         elevator.setSetpoint(elevator.getSetpoint() + speed);
     }
 
     public void setArmSpeed(double speed) {
+        if(speed == 0) return;
         arm.setSetpoint(arm.getSetpoint() + speed);
     }
 
     public void setWristSpeed(double speed) {
+        if(speed == 0) return;
         gripper.setWristSetpoint(gripper.getWristSetpoint() + speed);
     }
     public void setWinchSpeed(double speed) {
+        if(speed == 0) return;
         winch.setSetpoint(winch.getSetpoint() + speed);
     }
 
