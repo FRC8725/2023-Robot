@@ -116,6 +116,11 @@ public final class Constants {
                         new Rotation3d(0, 0, Math.PI));
         public static final Transform3d GoalMid2Left = new Transform3d(new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
         public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
+
+        // UsbCamera
+        public static final int[] UsbCameraResolution = {640, 480};
+        public static final int[] kYellowLowThreshold = {10, 50, 150};
+        public static final int[] kYellowHighThreshold = {85, 255, 255};
     }
 
     public static final class BalanceConstants {

@@ -47,12 +47,14 @@ public class Pneumatics extends SubsystemBase {
         winchReleaser.toggle();
     }
 
-    public void toggleGripperOpen() {
-        gripperIntrance.toggle();
+    public void setGripper(boolean isOpen) {
+        gripperIntrance.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
     }
 
+    /**
+     * @return isOpen
+     */
     public boolean getGripperStatus() {
-        // true is open
         return gripperIntrance.get() != DoubleSolenoid.Value.kForward;
     }
 
