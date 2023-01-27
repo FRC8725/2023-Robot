@@ -61,8 +61,6 @@ public class RobotContainer {
                 () -> m_elevatorJoystick.get_LStickX()
         ));
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
-        autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
-        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem, m_visionManager));
         configureButtonBindings();
         putToDashboard();
     }
@@ -88,6 +86,8 @@ public class RobotContainer {
 
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
+        autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
+        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem, m_visionManager));
         SmartDashboard.putData(autoCommand);
     }
 
