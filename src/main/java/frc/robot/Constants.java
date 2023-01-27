@@ -139,7 +139,7 @@ public final class Constants {
         public static final AprilTag aprilTag8 = new AprilTag(8, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(0))));
         public static final double length = Units.feetToMeters(54.27083);
         public static final double width = Units.feetToMeters(26.2916);
-        public static final AprilTagFieldLayout atfl = new AprilTagFieldLayout(
+        public static final AprilTagFieldLayout aprilTagField = new AprilTagFieldLayout(
                 List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag6, aprilTag7, aprilTag8),
                 FieldConstants.length, FieldConstants.width);
 
@@ -153,7 +153,7 @@ public final class Constants {
         public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
         public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
         public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
-        public static final double kPIDElevatorPositionTolerance = .1;
+        public static final double kPIDElevatorPositionTolerance = Units.inchesToMeters(1);
         public static final double kPIDArmPositionTolerance = .1;
         public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
         public static final double kPIDWinchAngularToleranceRads = 10./180* Math.PI;
@@ -189,7 +189,7 @@ public final class Constants {
         public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWinchAngularAccelerationRadiansPerSecond = 1;
 
-        public static final double kMinElevatorHeight = Units.inchesToMeters(1);
+        public static final double kMinElevatorHeight = Units.inchesToMeters(5);
         public static final double kMaxElevatorHeight = Units.inchesToMeters(65);
         public static final double kMinArmHeight = Units.inchesToMeters(1);
         public static final double kMaxArmHeight = Units.inchesToMeters(40);
@@ -211,7 +211,7 @@ public final class Constants {
 
     public static final class PoseConstants {
         // Position Order: Elevator Arm Winch Wrist
-        public static final double[] kLowElevatorPose = {0, 0, 0, 0};
+        public static final double[] kLowElevatorPose = {0, 0, Math.PI/2, -Math.PI/2};
         public static final double[] kMidElevatorPose = {0, 0, 0, 0};
         public static final double[] kHighElevatorPose = {0, 0, 0, 0};
         public static final double[] kLoadingZoneElevatorPose = {0, 0, 0, 0};

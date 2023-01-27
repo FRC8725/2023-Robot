@@ -41,9 +41,10 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         // 1. Get real-time joystick inputs
-        double xSpeed = xSpdFunction.get();
-        double ySpeed = ySpdFunction.get();
-        double turningSpeed = turningSpdFunction.get();
+        var xSpeed = xSpdFunction.get();
+        var ySpeed = ySpdFunction.get();
+        var turningSpeed = turningSpdFunction.get();
+        var decreaseSpeed = decreaseSpeedFunction.get();
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > Constants.Joystick.kDeadband ? xSpeed : 0.0;
@@ -56,9 +57,9 @@ public class SwerveJoystickCmd extends CommandBase {
         }
 
         // 3. Make the driving smoother
-        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? DriveConstants.kDecreaseDrivingSpeedFactor : 1.);
-        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeedFunction.get() ? DriveConstants.kDecreaseDrivingSpeedFactor : 1.);
-        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * (decreaseSpeedFunction.get() ? DriveConstants.kDecreaseTurningSpeedFactor : 1.);
+        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeed ? DriveConstants.kDecreaseDrivingSpeedFactor : 1.);
+        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * (decreaseSpeed ? DriveConstants.kDecreaseDrivingSpeedFactor : 1.);
+        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * (decreaseSpeed ? DriveConstants.kDecreaseTurningSpeedFactor : 1.);
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;

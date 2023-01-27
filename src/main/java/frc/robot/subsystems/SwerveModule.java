@@ -91,8 +91,7 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        double angle = absoluteEncoder.getAbsolutePosition() / 360.;
-        angle *= 2.0 * Math.PI;
+        var angle = absoluteEncoder.getAbsolutePosition() / 180. * Math.PI;
         angle -= absoluteEncoderOffsetAngle / 180 * Math.PI;
         return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
     }

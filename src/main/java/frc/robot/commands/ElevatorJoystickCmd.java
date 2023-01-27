@@ -34,16 +34,16 @@ public class ElevatorJoystickCmd extends CommandBase {
 
     @Override
     public void execute() {
-        double elevatorSpeed = elevatorSpdFunction.get();
+        var elevatorSpeed = elevatorSpdFunction.get();
         elevatorSpeed = Math.abs(elevatorSpeed) > Constants.Joystick.kDeadband ? elevatorSpeed : 0.0;
         elevatorSubsystem.setElevatorSpeed(elevatorSpeed);
-        double armSpeed = armSpdFunction.get();
+        var armSpeed = armSpdFunction.get();
         armSpeed = Math.abs(armSpeed) > Constants.Joystick.kDeadband ? armSpeed : 0;
         elevatorSubsystem.setArmSpeed(armSpeed);
-        double wristSpeed = wristSpdFunction.get();
+        var wristSpeed = wristSpdFunction.get();
         wristSpeed = Math.abs(wristSpeed) > Constants.Joystick.kDeadband ? wristSpeed : 0;
         elevatorSubsystem.setWristSpeed(wristSpeed);
-        double winchSpeed = wristSpdFunction.get();
+        var winchSpeed = wristSpdFunction.get();
         winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband ? winchSpeed : 0;
         elevatorSubsystem.setWinchSpeed(winchSpeed);
     }

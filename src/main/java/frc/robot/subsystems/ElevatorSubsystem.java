@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator.Arm;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.Gripper;
@@ -49,10 +46,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void reset() {
         elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         arm.setSetpoint(ElevatorConstants.kMinArmHeight);
-        gripper.setWristSetpoint(-Math.PI);
-        winch.setSetpoint(Math.PI);
+        gripper.setWristSetpoint(-Math.PI/2);
+        winch.setSetpoint(Math.PI/2);
         Timer.delay(1.5);
-        elevator.set(-.08);
+        elevator.setSpeed(-.08);
         arm.set(-.08);
     }
 
@@ -103,7 +100,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void stop() {
         arm.set(0);
-        elevator.set(0);
+        elevator.setSpeed(0);
         gripper.stop();
         winch.stop();
     }

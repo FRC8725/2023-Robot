@@ -39,14 +39,15 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (isPIDControlled || !atSetpoint()) {
-            speed = MathUtil.clamp(elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters)), -1, 1);
+        if (isPIDControlled && !atSetpoint()) {
+            if (!atSetpoint())speed = MathUtil.clamp(elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters)), -1, 1);
+            else speed = 0;
         }
         elevatorMotor.set(speed);
     }
 
     public void setSetpoint(double setpoint) {
-        if (setpoint > ElevatorConstants.kMaxElevatorHeight || setpoint < ElevatorConstants.kMinElevatorHeight) return;
+        if (setpoint > ElevatorConstants.kMaxElevatorHeight && setpoint < ElevatorConstants.kMinElevatorHeight) return;
         isPIDControlled = true;
         elevatorPIDController.setSetpoint(setpoint);
     }
@@ -58,7 +59,7 @@ public class Elevator extends SubsystemBase {
         return elevatorPIDController.getSetpoint();
     }
 
-    public void set(double speed) {
+    public void setSpeed(double speed) {
         isPIDControlled = false;
         this.speed = speed;
     }
@@ -68,7 +69,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean getLimitSwitch() {
-        return limitSwitch.get();
+        return !limitSwitch.get();
     }
 
 }

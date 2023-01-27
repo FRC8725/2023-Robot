@@ -61,7 +61,7 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void execute() {
-        Transform3d relativePos = visionManager.getAprilTagRelative();
+        var relativePos = visionManager.getAprilTagRelative();
         if (!visionManager.hasTarget()) relativePos = lastTarget;
 
         var robotPose = new Pose3d(
