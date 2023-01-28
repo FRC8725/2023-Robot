@@ -24,12 +24,12 @@ public class RunGripper extends CommandBase {
     public void initialize() {
         hasObject = !elevatorSubsystem.getIntakeSwitch();
         elevatorSubsystem.runIntake(false, false);
-        pneumatics.setGripper(!visionManager.isCone() || hasObject);
     }
 
     @Override
     public void execute() {
         elevatorSubsystem.runIntake(true, hasObject);
+        pneumatics.setGripper(!visionManager.isCone() || hasObject);
     }
 
     @Override

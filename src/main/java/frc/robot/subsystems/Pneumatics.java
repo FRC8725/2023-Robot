@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -48,6 +49,7 @@ public class Pneumatics extends SubsystemBase {
     }
 
     public void setGripper(boolean isOpen) {
+        SmartDashboard.putBoolean("isGripperOpen", isOpen);
         gripperIntrance.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
     }
 

@@ -118,9 +118,9 @@ public final class Constants {
         public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
 
         // UsbCamera
-        public static final int[] UsbCameraResolution = {640, 480};
-        public static final int[] kYellowLowThreshold = {10, 50, 150};
-        public static final int[] kYellowHighThreshold = {85, 255, 255};
+        public static final int[] UsbCameraResolution = {320, 240};
+        public static final int[] kYellowLowThreshold = {0, 100, 50};
+        public static final int[] kYellowHighThreshold = {40, 255, 255};
     }
 
     public static final class BalanceConstants {
@@ -154,7 +154,7 @@ public final class Constants {
     public static final class ElevatorConstants {
         public static final double kElevatorGearRatio = 1./9;
 
-        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(2);
+        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.8);
         public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
         public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
         public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
@@ -168,8 +168,8 @@ public final class Constants {
         public static final double kArmGearRatio = 1./9;
         public static final double kWinchGearRatio = 1./25;
 
-        public static final double kPElevator = 1;
-        public static final double kIElevator = 0.1;
+        public static final double kPElevator = 5;
+        public static final double kIElevator = 0;
         public static final double kDElevator = 0;
 
         public static final double kPWrist = .5;
@@ -184,7 +184,7 @@ public final class Constants {
         public static final double kIWinch = 0;
         public static final double kDWinch = 0;
 
-        public static final double kIntakeSpeed = .5;
+        public static final double kIntakeSpeed = .2;
 
         public static final double kWristAbsoluteEncoderOffset = 0;
         public static final double kWinchAbsoluteEncoderOffset = 0;
@@ -194,9 +194,9 @@ public final class Constants {
         public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWinchAngularAccelerationRadiansPerSecond = 1;
 
-        public static final double kMinElevatorHeight = 0;
-        public static final double kresetElevatorHeight = Units.inchesToMeters(5);
-        public static final double kMaxElevatorHeight = 1;
+//        public static final double kMinElevatorHeight = 0;
+        public static final double kMinElevatorHeight = Units.inchesToMeters(5);
+        public static final double kMaxElevatorHeight = Units.inchesToMeters(10);
         public static final double kMinArmHeight = Units.inchesToMeters(1);
         public static final double kMaxArmHeight = Units.inchesToMeters(40);
         public static final double kMinWinchAngle = Units.degreesToRadians(0);

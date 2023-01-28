@@ -2,6 +2,7 @@ package frc.robot.subsystems.Elevator;
 
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -11,6 +12,8 @@ import frc.lib.LazySparkMax;
 import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap.ElevatorPort;
 import frc.robot.Constants.ElevatorConstants;
+
+import java.util.ArrayList;
 
 public class Gripper extends SubsystemBase {
 
@@ -28,13 +31,14 @@ public class Gripper extends SubsystemBase {
     ProfiledPIDController wristProfiledPIDController;
 
     DutyCycleEncoder absoluteEncoder;
-    DigitalInput limitSwitch;
+    ArrayList<DigitalInput> limitSwitch;
 
     private Gripper() {
         leftMotor = new LazyTalonFX(ElevatorPort.kLeftIntakeMotor, ElevatorConstants.kIntakeGearRatio);
         rightMotor = new LazyTalonFX(ElevatorPort.kRightIntakeMotor, ElevatorConstants.kIntakeGearRatio);
         rightMotor.setInverted(true);
         intakeMotorGroup = new MotorControllerGroup(leftMotor, rightMotor);
+        intakeMotorGroup.setInverted(true);
 
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
 
@@ -46,7 +50,9 @@ public class Gripper extends SubsystemBase {
         wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
         wristProfiledPIDController.reset(getAbsoluteEncoderRad());
 
-        limitSwitch = new DigitalInput(ElevatorPort.kGripperLimitSwitch);
+        limitSwitch = new ArrayList<DigitalInput>();
+        limitSwitch.add(new DigitalInput(ElevatorPort.kGripperLimitSwitch[0]));
+        limitSwitch.add(new DigitalInput(ElevatorPort.kGripperLimitSwitch[1]));
     }
 
     @Override
@@ -64,7 +70,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean getIntakeLimitSwitch() {
-        return limitSwitch.get();
+        return limitSwitch.get(0).get() && limitSwitch.get(1).get();
     }
 
     public void setWristSetpoint(double setpoint) {

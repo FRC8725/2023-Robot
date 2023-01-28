@@ -35,7 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void periodic() {
         if(elevator.getLimitSwitch()) {
             elevator.zeroEncoder();
-            elevator.setSetpoint(ElevatorConstants.kresetElevatorHeight);
+            elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         }
         if(arm.getLimitSwitch()) {
             arm.zeroEncoder();
@@ -44,8 +44,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void reset() {
-        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
-        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
+//        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
+//        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         gripper.setWristSetpoint(-Math.PI/2);
         winch.setSetpoint(Math.PI/2);
         Timer.delay(1.5);
