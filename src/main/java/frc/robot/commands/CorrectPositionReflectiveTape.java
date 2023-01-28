@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -26,7 +27,7 @@ public class CorrectPositionReflectiveTape extends CommandBase {
     addRequirements(swerveSubsystem);
 
     // Controller Settings
-    yController = new PIDController(1.5 / Math.PI, 0, 0);
+    yController = new PIDController(1.5 * Math.PI, 0, 0);
     yController.setTolerance(.2);
     yController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -38,6 +39,7 @@ public class CorrectPositionReflectiveTape extends CommandBase {
     yController.reset();
     visionManager.getReflectiveTapeRelativeYawRads();
     visionManager.setDriverMode(false);
+    Timer.delay(.8);
   }
 
   @Override

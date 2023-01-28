@@ -48,7 +48,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         gripper.setWristSetpoint(-Math.PI/2);
         winch.setSetpoint(Math.PI/2);
-        Timer.delay(1.5);
         elevator.setSpeed(-.08);
         arm.set(-.08);
     }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -47,7 +48,6 @@ public class CorrectPosition extends CommandBase {
         thetaController.setTolerance(Units.degreesToRadians(3));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.visionManager = visionManager;
-        lastTarget = new Transform3d();
     }
 
     @Override
@@ -57,12 +57,17 @@ public class CorrectPosition extends CommandBase {
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
         visionManager.getAprilTagRelative();
         visionManager.setDriverMode(false);
+        lastTarget = new Transform3d();
+        Timer.delay(.8);
     }
 
     @Override
     public void execute() {
         var relativePos = visionManager.getAprilTagRelative();
         if (!visionManager.hasTarget()) relativePos = lastTarget;
+        else lastTarget = relativePos;
+
+        if (relativePos.getX() == 0 && relativePos.getY() == 0 && relativePos.getZ() == 0) return;
 
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
