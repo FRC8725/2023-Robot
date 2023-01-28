@@ -106,7 +106,6 @@ public class VisionManager extends SubsystemBase {
     @Override
     public void periodic() {
         if (usbCamera.isConnected()) cvSink = CameraServer.getVideo(usbCamera);
-        SmartDashboard.putBoolean("isCone", isCone());
         if (!camera.isConnected()) return;
         if (isFirstConnected) {
             camera.setDriverMode(true);

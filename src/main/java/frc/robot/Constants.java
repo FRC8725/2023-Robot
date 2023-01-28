@@ -164,7 +164,7 @@ public final class Constants {
         public static final double kPIDWinchAngularToleranceRads = 10./180* Math.PI;
 
         public static final double kIntakeGearRatio = 1;
-        public static final double kWristGearRatio = 1./27;
+        public static final double kWristGearRatio = 1./25;
         public static final double kArmGearRatio = 1./9;
         public static final double kWinchGearRatio = 1./25;
 
