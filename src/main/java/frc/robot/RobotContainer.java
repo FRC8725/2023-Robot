@@ -60,7 +60,6 @@ public class RobotContainer {
                 () -> m_elevatorJoystick.get_RStickX(),
                 () -> m_elevatorJoystick.get_LStickX()
         ));
-        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
         configureButtonBindings();
         putToDashboard();
     }
