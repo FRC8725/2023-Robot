@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -35,16 +37,16 @@ public class ElevatorJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         var elevatorSpeed = elevatorSpdFunction.get();
-        elevatorSpeed = Math.abs(elevatorSpeed) > Constants.Joystick.kDeadband ? elevatorSpeed * 0.02 : 0.0;
+        elevatorSpeed = Math.abs(elevatorSpeed) > Constants.Joystick.kDeadband ? elevatorSpeed * 0.01 * ElevatorConstants.kElevatorSpeed : 0.0;
         elevatorSubsystem.setElevatorSpeed(elevatorSpeed);
         var armSpeed = armSpdFunction.get();
-        armSpeed = Math.abs(armSpeed) > Constants.Joystick.kDeadband ? armSpeed * 0.02 : 0;
+        armSpeed = Math.abs(armSpeed) > Constants.Joystick.kDeadband ? armSpeed * 0.01 * ElevatorConstants.kArmSpeed : 0;
         elevatorSubsystem.setArmSpeed(armSpeed);
         var wristSpeed = wristSpdFunction.get();
-        wristSpeed = Math.abs(wristSpeed) > Constants.Joystick.kDeadband ? wristSpeed * 0.02 : 0;
+        wristSpeed = Math.abs(wristSpeed) > Constants.Joystick.kDeadband ? wristSpeed * 0.01 : 0;
         elevatorSubsystem.setWristSpeed(wristSpeed);
         var winchSpeed = wristSpdFunction.get();
-        winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband ? winchSpeed * 0.02: 0;
+        winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband ? winchSpeed * 0.01: 0;
         elevatorSubsystem.setWinchSpeed(winchSpeed);
     }
 

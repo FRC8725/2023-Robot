@@ -35,6 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void periodic() {
         if(elevator.getLimitSwitch()) {
             elevator.zeroEncoder();
+            elevator.setSpeed(0);
             elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         }
         if(arm.getLimitSwitch()) {
