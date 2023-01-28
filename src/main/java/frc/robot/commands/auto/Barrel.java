@@ -12,10 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.AutoConfigEstimator;
-import frc.robot.commands.BalanceCmd;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionManager;
 
 import java.util.HashMap;
 import java.util.List;

@@ -26,8 +26,14 @@ import frc.robot.Constants.FieldConstants;
 import java.util.Optional;
 
 public class VisionManager extends SubsystemBase {
+    private static final VisionManager instance = new VisionManager();
+
+    public static VisionManager getInstance() {
+        return instance;
+    }
 
     PhotonCamera camera = new PhotonCamera("OV5647");
+
     UsbCamera usbCamera;
     CvSource outputStream;
     CvSink cvSink;
