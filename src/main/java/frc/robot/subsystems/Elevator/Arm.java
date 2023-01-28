@@ -6,7 +6,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotMap.ElevatorPort;
 import frc.lib.LazySparkMax;
@@ -57,8 +56,8 @@ public class Arm extends SubsystemBase {
         return armPIDController.atSetpoint();
     }
 
-    public double getSetpoint() {
-        return armPIDController.getSetpoint();
+    public double getEncoder() {
+        return armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters);
     }
 
     public void set(double speed) {

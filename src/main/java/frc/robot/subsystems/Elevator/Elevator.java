@@ -64,8 +64,8 @@ public class Elevator extends SubsystemBase {
     public boolean atSetpoint() {
         return elevatorPIDController.atSetpoint();
     }
-    public double getSetpoint() {
-        return elevatorPIDController.getSetpoint();
+    public double getEncoder() {
+        return elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters);
     }
 
     public void setSpeed(double speed) {

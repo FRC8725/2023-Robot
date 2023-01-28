@@ -2,7 +2,6 @@ package frc.robot.subsystems.Elevator;
 
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -78,8 +77,8 @@ public class Gripper extends SubsystemBase {
         wristProfiledPIDController.setGoal(setpoint);
     }
 
-    public double getWristSetpoint() {
-        return wristProfiledPIDController.getSetpoint().position;
+    public double getWristEncoder() {
+        return wristMotor.getPositionAsRad();
     }
 
     public void stop() {
