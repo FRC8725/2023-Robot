@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotMap.ElevatorPort;
@@ -39,15 +40,18 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double output = armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
         if (isPIDControlled) {
-            speed = MathUtil.clamp(armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters)), -ElevatorConstants.kArmSpeed, ElevatorConstants.kArmSpeed);
-            if (atSetpoint()) speed = 0;
+            if (armPIDController.atSetpoint()) speed = 0;
+            else speed = MathUtil.clamp(output, -ElevatorConstants.kArmSpeed, ElevatorConstants.kArmSpeed);
         }
         armMotor.set(speed);
+        SmartDashboard.putNumber("arm position", armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
+        SmartDashboard.putNumber("arm setpoint", armPIDController.getSetpoint());
     }
 
     public void setSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMaxArmHeight, ElevatorConstants.kMaxArmHeight);
+        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinArmHeight, ElevatorConstants.kMaxArmHeight);
         isPIDControlled = true;
         armPIDController.setSetpoint(setpoint);
     }
@@ -70,7 +74,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getLimitSwitch() {
-        return limitSwitch.get();
+        return !limitSwitch.get();
     }
 }
 

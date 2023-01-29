@@ -46,13 +46,13 @@ public class Elevator extends SubsystemBase {
             else speed = MathUtil.clamp(output, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         }
         elevatorMotor.set(speed);
-        SmartDashboard.putNumber("elevator speed", elevatorMotor.get());
-        SmartDashboard.putNumber("elevator position", elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters));
-        SmartDashboard.putNumber("elevator position error", elevatorPIDController.getPositionError());
-        SmartDashboard.putBoolean("elevator atSetpoint", elevatorPIDController.atSetpoint());
-        SmartDashboard.putNumber("elevator setpoint", elevatorPIDController.getSetpoint());
-        SmartDashboard.putNumber("elevator tolerance", elevatorPIDController.getPositionTolerance());
-        SmartDashboard.putBoolean("limitSwitch", getLimitSwitch());
+//        SmartDashboard.putNumber("elevator speed", elevatorMotor.get());
+//        SmartDashboard.putNumber("elevator position", elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters));
+//        SmartDashboard.putNumber("elevator position error", elevatorPIDController.getPositionError());
+//        SmartDashboard.putBoolean("elevator atSetpoint", elevatorPIDController.atSetpoint());
+//        SmartDashboard.putNumber("elevator setpoint", elevatorPIDController.getSetpoint());
+//        SmartDashboard.putNumber("elevator tolerance", elevatorPIDController.getPositionTolerance());
+//        SmartDashboard.putBoolean("limitSwitch", getLimitSwitch());
     }
 
     public void setSetpoint(double setpoint) {

@@ -39,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
         if(arm.getLimitSwitch()) {
             arm.zeroEncoder();
+            arm.set(0);
             arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         }
     }
@@ -70,12 +71,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setElevatorSpeed(double speed) {
         if(speed == 0) return;
-        elevator.setSetpoint(elevator.getEncoder() + speed/ElevatorConstants.kPElevator);
+        elevator.setSetpoint(elevator.getEncoder() + speed/ElevatorConstants.kPElevator*ElevatorConstants.kElevatorSpeed);
     }
 
     public void setArmSpeed(double speed) {
         if(speed == 0) return;
-        arm.setSetpoint(arm.getEncoder() + speed/ElevatorConstants.kPArm);
+        arm.setSetpoint(arm.getEncoder() + speed/ElevatorConstants.kPArm*ElevatorConstants.kArmSpeed);
     }
 
     public void setWristSpeed(double speed) {
