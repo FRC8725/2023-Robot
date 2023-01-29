@@ -23,6 +23,7 @@ public class Winch extends SubsystemBase {
 
     ProfiledPIDController winchProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
+    boolean freeControl = false;
 
     private Winch() {
         winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
@@ -38,7 +39,8 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        winchMotor.set(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()));
+        if (freeControl) winchMotor.set(0);
+        else winchMotor.set(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()));
     }
 
     public double getAbsoluteEncoderRad() {
@@ -51,17 +53,18 @@ public class Winch extends SubsystemBase {
         winchProfiledPIDController.setGoal(setpoint);
     }
 
-    public double getSetpoint() {
-        return winchProfiledPIDController.getSetpoint().position;
-    }
-
     public double getEncoder() {
         return winchMotor.getPositionAsRad();
     }
 
+    public void setFreeControl(boolean isFreeControl) {
+        winchMotor.setIdleMode(isFreeControl? CANSparkMax.IdleMode.kCoast: CANSparkMax.IdleMode.kBrake);
+        freeControl = isFreeControl;
+    }
+
     public void stop() {
         winchMotor.set(0);
-        winchProfiledPIDController.setGoal(getAbsoluteEncoderRad());
+        winchProfiledPIDController.setGoal(winchMotor.getPositionAsRad());
     }
 }
 

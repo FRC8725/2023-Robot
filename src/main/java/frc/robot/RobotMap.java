@@ -31,7 +31,7 @@ public class RobotMap {
 
         // DIO
         public static final int kElevatorLimitSwitch = 0;
-        public static final int kArmLimitSwitch = 1;
+        public static final int kArmAbsoluteEncoder = 1;
         public static final int kWristAbsoluteEncoder = 2;
         public static final int kWinchAbsoluteEncoder = 3;
         public static final int[] kGripperLimitSwitch = {4, 5};

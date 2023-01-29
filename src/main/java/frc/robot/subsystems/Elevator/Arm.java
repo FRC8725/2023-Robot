@@ -3,9 +3,8 @@ package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotMap.ElevatorPort;
@@ -22,59 +21,54 @@ public class Arm extends SubsystemBase {
 
     LazySparkMax armMotor;
 
-    DigitalInput limitSwitch;
 
-    PIDController armPIDController;
+    ProfiledPIDController armProfiledPIDController;
+    DutyCycleEncoder absoluteEncoder;
 
     // Elevator factors
-    boolean isPIDControlled = false;
-    double speed = 0;
+    boolean freeControl = false;
 
     private Arm() {
         armMotor = new LazySparkMax(ElevatorPort.kArmMotor, ElevatorConstants.kArmGearRatio);
         armMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitch = new DigitalInput(ElevatorPort.kArmLimitSwitch);
-        armPIDController = new PIDController(ElevatorConstants.kPArm, ElevatorConstants.kIArm, ElevatorConstants.kDArm);
-        armPIDController.setTolerance(ElevatorConstants.kPIDArmPositionTolerance);
+
+        armProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPArm, ElevatorConstants.kIArm, ElevatorConstants.kDArm, ElevatorConstants.kArmControllerConstraints);
+        armProfiledPIDController.setTolerance(ElevatorConstants.kPIDArmAngularToleranceRads);
+        armProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kArmAbsoluteEncoder);
+        absoluteEncoder.setPositionOffset(ElevatorConstants.kArmAbsoluteEncoderOffset);
+        armMotor.setRadPosition(getAbsoluteEncoderRad());
     }
 
     @Override
     public void periodic() {
-        double output = armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
-        if (isPIDControlled) {
-            if (armPIDController.atSetpoint()) speed = 0;
-            else speed = MathUtil.clamp(output, -ElevatorConstants.kArmSpeed, ElevatorConstants.kArmSpeed);
-        }
-        armMotor.set(speed);
-        SmartDashboard.putNumber("arm position", armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
-        SmartDashboard.putNumber("arm setpoint", armPIDController.getSetpoint());
+        if (freeControl) armMotor.set(0);
+        else armMotor.set(armProfiledPIDController.calculate(armMotor.getPositionAsRad()));
+    }
+
+    public double getAbsoluteEncoderRad() {
+        double measurement = absoluteEncoder.getAbsolutePosition();
+        return measurement*2*Math.PI;
     }
 
     public void setSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinArmHeight, ElevatorConstants.kMaxArmHeight);
-        isPIDControlled = true;
-        armPIDController.setSetpoint(setpoint);
-    }
-
-    public boolean atSetpoint() {
-        return armPIDController.atSetpoint();
+        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinArmAngle, ElevatorConstants.kMaxArmAngle);
+        armProfiledPIDController.setGoal(setpoint);
     }
 
     public double getEncoder() {
-        return armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters);
+        return armMotor.getPositionAsRad();
     }
 
-    public void set(double speed) {
-        isPIDControlled = false;
-        this.speed = speed;
+    public void setFreeControl(boolean isFreeControl) {
+        armMotor.setIdleMode(isFreeControl? CANSparkMax.IdleMode.kCoast: CANSparkMax.IdleMode.kBrake);
+        freeControl = isFreeControl;
     }
 
-    public void zeroEncoder() {
-        armMotor.setRadPosition(0);
-    }
-
-    public boolean getLimitSwitch() {
-        return !limitSwitch.get();
+    public void stop() {
+        armMotor.set(0);
+        armProfiledPIDController.setGoal(armMotor.getPositionAsRad());
     }
 }
 
