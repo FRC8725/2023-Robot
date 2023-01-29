@@ -42,7 +42,7 @@ public class VisionManager extends SubsystemBase {
     PhotonPoseEstimator estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
 
     public VisionManager() {
-        usbCamera = CameraServer.startAutomaticCapture();
+        usbCamera = CameraServer.startAutomaticCapture(0);
         usbCamera.setResolution(VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
         outputStream = CameraServer.putVideo("ElevatorCAM", VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
         setDriverMode(false);
@@ -111,7 +111,7 @@ public class VisionManager extends SubsystemBase {
     boolean isFirstConnected = true;
     @Override
     public void periodic() {
-        if (usbCamera.isConnected()) cvSink = CameraServer.getVideo(usbCamera);
+        cvSink = CameraServer.getVideo(usbCamera);
         if (!camera.isConnected()) return;
         if (isFirstConnected) {
             camera.setDriverMode(true);

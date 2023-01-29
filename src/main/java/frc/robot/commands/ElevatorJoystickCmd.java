@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.VisionManager;
 
 import java.util.function.Supplier;
 
@@ -16,23 +18,25 @@ public class ElevatorJoystickCmd extends CommandBase {
     Supplier<Double> armSpdFunction;
     Supplier<Double> wristSpdFunction;
     Supplier<Double> winchSpdFunction;
+    Supplier<Boolean> gripperHorizontalFunction;
 
     public ElevatorJoystickCmd(ElevatorSubsystem elevatorSubsystem,
                                Supplier<Double> elevatorSpdFunction,
                                Supplier<Double> armSpdFunction,
                                Supplier<Double> wristSpdFunction,
-                               Supplier<Double> winchSpdFunction) {
+                               Supplier<Double> winchSpdFunction,
+                               Supplier<Boolean> gripperHorizontalFunction) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.elevatorSpdFunction = elevatorSpdFunction;
         this.armSpdFunction = armSpdFunction;
         this.wristSpdFunction = wristSpdFunction;
         this.winchSpdFunction = winchSpdFunction;
+        this.gripperHorizontalFunction = gripperHorizontalFunction;
         addRequirements(elevatorSubsystem);
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
@@ -48,6 +52,7 @@ public class ElevatorJoystickCmd extends CommandBase {
         var winchSpeed = wristSpdFunction.get();
         winchSpeed = Math.abs(winchSpeed) > Constants.Joystick.kDeadband ? winchSpeed: 0;
         elevatorSubsystem.setWinchSpeed(winchSpeed);
+        if (gripperHorizontalFunction.get()) elevatorSubsystem.setGripperHorizontal();
     }
 
     @Override

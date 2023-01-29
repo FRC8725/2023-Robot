@@ -93,15 +93,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         gripper.setWristSetpoint(-winch.getSetpoint());
     }
 
-    public void runIntake(boolean run, boolean isInverted) {
-        double speed = ElevatorConstants.kIntakeSpeed * (isInverted? -1: 1);
-        gripper.runIntake(run?speed: 0);
-    }
-
-    public boolean getIntakeSwitch() {
-        return gripper.getIntakeLimitSwitch();
-    }
-
     public void stop() {
         arm.set(0);
         elevator.setSpeed(0);

@@ -14,10 +14,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.Pneumatics;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionManager;
+import frc.robot.subsystems.*;
 import frc.robot.Constants.PoseConstants;
 
 import org.photonvision.PhotonCamera;
@@ -36,6 +33,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
     private final ElevatorSubsystem m_elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private final GripperSubsystem m_gripperSubsystem = GripperSubsystem.getInstance();
     private final Pneumatics m_pneumatics = Pneumatics.getInstance();
     private final GamepadJoystick m_swerveJoystick = new GamepadJoystick(0);
     private final GamepadJoystick m_elevatorJoystick = new GamepadJoystick(1);
@@ -58,8 +56,9 @@ public class RobotContainer {
                 () -> m_elevatorJoystick.get_LStickY(),
                 () -> m_elevatorJoystick.get_RStickY(),
                 () -> m_elevatorJoystick.get_RStickX(),
-                () -> m_elevatorJoystick.get_LStickX()
-        ));
+                () -> m_elevatorJoystick.get_LStickX(),
+                () -> !m_elevatorJoystick.btn_triggerR.getAsBoolean())
+        );
         configureButtonBindings();
         putToDashboard();
     }
@@ -72,8 +71,7 @@ public class RobotContainer {
         m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2, m_visionManager));
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
-        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_elevatorSubsystem, m_visionManager, m_pneumatics));
-        m_elevatorJoystick.btn_triggerR.whileFalse(new RepeatCommand(new InstantCommand(m_elevatorSubsystem::setGripperHorizontal)));
+        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
         m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
         m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
         m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
