@@ -15,14 +15,14 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
+import frc.robot.subsystems.Limelight;
 
 
 public class CorrectPosition extends CommandBase {
 
     private SwerveSubsystem swerveSubsystem;
     private ProfiledPIDController xController, yController, thetaController;
-
-    private VisionManager visionManager;
+    private Limelight limelight;
     private final int whereChase;
 
     private Transform3d lastTarget;
@@ -47,7 +47,7 @@ public class CorrectPosition extends CommandBase {
         yController.setTolerance(.2);
         thetaController.setTolerance(Units.degreesToRadians(3));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        this.visionManager = visionManager;
+        this.limelight = Limelight.getInstance();
     }
 
     @Override
@@ -55,19 +55,15 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        visionManager.getAprilTagRelative();
-        visionManager.setDriverMode(false);
         lastTarget = new Transform3d();
         Timer.delay(.8);
     }
 
     @Override
     public void execute() {
-        var relativePos = visionManager.getAprilTagRelative();
-        if (!visionManager.hasTarget()) relativePos = lastTarget;
-        else lastTarget = relativePos;
-
-        if (relativePos.getX() == 0 && relativePos.getY() == 0 && relativePos.getZ() == 0) return;
+        var relativePos = limelight.getAprilTagRelative();
+        if (relativePos.isEmpty()) return;
+        lastTarget = relativePos.get();
 
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
@@ -76,7 +72,7 @@ public class CorrectPosition extends CommandBase {
                 new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
         );
         var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
-        var targetPose = camPose.transformBy(relativePos);
+        var targetPose = camPose.transformBy(relativePos.get());
         Transform3d tag2goal = new Transform3d();
 
         // Change the place we want to go.
@@ -119,6 +115,5 @@ public class CorrectPosition extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
-        visionManager.setDriverMode(true);
     }
 }
