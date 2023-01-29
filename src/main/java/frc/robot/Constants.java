@@ -168,7 +168,7 @@ public final class Constants {
         public static final double kArmGearRatio = 1./9;
         public static final double kWinchGearRatio = 1./25;
 
-        public static final double kElevatorSpeed = .4;
+        public static final double kElevatorSpeed = .5;
 
         public static final double kPElevator = 8;
         public static final double kIElevator = 0;
@@ -178,7 +178,7 @@ public final class Constants {
         public static final double kIWrist = 0;
         public static final double kDWrist = 0;
 
-        public static final double kArmSpeed = .3;
+        public static final double kArmSpeed = .5;
         public static final double kPArm = 5;
         public static final double kIArm = 0;
         public static final double kDArm = 0;
