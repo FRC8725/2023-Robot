@@ -153,8 +153,8 @@ public final class Constants {
 
     public static final class ElevatorConstants {
 
-        public static final double kUpperArmLength = Units.inchesToMeters(33);
-        public static final double kForearmLength = Units.inchesToMeters(41);
+        public static final double kUpperArmLength = Units.inchesToMeters(41);
+        public static final double kForearmLength = Units.inchesToMeters(33);
 
         public static final double xSpdConvertFactor = 0.5;
         public static final double ySpdConvertFactor = 0.5;
@@ -165,15 +165,15 @@ public final class Constants {
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
-        public static final double kPIDElbowAngularToleranceRads = 10./180* Math.PI;
-        public static final double kPIDWinchAngularToleranceRads = 10./180* Math.PI;
+        public static final double kPIDElbowAngularToleranceRads = 1./180* Math.PI;
+        public static final double kPIDWinchAngularToleranceRads = 1./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
         public static final double kIntakeGearRatio = 1;
         // TODO: Change kWristGearRatio to the data we tested
         public static final double kWristGearRatio = 1/25.;
-        public static final double kElbowGearRatio = 1./9;
-        public static final double kWinchGearRatio = 1./45;
+        public static final double kElbowGearRatio = 1./45;
+        public static final double kWinchGearRatio = 1./9;
 
 //        public static final double kElevatorSpeed = .4;
 //
@@ -211,10 +211,14 @@ public final class Constants {
 //        public static final double kMaxElevatorHeight = Units.inchesToMeters(6);
         public static final double kMinElbowAngle = Units.degreesToRadians(-100);
         public static final double kMaxElbowAngle = Units.degreesToRadians(100);
-        public static final double kMinWinchAngle = Units.degreesToRadians(0);
+        public static final double kMinWinchAngle = Units.degreesToRadians(-90);
         public static final double kMaxWinchAngle = Units.degreesToRadians(90);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);
         public static final double kMaxWristAngle = Units.degreesToRadians(90);
+        public static final double kMaxHeight = 1;
+        public static final double kMinHeight = 0;
+        public static final double kMaxDistance = 2;
+        public static final double kMinDistance = -2;
 
         public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
                 new TrapezoidProfile.Constraints(

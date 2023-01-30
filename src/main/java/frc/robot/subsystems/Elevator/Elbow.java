@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotMap.ElevatorPort;
@@ -25,9 +26,6 @@ public class Elbow extends SubsystemBase {
     ProfiledPIDController elbowProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
 
-    // Elevator factors
-    boolean freeControl = false;
-
     private Elbow() {
         elbowMotor = new LazySparkMax(ElevatorPort.kElbowMotor, ElevatorConstants.kElbowGearRatio);
         elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -43,8 +41,7 @@ public class Elbow extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (freeControl) elbowMotor.set(0);
-        else elbowMotor.set(elbowProfiledPIDController.calculate(elbowMotor.getPositionAsRad()));
+        elbowMotor.set(elbowProfiledPIDController.calculate(elbowMotor.getPositionAsRad()));
     }
 
     public void resetEncoder() {
@@ -58,17 +55,12 @@ public class Elbow extends SubsystemBase {
 
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinElbowAngle, ElevatorConstants.kMaxElbowAngle);
+        SmartDashboard.putNumber("Elbow Setpoint", setpoint);
         elbowProfiledPIDController.setGoal(setpoint);
     }
 
     public double getEncoder() {
         return elbowMotor.getPositionAsRad();
-    }
-
-    public void setFreeControl(boolean isFreeControl) {
-        elbowMotor.setIdleMode(isFreeControl? CANSparkMax.IdleMode.kCoast: CANSparkMax.IdleMode.kBrake);
-        elbowProfiledPIDController.setGoal(elbowMotor.getPositionAsRad());
-        freeControl = isFreeControl;
     }
 
     public void stop() {

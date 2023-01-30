@@ -72,6 +72,8 @@ public class RobotContainer {
 //        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
         m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
 //        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
+        m_elevatorJoystick.btn_Y.onTrue(new InstantCommand(() -> m_elevatorSubsystem.setSetpoint(0.5, 1)));
+        m_elevatorJoystick.btn_A.onTrue(new InstantCommand(() -> m_elevatorSubsystem.setSetpoint(-0.5, 0)));
 //        m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
 //        m_elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
 //        m_elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));

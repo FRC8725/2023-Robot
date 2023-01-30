@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
@@ -35,15 +36,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         winch.resetEncoder();
         elbow.setSetpoint(Math.PI);
         winch.setSetpoint(0);
-        SmartDashboard.putNumber("ArmAngleRads", elbow.getEncoder());
-        SmartDashboard.putNumber("WinchAngleRads", winch.getEncoder());
     }
 
     private double LawOfCosinesTheta(double a, double b, double c) {
-        return Math.acos((Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2 * a * b));
+        double result = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2 * a * b);
+        return Math.acos(result);
     }
 
     public void setSetpoint(double distance, double height) {
+
+        if (Math.pow(distance, 2) + Math.pow(height, 2) > Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
+
+        distance = MathUtil.clamp(distance, ElevatorConstants.kMinDistance, ElevatorConstants.kMaxDistance);
+        height = MathUtil.clamp(height, ElevatorConstants.kMinHeight, ElevatorConstants.kMaxHeight);
+
+        SmartDashboard.putNumber("Distance", distance);
+        SmartDashboard.putNumber("Height", height);
+
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
         double l2 = ElevatorConstants.kForearmLength;
@@ -51,13 +60,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         double theta1 = LawOfCosinesTheta(l1, l2, l3);
         thetaElbow = Math.PI - theta1;
         double theta2 = LawOfCosinesTheta(l1, l3, l2);
-        double theta3 = LawOfCosinesTheta(distance, l3, height);
+        double theta3 = LawOfCosinesTheta(Math.abs(distance), l3, Math.abs(height));
         thetaWinch = Math.PI/2-theta3-theta2;
-        elbow.setSetpoint(thetaElbow*distance>0? 1: -1);
-        winch.setSetpoint(thetaWinch*distance>0? 1: -1);
+        elbow.setSetpoint(thetaElbow*(distance>0? 1: -1));
+        winch.setSetpoint(thetaWinch*(distance>0? 1: -1));
     }
 
     public void setSpeed(double spdX, double spdY) {
+        if (spdX == 0 || spdY == 0) return;
         double l1 = ElevatorConstants.kUpperArmLength;
         double l2 = ElevatorConstants.kForearmLength;
         double phi = winch.getEncoder();
@@ -80,11 +90,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 //        if(speed == 0) return;
 //        winch.setSetpoint(winch.getEncoder() + speed/ElevatorConstants.kPWinch);
 //    }
-
-    public void freeControl(boolean isFreeControl) {
-        elbow.setFreeControl(isFreeControl);
-        winch.setFreeControl(isFreeControl);
-    }
 
     public void stop() {
         elbow.stop();

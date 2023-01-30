@@ -1,10 +1,12 @@
 package frc.robot.subsystems.Elevator;
 
 
+import com.fasterxml.jackson.core.sym.NameN;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.Constants.ElevatorConstants;
@@ -23,7 +25,6 @@ public class Winch extends SubsystemBase {
 
     ProfiledPIDController winchProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
-    boolean freeControl = false;
 
     private Winch() {
         winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
@@ -39,8 +40,7 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (freeControl) winchMotor.set(0);
-        else winchMotor.set(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()));
+        winchMotor.set(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()));
     }
 
     public void resetEncoder() {
@@ -54,17 +54,12 @@ public class Winch extends SubsystemBase {
 
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWinchAngle, ElevatorConstants.kMaxWinchAngle);
+        SmartDashboard.putNumber("Winch Setpoint", setpoint);
         winchProfiledPIDController.setGoal(setpoint);
     }
 
     public double getEncoder() {
         return winchMotor.getPositionAsRad();
-    }
-
-    public void setFreeControl(boolean isFreeControl) {
-        winchMotor.setIdleMode(isFreeControl? CANSparkMax.IdleMode.kCoast: CANSparkMax.IdleMode.kBrake);
-        winchProfiledPIDController.setGoal(winchMotor.getPositionAsRad());
-        freeControl = isFreeControl;
     }
 
     public void stop() {

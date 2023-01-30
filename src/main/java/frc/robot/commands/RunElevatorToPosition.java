@@ -36,10 +36,10 @@ public class RunElevatorToPosition extends CommandBase {
 
     @Override
     public void initialize() {
-        elevatorSubsystem.setElevatorSetpoint(elevatorPosition);
-        elevatorSubsystem.setArmSetpoint(armPosition);
-        elevatorSubsystem.setWinchSetpoint(winchAngle);
-        elevatorSubsystem.setWristSetpoint(wristAngle);
+//        elevatorSubsystem.setElevatorSetpoint(elevatorPosition);
+//        elevatorSubsystem.setArmSetpoint(armPosition);
+//        elevatorSubsystem.setWinchSetpoint(winchAngle);
+//        elevatorSubsystem.setWristSetpoint(wristAngle);
     }
 
     @Override

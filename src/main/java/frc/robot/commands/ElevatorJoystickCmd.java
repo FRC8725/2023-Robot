@@ -33,9 +33,8 @@ public class ElevatorJoystickCmd extends CommandBase {
         var xSpeed = xSpdFunction.get();
         xSpeed = Math.abs(xSpeed) > Constants.Joystick.kDeadband ? xSpeed: 0;
         var ySpeed = ySpdFunction.get();
-        ySpeed = Math.abs(xSpeed) > Constants.Joystick.kDeadband ? xSpeed: 0;
+        ySpeed = Math.abs(ySpeed) > Constants.Joystick.kDeadband ? ySpeed: 0;
         elevatorSubsystem.setSpeed(xSpeed, ySpeed);
-        elevatorSubsystem.freeControl(freeFunction.get());
     }
 
     @Override
