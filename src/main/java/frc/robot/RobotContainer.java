@@ -55,7 +55,6 @@ public class RobotContainer {
                 m_elevatorSubsystem,
                 () -> m_elevatorJoystick.get_RStickY(),
                 () -> m_elevatorJoystick.get_RStickX(),
-                () -> m_elevatorJoystick.get_LStickX(),
                 () -> m_elevatorJoystick.btn_Back.getAsBoolean()
         ));
         configureButtonBindings();
@@ -70,13 +69,13 @@ public class RobotContainer {
         m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2, m_visionManager));
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
-        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
+//        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
         m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
-        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
-        m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
-        m_elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
-        m_elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));
-        m_elevatorJoystick.btn_Start.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kInitElevatorPose));
+//        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
+//        m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
+//        m_elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
+//        m_elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));
+//        m_elevatorJoystick.btn_Start.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kInitElevatorPose));
     }
 
     private void putToDashboard() {

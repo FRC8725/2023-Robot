@@ -34,13 +34,17 @@ public class Winch extends SubsystemBase {
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWinchAbsoluteEncoderOffset);
-        winchMotor.setRadPosition(getAbsoluteEncoderRad());
+        resetEncoder();
     }
 
     @Override
     public void periodic() {
         if (freeControl) winchMotor.set(0);
         else winchMotor.set(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()));
+    }
+
+    public void resetEncoder() {
+        winchMotor.setRadPosition(getAbsoluteEncoderRad());
     }
 
     public double getAbsoluteEncoderRad() {
@@ -59,6 +63,7 @@ public class Winch extends SubsystemBase {
 
     public void setFreeControl(boolean isFreeControl) {
         winchMotor.setIdleMode(isFreeControl? CANSparkMax.IdleMode.kCoast: CANSparkMax.IdleMode.kBrake);
+        winchProfiledPIDController.setGoal(winchMotor.getPositionAsRad());
         freeControl = isFreeControl;
     }
 
