@@ -47,12 +47,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         if (Math.pow(distance, 2) + Math.pow(height, 2) > Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
 
-        distance = MathUtil.clamp(distance, ElevatorConstants.kMinDistance, ElevatorConstants.kMaxDistance);
-        height = MathUtil.clamp(height, ElevatorConstants.kMinHeight, ElevatorConstants.kMaxHeight);
-
-        SmartDashboard.putNumber("Distance", distance);
-        SmartDashboard.putNumber("Height", height);
-
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
         double l2 = ElevatorConstants.kForearmLength;
@@ -67,7 +61,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double spdX, double spdY) {
-        if (spdX == 0 || spdY == 0) return;
         double l1 = ElevatorConstants.kUpperArmLength;
         double l2 = ElevatorConstants.kForearmLength;
         double phi = winch.getEncoder();
@@ -75,6 +68,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         double distance = Math.sin(phi+theta)*l2 + Math.sin(phi)*l1;
         double height = Math.cos(phi+theta)*l2 + Math.cos(phi)*l1;
         setSetpoint(distance+spdX*ElevatorConstants.xSpdConvertFactor, height+spdY*ElevatorConstants.ySpdConvertFactor);
+        SmartDashboard.putNumber("Distance", distance);
+        SmartDashboard.putNumber("Height", height);
     }
 
 //    public void setWinchSetpoint(double setpoint) {

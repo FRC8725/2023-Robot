@@ -53,8 +53,8 @@ public class RobotContainer {
         ));
         m_elevatorSubsystem.setDefaultCommand(new ElevatorJoystickCmd(
                 m_elevatorSubsystem,
+                () -> m_elevatorJoystick.get_LStickY(),
                 () -> m_elevatorJoystick.get_RStickY(),
-                () -> m_elevatorJoystick.get_RStickX(),
                 () -> m_elevatorJoystick.btn_Back.getAsBoolean()
         ));
         configureButtonBindings();
