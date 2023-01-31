@@ -119,7 +119,7 @@ public final class Constants {
         public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
 
         // UsbCamera
-        public static final int[] UsbCameraResolution = {320, 240};
+        public static final int[] UsbCameraResolution = {427, 240};
         public static final Scalar kYellowLowThreshold = new Scalar(0, 100, 50);
         public static final Scalar kYellowHighThreshold = new Scalar(40, 255, 255);
     }

@@ -92,64 +92,75 @@ public class VisionManager extends SubsystemBase {
         camera.setDriverMode(driverMode);
     }
 
-    public boolean isCone() {
-        Mat img = new Mat();
-        if (cvSink.grabFrame(img) == 0) {
-            outputStream.notifyError(cvSink.getError());
-            return false;
-        };
-        Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2HSV);
-        double[] centerColor = img.get(VisionConstants.UsbCameraResolution[1]/2, VisionConstants.UsbCameraResolution[0]/2);
-        SmartDashboard.putNumberArray("centerColor", centerColor);
-        // inRange(HSV, hThreshold, lThreshold)
-        return false;
-//        return !(centerColor[0] < VisionConstants.kYellowLowThreshold[0] || centerColor[0] > VisionConstants.kYellowHighThreshold[0] ||
-//                centerColor[1] < VisionConstants.kYellowLowThreshold[1] || centerColor[1] > VisionConstants.kYellowHighThreshold[1] ||
-//                centerColor[2] < VisionConstants.kYellowLowThreshold[2] || centerColor[2] > VisionConstants.kYellowHighThreshold[2]
-//        );
-    }
-
     public double getConeAngleRads() {
         Mat src = new Mat();
         if (cvSink.grabFrame(src) == 0) {
             outputStream.notifyError(cvSink.getError());
             return 0;
         };
-        Mat blurred = new Mat(src.rows(), src.rows(), src.type());
-        Imgproc.GaussianBlur(src, blurred, new Size(15, 15), 0);
-        Mat img_HSV = new Mat(src.rows(), src.rows(), src.type());
-        Imgproc.cvtColor(img_HSV, blurred, Imgproc.COLOR_BGR2HSV);
-        Mat img_thresh = new Mat(src.rows(), src.rows(), src.type());
-        Core.inRange(img_HSV, VisionConstants.kYellowLowThreshold, VisionConstants.kYellowHighThreshold, img_thresh);
-        Mat img_dilate = new Mat(src.rows(), src.rows(), src.type());
-        Imgproc.dilate(img_thresh, img_dilate, new Mat(5, 5, src.type()));
-        Mat img_edges = new Mat(src.rows(), src.rows(), src.type());
-        Imgproc.Canny(img_dilate, img_edges, 30, 180);
+        Mat img = new Mat(src.rows(), src.rows(), src.type());
+        Imgproc.GaussianBlur(src, img, new Size(11, 11), 0);
+        Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2HSV);
+        Core.inRange(img, VisionConstants.kYellowLowThreshold, VisionConstants.kYellowHighThreshold, img);
+        Imgproc.dilate(img, img, new Mat(3, 3, CvType.CV_32S), new Point(-1, -1), 2);
+        Imgproc.erode(img, img, new Mat(3, 3, CvType.CV_32S), new Point(-1, -1), 2);
+
         List<MatOfPoint> cnts = new ArrayList<>();
         Mat hierarchy = new Mat();
-        Imgproc.findContours(img_edges, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(img, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        for (MatOfPoint cnt : cnts) {
-            MatOfPoint2f cnt2f = new MatOfPoint2f();
-            MatOfPoint2f approx2f = new MatOfPoint2f();
-            MatOfPoint approx = new MatOfPoint();
-            cnt.convertTo(cnt2f, CvType.CV_32FC2);
-            Imgproc.approxPolyDP(cnt2f, approx2f, 2, true);
-            approx2f.convertTo(approx, CvType.CV_32S);
-            if (approx.size().height == 3) {
-                double[] a = approx.get(0, 0);
-                double[] b = approx.get(1, 0);
-                double[] c = approx.get(2, 0);
-                double l1 = norml2(a, b);
-                double l2 = norml2(a, b);
-                double l3 = norml2(a, b);
+        double maxVal = 0;
+        int maxIdx = 0;
+        for (int cntIdx = 0; cntIdx < cnts.size(); cntIdx++) {
+            double counterArea = Imgproc.contourArea(cnts.get(cntIdx));
+            if (maxVal < counterArea) {
+                maxVal = counterArea;
+                maxIdx = cntIdx;
             }
         }
-        return 0;
+
+        if (maxVal == 0) return 0;
+
+        MatOfPoint2f cnt2f = new MatOfPoint2f(cnts.get(maxIdx).toArray());
+        double peri = Imgproc.arcLength(cnt2f, true);
+        MatOfPoint2f approx2f = new MatOfPoint2f();
+        MatOfPoint approx = new MatOfPoint();
+
+        Imgproc.approxPolyDP(cnt2f, approx2f, 0.02 * peri, true);
+        Point[] pointsArray = approx.toArray();
+        Mat points = new Mat(pointsArray.length, 1, CvType.CV_32FC2);
+        for (int i = 0; i < pointsArray.length; i++) {
+            Point point = pointsArray[i];
+            points.put(i, 0, point.x, point.y);
+        }
+        Mat triangle = new Mat();
+        Imgproc.minEnclosingTriangle(points, triangle);
+
+        double[] p1 = triangle.get(0, 0);
+        double[] p2 = triangle.get(1, 0);
+        double[] p3 = triangle.get(2, 0);
+
+        double p1p2 = norml2(p1, p2);
+        double p2p3 = norml2(p2, p3);
+        double p1p3 = norml2(p1, p3);
+
+        double angle = 0;
+
+        if (p1p2 < p2p3 && p1p2 < p1p3) {
+            double[] mid = {(p1[0]+p2[0])/2, (p1[1]+p2[1])/2};
+            angle = Math.atan((p3[1]-mid[1])/(p3[0]-mid[0]));
+        } else if (p2p3 < p1p2 && p2p3 < p1p3) {
+            double[] mid = {(p2[0]+p3[0])/2, (p2[1]+p3[1])/2};
+            angle = Math.atan((p1[1]-mid[1])/(p1[0]-mid[0]));
+        } else if (p1p3 < p2p3 && p1p3 < p1p2) {
+            double[] mid = {(p1[0]+p3[0])/2, (p1[1]+p3[1])/2};
+            angle = Math.atan((p2[1]-mid[1])/(p2[0]-mid[0]));
+        }
+        return angle;
     }
 
     private double norml2(double[] a, double[] b) {
-        return Math.sqrt(Math.pow(a[0], 2) + Math.pow(b[0], 2)) + Math.sqrt(Math.pow(a[1], 2) + Math.pow(b[1], 2));
+        return Math.sqrt(Math.pow(a[0] - b[0], 2)) + Math.sqrt(Math.pow(a[1] - b[1], 2));
     }
 
     boolean isFirstConnected = true;
