@@ -149,14 +149,17 @@ public class VisionManager extends SubsystemBase {
         if (p1p2 < p2p3 && p1p2 < p1p3) {
             double[] mid = {(p1[0]+p2[0])/2, (p1[1]+p2[1])/2};
             angle = Math.atan((p3[1]-mid[1])/(p3[0]-mid[0]));
+            if (p3[0]-mid[0] < 0) angle -= Math.PI;
         } else if (p2p3 < p1p2 && p2p3 < p1p3) {
             double[] mid = {(p2[0]+p3[0])/2, (p2[1]+p3[1])/2};
             angle = Math.atan((p1[1]-mid[1])/(p1[0]-mid[0]));
+            if (p1[0]-mid[0] < 0) angle -= Math.PI;
         } else if (p1p3 < p2p3 && p1p3 < p1p2) {
             double[] mid = {(p1[0]+p3[0])/2, (p1[1]+p3[1])/2};
             angle = Math.atan((p2[1]-mid[1])/(p2[0]-mid[0]));
+            if (p2[0]-mid[0] < 0) angle -= Math.PI;
         }
-        return angle;
+        return angle+Math.PI/2;
     }
 
     private double norml2(double[] a, double[] b) {
