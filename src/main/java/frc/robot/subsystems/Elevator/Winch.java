@@ -2,7 +2,9 @@ package frc.robot.subsystems.Elevator;
 
 
 import com.fasterxml.jackson.core.sym.NameN;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -40,7 +42,7 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        winchMotor.set(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()));
+        winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
     }
 
     public void resetEncoder() {
@@ -56,6 +58,10 @@ public class Winch extends SubsystemBase {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWinchAngle, ElevatorConstants.kMaxWinchAngle);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
         winchProfiledPIDController.setGoal(setpoint);
+    }
+
+    public boolean atSetpoint() {
+        return winchProfiledPIDController.atSetpoint();
     }
 
     public double getEncoder() {

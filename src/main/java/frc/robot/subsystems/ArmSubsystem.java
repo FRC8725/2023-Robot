@@ -1,26 +1,25 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator.Elbow;
 import frc.robot.subsystems.Elevator.Winch;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class ArmSubsystem extends SubsystemBase {
 
-    private final static ElevatorSubsystem INSTANCE = new ElevatorSubsystem();
+    private final static ArmSubsystem INSTANCE = new ArmSubsystem();
 
     @SuppressWarnings("WeakerAccess")
-    public static ElevatorSubsystem getInstance() {
+    public static ArmSubsystem getInstance() {
         return INSTANCE;
     }
 
     private final Elbow elbow;
     private final Winch winch;
 
-    private ElevatorSubsystem() {
+    private ArmSubsystem() {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         reset();
@@ -43,21 +42,26 @@ public class ElevatorSubsystem extends SubsystemBase {
         return Math.acos(result);
     }
 
-    public void setSetpoint(double distance, double height) {
+    public void setSetpoint(double xAxis, double yAxis) {
 
-        if (Math.pow(distance, 2) + Math.pow(height, 2) > Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
+        double distanceSquared = Math.pow(xAxis, 2) + Math.pow(yAxis, 2);
+        if (distanceSquared > Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
 
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
         double l2 = ElevatorConstants.kForearmLength;
-        double l3 = Math.sqrt(Math.pow(distance, 2)+Math.pow(height, 2));
+        double l3 = Math.sqrt(distanceSquared);
         double theta1 = LawOfCosinesTheta(l1, l2, l3);
         thetaElbow = Math.PI - theta1;
         double theta2 = LawOfCosinesTheta(l1, l3, l2);
-        double theta3 = LawOfCosinesTheta(Math.abs(distance), l3, Math.abs(height));
-        thetaWinch = Math.PI/2-theta3-theta2;
-        elbow.setSetpoint(thetaElbow*(distance>0? 1: -1));
-        winch.setSetpoint(thetaWinch*(distance>0? 1: -1));
+        double theta3 = LawOfCosinesTheta(Math.abs(xAxis), l3, Math.abs(yAxis));
+        thetaWinch = Math.PI/2-theta3-(xAxis>0? 1: -1 * theta2);
+        elbow.setSetpoint(thetaElbow);
+        winch.setSetpoint(thetaWinch);
+    }
+
+    public boolean atSetpoint() {
+        return elbow.atSetpoint() && winch.atSetpoint();
     }
 
     public void setSpeed(double spdX, double spdY) {
@@ -65,26 +69,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         double l2 = ElevatorConstants.kForearmLength;
         double phi = winch.getEncoder();
         double theta = elbow.getEncoder();
-        double distance = Math.sin(phi+theta)*l2 + Math.sin(phi)*l1;
-        double height = Math.cos(phi+theta)*l2 + Math.cos(phi)*l1;
-        setSetpoint(distance+spdX*ElevatorConstants.xSpdConvertFactor, height+spdY*ElevatorConstants.ySpdConvertFactor);
-        SmartDashboard.putNumber("Distance", distance);
-        SmartDashboard.putNumber("Height", height);
+        double xAxis = Math.sin(phi+theta)*l2 + Math.sin(phi)*l1;
+        double yAxis = Math.cos(phi+theta)*l2 + Math.cos(phi)*l1;
+        setSetpoint(xAxis+spdX*ElevatorConstants.xSpdConvertFactor, yAxis+spdY*ElevatorConstants.ySpdConvertFactor);
+        SmartDashboard.putNumber("Distance", xAxis);
+        SmartDashboard.putNumber("Height", yAxis);
     }
-
-//    public void setWinchSetpoint(double setpoint) {
-//        winch.setSetpoint(setpoint);
-//    }
 //
 //    public void setArmSpeed(double speed) {
 //        if(speed == 0) return;
 //        elbow.setSetpoint(elbow.getEncoder() + speed/ElevatorConstants.kPElbow);
 //    }
 //
-//    public void setWinchSpeed(double speed) {
-//        if(speed == 0) return;
-//        winch.setSetpoint(winch.getEncoder() + speed/ElevatorConstants.kPWinch);
-//    }
 
     public void stop() {
         elbow.stop();

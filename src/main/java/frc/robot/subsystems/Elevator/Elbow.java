@@ -3,6 +3,7 @@ package frc.robot.subsystems.Elevator;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,7 +42,7 @@ public class Elbow extends SubsystemBase {
 
     @Override
     public void periodic() {
-        elbowMotor.set(elbowProfiledPIDController.calculate(elbowMotor.getPositionAsRad()));
+        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(elbowMotor.getPositionAsRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
     }
 
     public void resetEncoder() {
@@ -57,6 +58,10 @@ public class Elbow extends SubsystemBase {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinElbowAngle, ElevatorConstants.kMaxElbowAngle);
         SmartDashboard.putNumber("Elbow Setpoint", setpoint);
         elbowProfiledPIDController.setGoal(setpoint);
+    }
+
+    public boolean atSetpoint() {
+        return elbowProfiledPIDController.atSetpoint();
     }
 
     public double getEncoder() {

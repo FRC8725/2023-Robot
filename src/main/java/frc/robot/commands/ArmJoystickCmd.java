@@ -2,27 +2,24 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 import java.util.function.Supplier;
 
 
-public class ElevatorJoystickCmd extends CommandBase {
+public class ArmJoystickCmd extends CommandBase {
 
-    ElevatorSubsystem elevatorSubsystem;
-    Supplier<Double> xSpdFunction;
-    Supplier<Double> ySpdFunction;
+    ArmSubsystem armSubsystem;
+    Supplier<Double> xSpdFunction, ySpdFunction;
     Supplier<Boolean> freeFunction;
 
-    public ElevatorJoystickCmd(ElevatorSubsystem elevatorSubsystem,
-                               Supplier<Double> xSpdFunction,
-                               Supplier<Double> ySpdFunction,
-                               Supplier<Boolean> freeFunction) {
-        this.elevatorSubsystem = elevatorSubsystem;
+    public ArmJoystickCmd(ArmSubsystem armSubsystem,
+                          Supplier<Double> xSpdFunction,
+                          Supplier<Double> ySpdFunction) {
+        this.armSubsystem = armSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
-        this.freeFunction = freeFunction;
-        addRequirements(elevatorSubsystem);
+        addRequirements(armSubsystem);
     }
 
     @Override
@@ -34,7 +31,7 @@ public class ElevatorJoystickCmd extends CommandBase {
         xSpeed = Math.abs(xSpeed) > Constants.Joystick.kDeadband ? xSpeed: 0;
         var ySpeed = ySpdFunction.get();
         ySpeed = Math.abs(ySpeed) > Constants.Joystick.kDeadband ? ySpeed: 0;
-        elevatorSubsystem.setSpeed(xSpeed, ySpeed);
+        armSubsystem.setSpeed(xSpeed, ySpeed);
     }
 
     @Override
@@ -45,6 +42,6 @@ public class ElevatorJoystickCmd extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        elevatorSubsystem.stop();
+        armSubsystem.stop();
     }
 }

@@ -9,13 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.subsystems.*;
-import frc.robot.Constants.PoseConstants;
 
 import org.photonvision.PhotonCamera;
 
@@ -32,7 +29,7 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
-    private final ElevatorSubsystem m_elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private final ArmSubsystem m_armSubsystem = ArmSubsystem.getInstance();
     private final GripperSubsystem m_gripperSubsystem = GripperSubsystem.getInstance();
     private final Pneumatics m_pneumatics = Pneumatics.getInstance();
     private final GamepadJoystick m_swerveJoystick = new GamepadJoystick(0);
@@ -51,11 +48,10 @@ public class RobotContainer {
                 () -> !m_swerveJoystick.btn_topL.getAsBoolean(),
                 () -> m_swerveJoystick.btn_topR.getAsBoolean()
         ));
-        m_elevatorSubsystem.setDefaultCommand(new ElevatorJoystickCmd(
-                m_elevatorSubsystem,
+        m_armSubsystem.setDefaultCommand(new ArmJoystickCmd(
+                m_armSubsystem,
                 () -> m_elevatorJoystick.get_LStickY(),
-                () -> m_elevatorJoystick.get_RStickY(),
-                () -> m_elevatorJoystick.btn_Back.getAsBoolean()
+                () -> m_elevatorJoystick.get_RStickY()
         ));
         configureButtonBindings();
         putToDashboard();
@@ -70,14 +66,14 @@ public class RobotContainer {
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
 //        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
-        m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
+        m_elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_armSubsystem::reset));
 //        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
-        m_elevatorJoystick.btn_Y.onTrue(new InstantCommand(() -> m_elevatorSubsystem.setSetpoint(0.5, 1)));
-        m_elevatorJoystick.btn_A.onTrue(new InstantCommand(() -> m_elevatorSubsystem.setSetpoint(-0.5, 0)));
+        m_elevatorJoystick.btn_Y.onTrue(new InstantCommand(() -> m_armSubsystem.setSetpoint(0.5, 1)));
+        m_elevatorJoystick.btn_A.onTrue(new InstantCommand(() -> m_armSubsystem.setSetpoint(-0.5, 0)));
 //        m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
 //        m_elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
 //        m_elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));
-//        m_elevatorJoystick.btn_Start.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kInitElevatorPose));
+        m_elevatorJoystick.btn_Start.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
     }
 
     private void putToDashboard() {

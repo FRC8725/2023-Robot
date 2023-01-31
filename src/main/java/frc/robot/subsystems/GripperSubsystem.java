@@ -2,8 +2,9 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
+import frc.robot.subsystems.Elevator.Elbow;
 import frc.robot.subsystems.Elevator.Gripper;
+import frc.robot.subsystems.Elevator.Winch;
 
 public class GripperSubsystem extends SubsystemBase {
 
@@ -15,18 +16,39 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
+    Elbow elbow;
+    Winch winch;
+    boolean isHorizontal = true;
+
+    @Override
+    public void periodic(){
+        gripper.setWristSetpoint(elbow.getEncoder() - Math.PI/2 + winch.getEncoder() + (isHorizontal? 0: -90));
+    }
 
     private GripperSubsystem() {
         gripper = Gripper.getInstance();
+        elbow = Elbow.getInstance();
+        winch = Winch.getInstance();
+        reset();
     }
 
-    public void runIntake(boolean run, boolean isInverted) {
-        double speed = ElevatorConstants.kIntakeSpeed * (isInverted? -1: 1);
-        gripper.runIntake(run?speed: 0);
+    public void reset() {
+        gripper.resetWristEncoder();
+        gripper.setWristSetpoint(0);
+        gripper.setRollSetpoint(0);
+        isHorizontal = true;
     }
 
-    public boolean getIntakeSwitch() {
-        return gripper.getIntakeLimitSwitch();
+    public void setHorizontal(boolean isHorizontal) {
+        this.isHorizontal = isHorizontal;
+    }
+
+    public void setRollSetpoint(double setpoint) {
+        gripper.setRollSetpoint(setpoint);
+    }
+
+    public void addRollSetpoint(double v) {
+        gripper.setRollSetpoint(gripper.getRollEncoder()+v);
     }
 
 }
