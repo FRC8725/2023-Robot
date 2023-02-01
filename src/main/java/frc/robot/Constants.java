@@ -196,9 +196,9 @@ public final class Constants {
         public static final double kIRoll = 0;
         public static final double kDRoll = 0;
 
-        public static final double kWristAbsoluteEncoderOffset = 0;
-        public static final double kElbowAbsoluteEncoderOffset = 0;
-        public static final double kWinchAbsoluteEncoderOffset = 0;
+        public static final double kWristAbsoluteEncoderOffset = 0.;
+        public static final double kElbowAbsoluteEncoderOffset = 0.7151;
+        public static final double kWinchAbsoluteEncoderOffset = 0.9723;
 
         public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxWristAngularAccelerationRadiansPerSecond = Math.PI;

@@ -31,6 +31,7 @@ public class Winch extends SubsystemBase {
     private Winch() {
         winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
         winchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        winchMotor.setInverted(true);
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
         winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
         winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -43,6 +44,7 @@ public class Winch extends SubsystemBase {
     @Override
     public void periodic() {
         winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
+        SmartDashboard.putNumber("Winch Absolute", getAbsoluteEncoderRad());
     }
 
     public void resetEncoder() {
@@ -50,7 +52,7 @@ public class Winch extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition();
+        double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWinchAbsoluteEncoderOffset;
         return measurement*2*Math.PI;
     }
 
