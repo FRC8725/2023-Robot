@@ -33,6 +33,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     public void reset() {
+        gripper.stop();
         gripper.resetWristEncoder();
         gripper.setWristSetpoint(0);
         gripper.setRollSetpoint(0);
@@ -47,8 +48,8 @@ public class GripperSubsystem extends SubsystemBase {
         gripper.setRollSetpoint(setpoint);
     }
 
-    public void addRollSetpoint(double v) {
-        gripper.setRollSetpoint(gripper.getRollEncoder()+v);
+    public void addRollSetpoint(double variable) {
+        gripper.setRollSetpoint(gripper.getRollEncoder()+variable);
     }
 
 }

@@ -8,6 +8,9 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableListener;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,6 +47,7 @@ public class VisionManager extends SubsystemBase {
     public VisionManager() {
         usbCamera = CameraServer.startAutomaticCapture(0);
         usbCamera.setResolution(VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
+        cvSink = CameraServer.getVideo(usbCamera);
         outputStream = CameraServer.putVideo("ElevatorCAM", VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
         setDriverMode(false);
     }
@@ -93,73 +97,77 @@ public class VisionManager extends SubsystemBase {
     }
 
     public double getConeAngleRads() {
-        Mat src = new Mat();
-        if (cvSink.grabFrame(src) == 0) {
-            outputStream.notifyError(cvSink.getError());
-            return 0;
-        };
-        Mat img = new Mat(src.rows(), src.rows(), src.type());
-        Imgproc.GaussianBlur(src, img, new Size(11, 11), 0);
-        Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2HSV);
-        Core.inRange(img, VisionConstants.kYellowLowThreshold, VisionConstants.kYellowHighThreshold, img);
-        Imgproc.dilate(img, img, new Mat(3, 3, CvType.CV_32S), new Point(-1, -1), 2);
-        Imgproc.erode(img, img, new Mat(3, 3, CvType.CV_32S), new Point(-1, -1), 2);
+//        Mat src = new Mat();
+//        if (cvSink.grabFrame(src) == 0) {
+//            outputStream.notifyError(cvSink.getError());
+//            return 0;
+//        };
+//        outputStream.putFrame(src);
+//        Mat img = new Mat(src.rows(), src.rows(), src.type());
+//        Imgproc.GaussianBlur(src, img, new Size(11, 11), 0);
+//        Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2HSV);
+//        Core.inRange(img, VisionConstants.kYellowLowThreshold, VisionConstants.kYellowHighThreshold, img);
+//        Imgproc.dilate(img, img, new Mat(3, 3, CvType.CV_8U), new Point(-1, -1), 2);
+//        Imgproc.erode(img, img, new Mat(3, 3, CvType.CV_8U), new Point(-1, -1), 2);
+//
+//        List<MatOfPoint> cnts = new ArrayList<>();
+//        Mat hierarchy = new Mat();
+//        Imgproc.findContours(img, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+//
+//        double maxVal = 0;
+//        int maxIdx = 0;
+//        for (int cntIdx = 0; cntIdx < cnts.size(); cntIdx++) {
+//            double counterArea = Imgproc.contourArea(cnts.get(cntIdx));
+//            if (maxVal < counterArea) {
+//                maxVal = counterArea;
+//                maxIdx = cntIdx;
+//            }
+//        }
+//
+//        if (maxVal == 0) return 0;
+//
+//        MatOfPoint2f cnt2f = new MatOfPoint2f(cnts.get(maxIdx).toArray());
+//        double peri = Imgproc.arcLength(cnt2f, true);
+//        MatOfPoint2f approx2f = new MatOfPoint2f();
+//
+//        Imgproc.approxPolyDP(cnt2f, approx2f, 0.02 * peri, true);
+//        Point[] pointsArray = approx2f.toArray();
+//        Mat points = new Mat(pointsArray.length, 1, CvType.CV_32FC2);
+//        for (int i = 0; i < pointsArray.length; i++) {
+//            Point point = pointsArray[i];
+//            points.put(i, 0, point.x, point.y);
+//            System.out.println(point.x);
+//        }
+//        Mat triangle = new Mat();
+//        Imgproc.minEnclosingTriangle(points, triangle);
+//
+//        double[] p1 = triangle.get(0, 0);
+//        double[] p2 = triangle.get(1, 0);
+//        double[] p3 = triangle.get(2, 0);
+//
+//        if (p1 == null || p2 == null || p3 == null) return 0;
+//
+//        double p1p2 = norml2(p1, p2);
+//        double p2p3 = norml2(p2, p3);
+//        double p1p3 = norml2(p1, p3);
+//
+//        double angle = 0;
+//
+//        if (p1p2 < p2p3 && p1p2 < p1p3) {
+//            double[] mid = {(p1[0]+p2[0])/2, (p1[1]+p2[1])/2};
+//            angle = Math.atan((p3[1]-mid[1])/(p3[0]-mid[0]));
+//            if (p3[0]-mid[0] < 0) angle -= Math.PI;
+//        } else if (p2p3 < p1p2 && p2p3 < p1p3) {
+//            double[] mid = {(p2[0]+p3[0])/2, (p2[1]+p3[1])/2};
+//            angle = Math.atan((p1[1]-mid[1])/(p1[0]-mid[0]));
+//            if (p1[0]-mid[0] < 0) angle -= Math.PI;
+//        } else if (p1p3 < p2p3 && p1p3 < p1p2) {
+//            double[] mid = {(p1[0]+p3[0])/2, (p1[1]+p3[1])/2};
+//            angle = Math.atan((p2[1]-mid[1])/(p2[0]-mid[0]));
+//            if (p2[0]-mid[0] < 0) angle -= Math.PI;
+//        }
 
-        List<MatOfPoint> cnts = new ArrayList<>();
-        Mat hierarchy = new Mat();
-        Imgproc.findContours(img, cnts, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-
-        double maxVal = 0;
-        int maxIdx = 0;
-        for (int cntIdx = 0; cntIdx < cnts.size(); cntIdx++) {
-            double counterArea = Imgproc.contourArea(cnts.get(cntIdx));
-            if (maxVal < counterArea) {
-                maxVal = counterArea;
-                maxIdx = cntIdx;
-            }
-        }
-
-        if (maxVal == 0) return 0;
-
-        MatOfPoint2f cnt2f = new MatOfPoint2f(cnts.get(maxIdx).toArray());
-        double peri = Imgproc.arcLength(cnt2f, true);
-        MatOfPoint2f approx2f = new MatOfPoint2f();
-        MatOfPoint approx = new MatOfPoint();
-
-        Imgproc.approxPolyDP(cnt2f, approx2f, 0.02 * peri, true);
-        Point[] pointsArray = approx.toArray();
-        Mat points = new Mat(pointsArray.length, 1, CvType.CV_32FC2);
-        for (int i = 0; i < pointsArray.length; i++) {
-            Point point = pointsArray[i];
-            points.put(i, 0, point.x, point.y);
-        }
-        Mat triangle = new Mat();
-        Imgproc.minEnclosingTriangle(points, triangle);
-
-        double[] p1 = triangle.get(0, 0);
-        double[] p2 = triangle.get(1, 0);
-        double[] p3 = triangle.get(2, 0);
-
-        double p1p2 = norml2(p1, p2);
-        double p2p3 = norml2(p2, p3);
-        double p1p3 = norml2(p1, p3);
-
-        double angle = 0;
-
-        if (p1p2 < p2p3 && p1p2 < p1p3) {
-            double[] mid = {(p1[0]+p2[0])/2, (p1[1]+p2[1])/2};
-            angle = Math.atan((p3[1]-mid[1])/(p3[0]-mid[0]));
-            if (p3[0]-mid[0] < 0) angle -= Math.PI;
-        } else if (p2p3 < p1p2 && p2p3 < p1p3) {
-            double[] mid = {(p2[0]+p3[0])/2, (p2[1]+p3[1])/2};
-            angle = Math.atan((p1[1]-mid[1])/(p1[0]-mid[0]));
-            if (p1[0]-mid[0] < 0) angle -= Math.PI;
-        } else if (p1p3 < p2p3 && p1p3 < p1p2) {
-            double[] mid = {(p1[0]+p3[0])/2, (p1[1]+p3[1])/2};
-            angle = Math.atan((p2[1]-mid[1])/(p2[0]-mid[0]));
-            if (p2[0]-mid[0] < 0) angle -= Math.PI;
-        }
-        return angle+Math.PI/2;
+        return NetworkTableInstance.getDefault().getTable("Vision").getDoubleTopic("ConeAngle").subscribe(0.).get();
     }
 
     private double norml2(double[] a, double[] b) {
@@ -169,7 +177,6 @@ public class VisionManager extends SubsystemBase {
     boolean isFirstConnected = true;
     @Override
     public void periodic() {
-        cvSink = CameraServer.getVideo(usbCamera);
         if (!camera.isConnected()) return;
         if (isFirstConnected) {
             camera.setDriverMode(true);

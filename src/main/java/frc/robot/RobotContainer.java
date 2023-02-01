@@ -7,9 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
@@ -67,7 +65,7 @@ public class RobotContainer {
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
 //        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
-        m_elevatorJoystick.btn_topL.whileTrue(new RepeatCommand(new AlignGripper(m_gripperSubsystem, m_visionManager)));
+        m_elevatorJoystick.btn_topL.whileTrue(new AlignGripper(m_gripperSubsystem, m_visionManager));
         m_elevatorJoystick.btn_triggerL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_topR.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
         m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_pneumatics));

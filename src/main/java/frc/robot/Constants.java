@@ -119,7 +119,7 @@ public final class Constants {
         public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
 
         // UsbCamera
-        public static final int[] UsbCameraResolution = {427, 240};
+        public static final int[] UsbCameraResolution = {320, 240};
         public static final Scalar kYellowLowThreshold = new Scalar(0, 100, 50);
         public static final Scalar kYellowHighThreshold = new Scalar(40, 255, 255);
     }
@@ -171,11 +171,11 @@ public final class Constants {
         public static final double kPIDRollAngularToleranceRads = 3./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
-        public static final double kRollMotorGearRatio = 1;
+        public static final double kRollMotorGearRatio = 1./20;
         // TODO: Change kWristGearRatio to the data we tested
-        public static final double kWristGearRatio = 1/25.;
+        public static final double kWristGearRatio = 1./25;
         public static final double kElbowGearRatio = 1./45;
-        public static final double kWinchGearRatio = 1./9;
+        public static final double kWinchGearRatio = 1./45;
 
         public static final double kMaxWinchSpeed = .1;
         public static final double kMaxElbowSpeed = .1;
@@ -192,7 +192,7 @@ public final class Constants {
         public static final double kIWinch = 0;
         public static final double kDWinch = 0;
 
-        public static final double kPRoll = .5;
+        public static final double kPRoll = .7;
         public static final double kIRoll = 0;
         public static final double kDRoll = 0;
 
@@ -206,8 +206,8 @@ public final class Constants {
         public static final double kMaxElbowAngularAccelerationRadiansPerSecond = Math.PI/2;
         public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI/2;
         public static final double kMaxWinchAngularAccelerationRadiansPerSecond = Math.PI/3;
-        public static final double kMaxRollAngularSpeedRadiansPerSecond = Math.PI/2;
-        public static final double kMaxRollAngularAccelerationRadiansPerSecond = Math.PI/2;
+        public static final double kMaxRollAngularSpeedRadiansPerSecond = Math.PI*3/2;
+        public static final double kMaxRollAngularAccelerationRadiansPerSecond = Math.PI;
 
 //        public static final double kMinElevatorHeight = 0;
 //        public static final double kMinElevatorHeight = Units.inchesToMeters(1);

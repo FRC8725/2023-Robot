@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Elevator;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
+import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap.ElevatorPort;
 import frc.robot.Constants.ElevatorConstants;
 
@@ -20,15 +22,17 @@ public class Gripper extends SubsystemBase {
         return INSTANCE;
     }
 
-    LazySparkMax wristMotor, rollMotor;
+    LazySparkMax wristMotor;
+    LazyTalonFX rollMotor;
 
     ProfiledPIDController wristProfiledPIDController, rollProfiledPIDController;
 
     DutyCycleEncoder absoluteEncoder;
 
     private Gripper() {
-        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
-        rollMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rollMotor = new LazyTalonFX(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
+//        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
+        rollMotor.setNeutralMode(NeutralMode.Coast);
 
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
         wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -44,7 +48,7 @@ public class Gripper extends SubsystemBase {
         rollProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPRoll, ElevatorConstants.kIRoll, ElevatorConstants.kDRoll, ElevatorConstants.kRollControllerConstraints);
         rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
         rollProfiledPIDController.disableContinuousInput();
-        rollMotor.setRadPosition(Math.PI/2);
+        rollMotor.setRadPosition(0);
         resetWristEncoder();
     }
 
@@ -52,7 +56,6 @@ public class Gripper extends SubsystemBase {
     public void periodic() {
         wristMotor.set(wristProfiledPIDController.calculate(wristMotor.getPositionAsRad()));
         rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()));
-        SmartDashboard.putNumber("Wrist Angle", wristMotor.getPositionAsRad());
     }
 
     public void resetWristEncoder() {
@@ -74,11 +77,11 @@ public class Gripper extends SubsystemBase {
     }
 
     public void setRollSetpoint(double setpoint) {
-        wristProfiledPIDController.setGoal(setpoint);
+        rollProfiledPIDController.setGoal(setpoint);
     }
 
     public double getRollEncoder() {
-        return wristMotor.getPositionAsRad();
+        return rollMotor.getPositionAsRad();
     }
 
     public void stop() {
