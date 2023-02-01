@@ -1,76 +1,76 @@
-package frc.robot.commands;
+// package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionManager;
-
-
-public class CorrectPositionReflectiveTape extends CommandBase {
-
-  final private SwerveSubsystem swerveSubsystem;
-  final private PIDController yController;
+// import edu.wpi.first.math.controller.PIDController;
+// import edu.wpi.first.math.controller.ProfiledPIDController;
+// import edu.wpi.first.math.geometry.*;
+// import edu.wpi.first.math.kinematics.ChassisSpeeds;
+// import edu.wpi.first.math.kinematics.SwerveModuleState;
+// import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
+// import frc.robot.Constants.AutoConstants;
+// import frc.robot.Constants.DriveConstants;
+// import frc.robot.Constants.VisionConstants;
+// import frc.robot.subsystems.SwerveSubsystem;
+// import frc.robot.subsystems.VisionManager;
 
 
-  final private VisionManager visionManager;
+// public class CorrectPositionReflectiveTape extends CommandBase {
 
-  public CorrectPositionReflectiveTape(SwerveSubsystem swerveSubsystem, VisionManager visionManager) {
-    this.swerveSubsystem = swerveSubsystem;
-    addRequirements(swerveSubsystem);
+//   final private SwerveSubsystem swerveSubsystem;
+//   final private PIDController yController;
 
-    // Controller Settings
-    yController = new PIDController(1.5 * Math.PI, 0, 0);
-    yController.setTolerance(.2);
-    yController.enableContinuousInput(-Math.PI, Math.PI);
 
-    this.visionManager = visionManager;
-  }
+//   final private VisionManager visionManager;
 
-  @Override
-  public void initialize() {
-    yController.reset();
-    visionManager.getReflectiveTapeRelativeYawRads();
-    visionManager.setDriverMode(false);
-    Timer.delay(.8);
-  }
+//   public CorrectPositionReflectiveTape(SwerveSubsystem swerveSubsystem, VisionManager visionManager) {
+//     this.swerveSubsystem = swerveSubsystem;
+//     addRequirements(swerveSubsystem);
 
-  @Override
-  public void execute() {
-    double relativeRads = visionManager.getReflectiveTapeRelativeYawRads();
-    if (!visionManager.hasTarget()) {
-      swerveSubsystem.stopModules();
-      return;
-    }
+//     // Controller Settings
+//     yController = new PIDController(1.5 * Math.PI, 0, 0);
+//     yController.setTolerance(.2);
+//     yController.enableContinuousInput(-Math.PI, Math.PI);
 
-    yController.setSetpoint(relativeRads);
+//     this.visionManager = visionManager;
+//   }
 
-    var ySpeed = yController.calculate(0);
+//   @Override
+//   public void initialize() {
+//     yController.reset();
+//     visionManager.getReflectiveTapeRelativeYawRads();
+//     visionManager.setDriverMode(false);
+//     Timer.delay(.8);
+//   }
 
-    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            0, ySpeed, 0, swerveSubsystem.getRotation2d());
+//   @Override
+//   public void execute() {
+//     double relativeRads = visionManager.getReflectiveTapeRelativeYawRads();
+//     if (!visionManager.hasTarget()) {
+//       swerveSubsystem.stopModules();
+//       return;
+//     }
 
-    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+//     yController.setSetpoint(relativeRads);
 
-    swerveSubsystem.setModuleStates(moduleStates);
-  }
+//     var ySpeed = yController.calculate(0);
 
-  @Override
-  public boolean isFinished() {
-    // TODO: Make this return true when this Command no longer needs to run execute()
-    return false;
-  }
+//     ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+//             0, ySpeed, 0, swerveSubsystem.getRotation2d());
 
-  @Override
-  public void end(boolean interrupted) {
-    visionManager.setDriverMode(true);
-    swerveSubsystem.stopModules();
-  }
-}
+//     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+//     swerveSubsystem.setModuleStates(moduleStates);
+//   }
+
+//   @Override
+//   public boolean isFinished() {
+//     // TODO: Make this return true when this Command no longer needs to run execute()
+//     return false;
+//   }
+
+//   @Override
+//   public void end(boolean interrupted) {
+//     visionManager.setDriverMode(true);
+//     swerveSubsystem.stopModules();
+//   }
+// }

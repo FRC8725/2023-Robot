@@ -32,22 +32,20 @@ public class VisionManager extends SubsystemBase {
         return instance;
     }
 
-    PhotonCamera camera = new PhotonCamera("OV5647");
-
     UsbCamera usbCamera;
     CvSource outputStream;
     CvSink cvSink;
-    PhotonPipelineResult result = new PhotonPipelineResult();
+    // PhotonPipelineResult result = new PhotonPipelineResult();
     // Pair<PhotonCamera, Transform3d> campair = new Pair<PhotonCamera, Transform3d>(camera, VisionConstants.Photon2Robot);
-    PhotonPoseEstimator estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
+    // PhotonPoseEstimator estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
 
     public VisionManager() {
         usbCamera = CameraServer.startAutomaticCapture();
         usbCamera.setResolution(VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
         outputStream = CameraServer.putVideo("ElevatorCAM", VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
-        setDriverMode(false);
+        // setDriverMode(false);
     }
-
+    /*
     public Transform3d getAprilTagRelative() {
         camera.setPipelineIndex(1);
         PhotonTrackedTarget target;
@@ -91,6 +89,7 @@ public class VisionManager extends SubsystemBase {
     public void setDriverMode(boolean driverMode) {
         camera.setDriverMode(driverMode);
     }
+    */
 
     public boolean isCone() {
         Mat img = new Mat();
@@ -112,12 +111,14 @@ public class VisionManager extends SubsystemBase {
     @Override
     public void periodic() {
         if (usbCamera.isConnected()) cvSink = CameraServer.getVideo(usbCamera);
+        /*
         if (!camera.isConnected()) return;
         if (isFirstConnected) {
             camera.setDriverMode(true);
             isFirstConnected = false;
         }
         result = camera.getLatestResult();
+        */
     }
 }
 
