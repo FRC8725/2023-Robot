@@ -56,6 +56,8 @@ public class ArmSubsystem extends SubsystemBase {
         double theta2 = LawOfCosinesTheta(l1, l3, l2);
         double theta3 = LawOfCosinesTheta(Math.abs(xAxis), l3, Math.abs(yAxis));
         thetaWinch = Math.PI/2-theta3-(xAxis>0? 1: -1 * theta2);
+        if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
+        if (thetaElbow <  ElevatorConstants.kMinElbowAngle || thetaElbow > ElevatorConstants.kMaxElbowAngle) return;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
     }
