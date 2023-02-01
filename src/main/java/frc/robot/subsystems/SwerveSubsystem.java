@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.RobotMap.DriverPort;
-import frc.robot.subsystems.Limelight;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -55,7 +54,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[]{
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
-    }, new Pose2d());
+    }, vision.getEstimatedGlobalPose().orElse(new Pose2d()));
     private final Field2d m_field = new Field2d();
     public SwerveSubsystem() {
         new Thread(() -> {
@@ -103,8 +102,6 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
-        var gloabalPose = vision.getEstimatedGlobalPose();
-        gloabalPose.ifPresent(pose2dDoublePair -> SwerveEstimator.addVisionMeasurement(pose2dDoublePair.getFirst(), pose2dDoublePair.getSecond()));
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putData(m_field);
