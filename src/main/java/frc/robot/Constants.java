@@ -153,23 +153,25 @@ public final class Constants {
     }
 
     public static final class ElevatorConstants {
-        public static final double kElevatorGearRatio = 1./9;
-
-        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.8);
+        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
         public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
-        public static final double kArmReelDiameterMeters = Units.inchesToMeters(2);
+        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);
         public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
-        public static final double kPIDElevatorPositionTolerance = Units.inchesToMeters(1);
-        public static final double kPIDArmPositionTolerance = .1;
+        public static final double kPIDElevatorPositionTolerance = 0.001;
+        public static final double kPIDArmPositionTolerance = .001;
         public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
         public static final double kPIDWinchAngularToleranceRads = 10./180* Math.PI;
 
+        public static final double kElevatorGearRatio = 1./9;
         public static final double kIntakeGearRatio = 1;
-        public static final double kWristGearRatio = 1./25;
+        // TODO: Change kWristGearRatio to the data we tested
+        public static final double kWristGearRatio = 1/25.;
         public static final double kArmGearRatio = 1./9;
         public static final double kWinchGearRatio = 1./25;
 
-        public static final double kPElevator = 5;
+        public static final double kElevatorSpeed = .5;
+
+        public static final double kPElevator = 8;
         public static final double kIElevator = 0;
         public static final double kDElevator = 0;
 
@@ -177,7 +179,8 @@ public final class Constants {
         public static final double kIWrist = 0;
         public static final double kDWrist = 0;
 
-        public static final double kPArm = .5;
+        public static final double kArmSpeed = .5;
+        public static final double kPArm = 5;
         public static final double kIArm = 0;
         public static final double kDArm = 0;
 
@@ -190,16 +193,16 @@ public final class Constants {
         public static final double kWristAbsoluteEncoderOffset = 0;
         public static final double kWinchAbsoluteEncoderOffset = 0;
 
-        public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI/2;
-        public static final double kMaxWristAngularAccelerationRadiansPerSecond = 1;
+        public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxWristAngularAccelerationRadiansPerSecond = Math.PI;
         public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI/2;
-        public static final double kMaxWinchAngularAccelerationRadiansPerSecond = 1;
+        public static final double kMaxWinchAngularAccelerationRadiansPerSecond = Math.PI/3;
 
 //        public static final double kMinElevatorHeight = 0;
-        public static final double kMinElevatorHeight = Units.inchesToMeters(5);
-        public static final double kMaxElevatorHeight = Units.inchesToMeters(10);
+        public static final double kMinElevatorHeight = Units.inchesToMeters(1);
+        public static final double kMaxElevatorHeight = Units.inchesToMeters(6);
         public static final double kMinArmHeight = Units.inchesToMeters(1);
-        public static final double kMaxArmHeight = Units.inchesToMeters(40);
+        public static final double kMaxArmHeight = Units.inchesToMeters(20);
         public static final double kMinWinchAngle = Units.degreesToRadians(0);
         public static final double kMaxWinchAngle = Units.degreesToRadians(90);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);

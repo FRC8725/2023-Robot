@@ -5,8 +5,8 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.RobotMap.ElevatorPort;
 import frc.lib.LazySparkMax;
@@ -40,15 +40,18 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double output = armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
         if (isPIDControlled) {
-            if (atSetpoint()) speed = 0;
-            else speed = MathUtil.clamp(armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters)), -1, 1);
+            if (armPIDController.atSetpoint()) speed = 0;
+            else speed = MathUtil.clamp(output, -ElevatorConstants.kArmSpeed, ElevatorConstants.kArmSpeed);
         }
         armMotor.set(speed);
+        SmartDashboard.putNumber("arm position", armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
+        SmartDashboard.putNumber("arm setpoint", armPIDController.getSetpoint());
     }
 
     public void setSetpoint(double setpoint) {
-        if (setpoint > ElevatorConstants.kMaxArmHeight || setpoint < ElevatorConstants.kMinArmHeight) return;
+        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinArmHeight, ElevatorConstants.kMaxArmHeight);
         isPIDControlled = true;
         armPIDController.setSetpoint(setpoint);
     }
@@ -57,8 +60,8 @@ public class Arm extends SubsystemBase {
         return armPIDController.atSetpoint();
     }
 
-    public double getSetpoint() {
-        return armPIDController.getSetpoint();
+    public double getEncoder() {
+        return armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters);
     }
 
     public void set(double speed) {
@@ -71,7 +74,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getLimitSwitch() {
-        return limitSwitch.get();
+        return !limitSwitch.get();
     }
 }
 

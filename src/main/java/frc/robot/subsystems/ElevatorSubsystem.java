@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator.Arm;
@@ -35,10 +34,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void periodic() {
         if(elevator.getLimitSwitch()) {
             elevator.zeroEncoder();
+            elevator.setSpeed(0);
             elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
         }
         if(arm.getLimitSwitch()) {
             arm.zeroEncoder();
+            arm.set(0);
             arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         }
     }
@@ -70,35 +71,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setElevatorSpeed(double speed) {
         if(speed == 0) return;
-        elevator.setSetpoint(elevator.getSetpoint() + speed);
+        elevator.setSetpoint(elevator.getEncoder() + speed/ElevatorConstants.kPElevator*ElevatorConstants.kElevatorSpeed);
     }
 
     public void setArmSpeed(double speed) {
         if(speed == 0) return;
-        arm.setSetpoint(arm.getSetpoint() + speed);
+        arm.setSetpoint(arm.getEncoder() + speed/ElevatorConstants.kPArm*ElevatorConstants.kArmSpeed);
     }
 
     public void setWristSpeed(double speed) {
         if(speed == 0) return;
-        gripper.setWristSetpoint(gripper.getWristSetpoint() + speed);
+        gripper.setWristSetpoint(gripper.getWristEncoder() + speed/ElevatorConstants.kPWrist);
     }
     public void setWinchSpeed(double speed) {
         if(speed == 0) return;
-        winch.setSetpoint(winch.getSetpoint() + speed);
+        winch.setSetpoint(winch.getEncoder() + speed/ElevatorConstants.kPWinch);
     }
 
     public void setGripperHorizontal() {
         if(DriverStation.isAutonomous()) return;
         gripper.setWristSetpoint(-winch.getSetpoint());
-    }
-
-    public void runIntake(boolean run, boolean isInverted) {
-        double speed = ElevatorConstants.kIntakeSpeed * (isInverted? -1: 1);
-        gripper.runIntake(run?speed: 0);
-    }
-
-    public boolean getIntakeSwitch() {
-        return gripper.getIntakeLimitSwitch();
     }
 
     public void stop() {

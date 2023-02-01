@@ -23,7 +23,7 @@ public class VisionManager extends SubsystemBase {
     CvSink cvSink;
 
     public VisionManager() {
-        usbCamera = CameraServer.startAutomaticCapture();
+        usbCamera = CameraServer.startAutomaticCapture(0);
         usbCamera.setResolution(VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
         outputStream = CameraServer.putVideo("ElevatorCAM", VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
        

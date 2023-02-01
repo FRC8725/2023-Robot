@@ -1,12 +1,13 @@
 package frc.robot.subsystems.Elevator;
 
 
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.lib.LazyTalonFX;
@@ -44,6 +45,7 @@ public class Gripper extends SubsystemBase {
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
+        wristMotor.setRadPosition(getAbsoluteEncoderRad());
 
         wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
@@ -57,7 +59,8 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        wristMotor.set(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()));
+        wristMotor.set(wristProfiledPIDController.calculate(wristMotor.getPositionAsRad()));
+        SmartDashboard.putNumber("Wrist Angle", wristMotor.getPositionAsRad());
     }
 
     public double getAbsoluteEncoderRad() {
@@ -78,8 +81,8 @@ public class Gripper extends SubsystemBase {
         wristProfiledPIDController.setGoal(setpoint);
     }
 
-    public double getWristSetpoint() {
-        return wristProfiledPIDController.getSetpoint().position;
+    public double getWristEncoder() {
+        return wristMotor.getPositionAsRad();
     }
 
     public void stop() {

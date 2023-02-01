@@ -40,19 +40,23 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double output = elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters));
         if (isPIDControlled) {
-            if (atSetpoint()) speed = 0;
-            else speed = MathUtil.clamp(elevatorPIDController.calculate(elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters)), -1, 1);
+            if (elevatorPIDController.atSetpoint()) speed = 0;
+            else speed = MathUtil.clamp(output, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         }
         elevatorMotor.set(speed);
-        SmartDashboard.putNumber("elevator speed", elevatorMotor.get());
-        SmartDashboard.putNumber("elevator position rad", elevatorMotor.getPositionAsRad());
-        SmartDashboard.putNumber("elevator setpoint", elevatorPIDController.getSetpoint());
-        SmartDashboard.putBoolean("limitSwitch", getLimitSwitch());
+//        SmartDashboard.putNumber("elevator speed", elevatorMotor.get());
+//        SmartDashboard.putNumber("elevator position", elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters));
+//        SmartDashboard.putNumber("elevator position error", elevatorPIDController.getPositionError());
+//        SmartDashboard.putBoolean("elevator atSetpoint", elevatorPIDController.atSetpoint());
+//        SmartDashboard.putNumber("elevator setpoint", elevatorPIDController.getSetpoint());
+//        SmartDashboard.putNumber("elevator tolerance", elevatorPIDController.getPositionTolerance());
+//        SmartDashboard.putBoolean("limitSwitch", getLimitSwitch());
     }
 
     public void setSetpoint(double setpoint) {
-        if (setpoint > ElevatorConstants.kMaxElevatorHeight || setpoint < ElevatorConstants.kMinElevatorHeight) return;
+        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinElevatorHeight, ElevatorConstants.kMaxElevatorHeight);
         isPIDControlled = true;
         elevatorPIDController.setSetpoint(setpoint);
     }
@@ -60,8 +64,8 @@ public class Elevator extends SubsystemBase {
     public boolean atSetpoint() {
         return elevatorPIDController.atSetpoint();
     }
-    public double getSetpoint() {
-        return elevatorPIDController.getSetpoint();
+    public double getEncoder() {
+        return elevatorMotor.getPositionAsMeters(ElevatorConstants.kElevatorReelCircumferenceMeters);
     }
 
     public void setSpeed(double speed) {
