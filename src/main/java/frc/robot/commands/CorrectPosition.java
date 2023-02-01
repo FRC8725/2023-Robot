@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -25,7 +26,7 @@ public class CorrectPosition extends CommandBase {
     private Limelight limelight;
     private final int whereChase;
 
-    private Transform3d lastTarget;
+    private Pose2d lastTarget;
     // 0 stand for left side
     // 1 stand for middle
     // 2 stand for right side
@@ -52,11 +53,6 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void initialize() {
-        xController.reset(swerveSubsystem.getPose().getX());
-        yController.reset(swerveSubsystem.getPose().getY());
-        thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        lastTarget = new Transform3d();
-        Timer.delay(.8);
     }
 
     @Override
@@ -64,38 +60,24 @@ public class CorrectPosition extends CommandBase {
         var relativePos = limelight.getAprilTagRelative();
         if (relativePos.isEmpty()) return;
         lastTarget = relativePos.get();
-
-        var robotPose = new Pose3d(
-                swerveSubsystem.getPose().getX(),
-                swerveSubsystem.getPose().getY(),
-                0.0,
-                new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
-        );
-        var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
-        var targetPose = camPose.transformBy(relativePos.get());
-        Transform3d tag2goal = new Transform3d();
-
-        // Change the place we want to go.
+        xController.setGoal(0);
+        yController.setGoal(0);
+        thetaController.setGoal(0);
+        var xSpeed = xController.calculate(lastTarget.getX());
+        double ySpeed;
         switch (whereChase) {
             case 0:
-                tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Left);
+                ySpeed = yController.calculate(lastTarget.getY()-VisionConstants.yoffset);
                 break;
             case 2:
-                tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Right);
+                ySpeed = yController.calculate(lastTarget.getY()+VisionConstants.yoffset);
                 break;
             default:
-                tag2goal = VisionConstants.Tag2Goal;
+                ySpeed = yController.calculate(lastTarget.getY());
         }
 
-        var goalPose = targetPose.transformBy(tag2goal).toPose2d();
-
-        xController.setGoal(goalPose.getX());
-        yController.setGoal(goalPose.getY());
-        thetaController.setGoal(goalPose.getRotation().getRadians());
-
-        var xSpeed = xController.calculate(robotPose.getX());
-        var ySpeed = yController.calculate(robotPose.getY());
-        var turningSpeed = thetaController.calculate(swerveSubsystem.getPose().getRotation().getRadians());
+        var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
+        // var turningSpeed = 0;
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());

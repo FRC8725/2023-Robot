@@ -1,0 +1,29 @@
+{
+  "Clients": {
+    "open": true
+  },
+  "Connections": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "8725"
+  },
+  "Server": {
+    "open": true
+  },
+  "outlineviewer": {
+    "open": true
+  },
+  "retained": {
+    "limelight": {
+      "open": true
+    }
+  },
+  "shuffleboard@1": {
+    "Publishers": {
+      "open": true
+    },
+    "open": true
+  }
+}
