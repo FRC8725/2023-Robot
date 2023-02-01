@@ -2,14 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -27,9 +22,6 @@ public class CorrectPosition extends CommandBase {
     private final int whereChase;
 
     private Pose2d lastTarget;
-    // 0 stand for left side
-    // 1 stand for middle
-    // 2 stand for right side
 
     public CorrectPosition(SwerveSubsystem swerveSubsystem, int whereChase, VisionManager visionManager) {
         // 0 stand for left side

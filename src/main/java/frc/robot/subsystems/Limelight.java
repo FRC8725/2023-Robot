@@ -43,15 +43,6 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumberArray("robot Pose from limelight", robotToTagSubscriber.get());
   }
 
-  // public Optional<Transform3d> getAprilTagRelative() {
-  //   var robotPoseArray = robotToTagSubscriber.get();
-  //   Optional<Transform3d> CameraToTarget = Optional.empty();
-  //   if (tagIDSubscriber.get() != -1) {
-  //     CameraToTarget = Optional.of(new Transform3d(new Translation3d(robotPoseArray[2], -robotPoseArray[0], robotPoseArray[1]), new Rotation3d(robotPoseArray[3], robotPoseArray[4], robotPoseArray[5])));
-  //   }
-  //   return CameraToTarget;
-  // }
-
   public Optional<Pose2d> getAprilTagRelative() {
     var robotPoseArray = robotToTagSubscriber.get();
     Optional<Pose2d> CameraToTarget = Optional.empty();
@@ -70,14 +61,4 @@ public class Limelight extends SubsystemBase {
       return Optional.of(robotPose2d);
     }
   }
-
-  // public Optional<Pose2d> getTeamRobotPose() {
-  //   var robotPoseArray = robotTeamPoseSubscriber.get();
-  //   if(tagIDSubscriber.get() == -1) {
-  //     return Optional.empty();
-  //   } else {
-  //     var robotPose2d = new Pose2d(robotPoseArray[0], robotPoseArray[1], new Rotation2d(robotPoseArray[2], robotPoseArray[3]));
-  //     return Optional.of(robotPose2d);
-  //   }
-  // }
 }

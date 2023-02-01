@@ -21,13 +21,6 @@ public class Barrel extends SequentialCommandGroup {
 
     public Barrel(SwerveSubsystem m_swerveSubsystem) {
 
-//        this.m_swerveSubsystem = m_swerveSubsystem;
-
-//        xController = new PIDController(AutoConstants.kPXController, 0, 0);
-//        yController = new PIDController(AutoConstants.kPYController, 0, 0);
-//        thetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
-//        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
                 "Barrel", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
