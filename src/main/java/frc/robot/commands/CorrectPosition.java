@@ -1,34 +1,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
+import frc.robot.subsystems.Limelight;
 
 
 public class CorrectPosition extends CommandBase {
 
     private SwerveSubsystem swerveSubsystem;
     private ProfiledPIDController xController, yController, thetaController;
-
-    private VisionManager visionManager;
+    private Limelight limelight;
     private final int whereChase;
 
-    private Transform3d lastTarget;
-    // 0 stand for left side
-    // 1 stand for middle
-    // 2 stand for right side
+    private Pose2d lastTarget;
 
     public CorrectPosition(SwerveSubsystem swerveSubsystem, int whereChase, VisionManager visionManager) {
         // 0 stand for left side
@@ -47,59 +40,36 @@ public class CorrectPosition extends CommandBase {
         yController.setTolerance(.2);
         thetaController.setTolerance(Units.degreesToRadians(3));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        this.visionManager = visionManager;
+        this.limelight = Limelight.getInstance();
     }
 
     @Override
     public void initialize() {
-        xController.reset(swerveSubsystem.getPose().getX());
-        yController.reset(swerveSubsystem.getPose().getY());
-        thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        visionManager.getAprilTagRelative();
-        visionManager.setDriverMode(false);
-        lastTarget = new Transform3d();
-        Timer.delay(.8);
     }
 
     @Override
     public void execute() {
-        var relativePos = visionManager.getAprilTagRelative();
-        if (!visionManager.hasTarget()) relativePos = lastTarget;
-        else lastTarget = relativePos;
-
-        if (relativePos.getX() == 0 && relativePos.getY() == 0 && relativePos.getZ() == 0) return;
-
-        var robotPose = new Pose3d(
-                swerveSubsystem.getPose().getX(),
-                swerveSubsystem.getPose().getY(),
-                0.0,
-                new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
-        );
-        var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
-        var targetPose = camPose.transformBy(relativePos);
-        Transform3d tag2goal = new Transform3d();
-
-        // Change the place we want to go.
+        var relativePos = limelight.getAprilTagRelative();
+        if (relativePos.isEmpty()) return;
+        lastTarget = relativePos.get();
+        xController.setGoal(0);
+        yController.setGoal(0);
+        thetaController.setGoal(0);
+        var xSpeed = xController.calculate(lastTarget.getX());
+        double ySpeed;
         switch (whereChase) {
             case 0:
-                tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Left);
+                ySpeed = yController.calculate(lastTarget.getY()-VisionConstants.yoffset);
                 break;
             case 2:
-                tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Right);
+                ySpeed = yController.calculate(lastTarget.getY()+VisionConstants.yoffset);
                 break;
             default:
-                tag2goal = VisionConstants.Tag2Goal;
+                ySpeed = yController.calculate(lastTarget.getY());
         }
 
-        var goalPose = targetPose.transformBy(tag2goal).toPose2d();
-
-        xController.setGoal(goalPose.getX());
-        yController.setGoal(goalPose.getY());
-        thetaController.setGoal(goalPose.getRotation().getRadians());
-
-        var xSpeed = xController.calculate(robotPose.getX());
-        var ySpeed = yController.calculate(robotPose.getY());
-        var turningSpeed = thetaController.calculate(swerveSubsystem.getPose().getRotation().getRadians());
+        var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
+        // var turningSpeed = 0;
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
@@ -119,6 +89,5 @@ public class CorrectPosition extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
-        visionManager.setDriverMode(true);
     }
 }
