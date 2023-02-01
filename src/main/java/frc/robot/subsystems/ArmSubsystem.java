@@ -45,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setSetpoint(double xAxis, double yAxis) {
 
         double distanceSquared = Math.pow(xAxis, 2) + Math.pow(yAxis, 2);
-        if (distanceSquared > Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
+        if (distanceSquared >= Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
 
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
