@@ -29,6 +29,7 @@ public class Elbow extends SubsystemBase {
 
     private Elbow() {
         elbowMotor = new LazySparkMax(ElevatorPort.kElbowMotor, ElevatorConstants.kElbowGearRatio);
+        elbowMotor.setInverted(true);
         elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         elbowProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPElbow, ElevatorConstants.kIElbow, ElevatorConstants.kDElbow, ElevatorConstants.kElbowControllerConstraints);
@@ -44,6 +45,7 @@ public class Elbow extends SubsystemBase {
     public void periodic() {
         elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(elbowMotor.getPositionAsRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Elbow Encoder", elbowMotor.getPositionAsRad());
     }
 
     public void resetEncoder() {
@@ -52,6 +54,7 @@ public class Elbow extends SubsystemBase {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kElbowAbsoluteEncoderOffset;
+        if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
 

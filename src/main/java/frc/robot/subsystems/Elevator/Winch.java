@@ -45,6 +45,7 @@ public class Winch extends SubsystemBase {
     public void periodic() {
         winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
         SmartDashboard.putNumber("Winch Absolute", getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Winch Encoder", winchMotor.getPositionAsRad());
     }
 
     public void resetEncoder() {
@@ -53,6 +54,7 @@ public class Winch extends SubsystemBase {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWinchAbsoluteEncoderOffset;
+        if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
 

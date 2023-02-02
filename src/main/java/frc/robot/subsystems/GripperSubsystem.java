@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.Elbow;
 import frc.robot.subsystems.Elevator.Gripper;
@@ -23,6 +24,7 @@ public class GripperSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
         gripper.setWristSetpoint(elbow.getEncoder() - Math.PI/2 + winch.getEncoder() + (isHorizontal? 0: -90));
+        SmartDashboard.putNumber("Wrist Setpoint", elbow.getEncoder() - Math.PI/2 + winch.getEncoder() + (isHorizontal? 0: -90));
     }
 
     private GripperSubsystem() {

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
@@ -19,6 +20,8 @@ public class ArmSubsystem extends SubsystemBase {
     private final Elbow elbow;
     private final Winch winch;
 
+    private double lastXAxis, lastYAxis;
+
     private ArmSubsystem() {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
@@ -26,15 +29,18 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+    }
 
     public void reset() {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         elbow.resetEncoder();
         winch.resetEncoder();
-        elbow.setSetpoint(Math.PI);
+        elbow.setSetpoint(Math.PI/2);
         winch.setSetpoint(0);
+        lastXAxis = 0;
+        lastYAxis = ElevatorConstants.kUpperArmLength;
     }
 
     private double LawOfCosinesTheta(double a, double b, double c) {
@@ -67,15 +73,17 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double spdX, double spdY) {
-        double l1 = ElevatorConstants.kUpperArmLength;
-        double l2 = ElevatorConstants.kForearmLength;
-        double phi = winch.getEncoder();
-        double theta = elbow.getEncoder();
-        double xAxis = Math.sin(phi+theta)*l2 + Math.sin(phi)*l1;
-        double yAxis = Math.cos(phi+theta)*l2 + Math.cos(phi)*l1;
-        setSetpoint(xAxis+spdX*ElevatorConstants.xSpdConvertFactor, yAxis+spdY*ElevatorConstants.ySpdConvertFactor);
-        SmartDashboard.putNumber("Distance", xAxis);
-        SmartDashboard.putNumber("Height", yAxis);
+//        double l1 = ElevatorConstants.kUpperArmLength;
+//        double l2 = ElevatorConstants.kForearmLength;
+//        double phi = winch.getEncoder();
+//        double theta = elbow.getEncoder();
+//        double xAxis = Math.sin(phi+theta)*l2 + Math.sin(phi)*l1;
+//        double yAxis = Math.cos(phi+theta)*l2 + Math.cos(phi)*l1;
+        setSetpoint(lastXAxis+spdX*ElevatorConstants.xSpdConvertFactor, lastYAxis+spdY*ElevatorConstants.ySpdConvertFactor);
+        lastXAxis += spdX*ElevatorConstants.xSpdConvertFactor;
+        lastYAxis += spdY*ElevatorConstants.ySpdConvertFactor;
+        SmartDashboard.putNumber("Distance", lastXAxis);
+        SmartDashboard.putNumber("Height", lastYAxis);
     }
 //
 //    public void setArmSpeed(double speed) {
