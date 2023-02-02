@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,6 +55,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         double distanceSquared = Math.pow(xAxis, 2) + Math.pow(yAxis, 2);
         if (distanceSquared >= Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
+        else if (distanceSquared <= Math.pow(ElevatorConstants.kUpperArmLength - ElevatorConstants.kForearmLength, 2)) return;
 
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
@@ -60,10 +64,9 @@ public class ArmSubsystem extends SubsystemBase {
         double theta1 = LawOfCosinesTheta(l1, l2, l3);
         thetaElbow = Math.PI - theta1;
         double theta2 = LawOfCosinesTheta(l1, l3, l2);
-        double theta3 = LawOfCosinesTheta(Math.abs(xAxis), l3, Math.abs(yAxis));
-        thetaWinch = Math.PI/2-theta3-(xAxis>0? 1: -1 * theta2);
+        thetaWinch = Math.acos(yAxis / l3) * xAxis>0? 1: -1 - theta2;
         if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
-        if (thetaElbow <  ElevatorConstants.kMinElbowAngle || thetaElbow > ElevatorConstants.kMaxElbowAngle) return;
+        else if (thetaElbow <  ElevatorConstants.kMinElbowAngle || thetaElbow > ElevatorConstants.kMaxElbowAngle) return;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
     }
@@ -73,17 +76,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double spdX, double spdY) {
-//        double l1 = ElevatorConstants.kUpperArmLength;
-//        double l2 = ElevatorConstants.kForearmLength;
-//        double phi = winch.getEncoder();
-//        double theta = elbow.getEncoder();
-//        double xAxis = Math.sin(phi+theta)*l2 + Math.sin(phi)*l1;
-//        double yAxis = Math.cos(phi+theta)*l2 + Math.cos(phi)*l1;
-        setSetpoint(lastXAxis+spdX*ElevatorConstants.xSpdConvertFactor, lastYAxis+spdY*ElevatorConstants.ySpdConvertFactor);
-        lastXAxis += spdX*ElevatorConstants.xSpdConvertFactor;
-        lastYAxis += spdY*ElevatorConstants.ySpdConvertFactor;
-        SmartDashboard.putNumber("Distance", lastXAxis);
-        SmartDashboard.putNumber("Height", lastYAxis);
+        Transform2d vectorWinch = new Transform2d(new Translation2d(0, ElevatorConstants.kUpperArmLength), Rotation2d.fromRadians(winch.getEncoder()));
+        Transform2d vectorElbow = new Transform2d(new Translation2d(0, ElevatorConstants.kForearmLength), Rotation2d.fromRadians(winch.getEncoder() + elbow.getEncoder()));
+        Translation2d point = vectorElbow.plus(vectorElbow).getTranslation();
+        setSetpoint(point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
+        SmartDashboard.putNumber("xAxis", point.getX());
+        SmartDashboard.putNumber("yAxis", point.getY());
     }
 //
 //    public void setArmSpeed(double speed) {
