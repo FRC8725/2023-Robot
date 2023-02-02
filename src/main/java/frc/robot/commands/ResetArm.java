@@ -23,7 +23,7 @@ public class ResetArm extends CommandBase {
     public void initialize() {
         armSubsystem.reset();
         gripperSubsystem.reset();
-        pneumatics.setGripper(true);
+        pneumatics.setGripper(false);
     }
 
     @Override

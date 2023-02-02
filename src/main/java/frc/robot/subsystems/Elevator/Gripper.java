@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
@@ -49,6 +50,7 @@ public class Gripper extends SubsystemBase {
         rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
         rollProfiledPIDController.disableContinuousInput();
         rollMotor.setRadPosition(0);
+        if (!absoluteEncoder.isConnected()) Timer.delay(.1);
         resetWristEncoder();
     }
 

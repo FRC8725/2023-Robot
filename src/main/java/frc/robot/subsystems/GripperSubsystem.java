@@ -37,7 +37,6 @@ public class GripperSubsystem extends SubsystemBase {
     public void reset() {
         gripper.stop();
         gripper.resetWristEncoder();
-        gripper.setWristSetpoint(0);
         gripper.setRollSetpoint(0);
         isHorizontal = true;
     }

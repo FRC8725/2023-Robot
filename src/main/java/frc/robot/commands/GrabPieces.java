@@ -28,8 +28,7 @@ public class GrabPieces extends SequentialCommandGroup {
                 new AlignGripper(gripperSubsystem, visionManager),
                 new RunArmToPosition(armSubsystem, gripperSubsystem, 1, .3, false),
                 new InstantCommand(() -> pneumatics.setGripper(false)),
-                new RunArmToPosition(armSubsystem, gripperSubsystem, .5, 1, true),
-                new InstantCommand(() -> gripperSubsystem.setRollSetpoint(0))
+                new ResetArm(armSubsystem, gripperSubsystem, pneumatics)
                 );
     }
 }

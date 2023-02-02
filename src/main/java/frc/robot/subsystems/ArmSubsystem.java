@@ -23,8 +23,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final Elbow elbow;
     private final Winch winch;
 
-    private double lastXAxis, lastYAxis;
-
     private ArmSubsystem() {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
@@ -42,12 +40,11 @@ public class ArmSubsystem extends SubsystemBase {
         winch.resetEncoder();
         elbow.setSetpoint(Math.PI/2);
         winch.setSetpoint(0);
-        lastXAxis = 0;
-        lastYAxis = ElevatorConstants.kUpperArmLength;
     }
 
     private double LawOfCosinesTheta(double a, double b, double c) {
         double result = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2 * a * b);
+        if (Math.abs(result) > 1) return -1;
         return Math.acos(result);
     }
 
@@ -64,8 +61,12 @@ public class ArmSubsystem extends SubsystemBase {
         double theta1 = LawOfCosinesTheta(l1, l2, l3);
         thetaElbow = Math.PI - theta1;
         double theta2 = LawOfCosinesTheta(l1, l3, l2);
+        if (Math.abs(yAxis / l3) > 1) return;
         thetaWinch = Math.acos(yAxis / l3) * xAxis>0? 1: -1 - theta2;
-        if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
+
+        // Some insurance for the massive arm
+        if (theta1 == -1 || theta2 == -1) return;
+        else if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
         else if (thetaElbow <  ElevatorConstants.kMinElbowAngle || thetaElbow > ElevatorConstants.kMaxElbowAngle) return;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
@@ -76,9 +77,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double spdX, double spdY) {
-        Transform2d vectorWinch = new Transform2d(new Translation2d(0, ElevatorConstants.kUpperArmLength), Rotation2d.fromRadians(winch.getEncoder()));
-        Transform2d vectorElbow = new Transform2d(new Translation2d(0, ElevatorConstants.kForearmLength), Rotation2d.fromRadians(winch.getEncoder() + elbow.getEncoder()));
-        Translation2d point = vectorElbow.plus(vectorElbow).getTranslation();
+        Transform2d vectorUpperArm = new Transform2d(new Translation2d(0, ElevatorConstants.kUpperArmLength), Rotation2d.fromRadians(winch.getEncoder()));
+        Transform2d vectorForearm = new Transform2d(new Translation2d(0, ElevatorConstants.kForearmLength), Rotation2d.fromRadians(winch.getEncoder() + elbow.getEncoder()));
+        Translation2d point = vectorUpperArm.plus(vectorForearm).getTranslation();
         setSetpoint(point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
         SmartDashboard.putNumber("xAxis", point.getX());
         SmartDashboard.putNumber("yAxis", point.getY());
