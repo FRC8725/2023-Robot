@@ -54,7 +54,7 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        wristMotor.set(wristProfiledPIDController.calculate(wristMotor.getPositionAsRad()));
+        wristMotor.set(wristProfiledPIDController.calculate(absoluteEncoder.getAbsolutePosition()));
         rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()));
         SmartDashboard.putNumber("Wrist Absolute", getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Wrist Encoder", getWristEncoder());

@@ -27,13 +27,11 @@ public class GripperSubsystem extends SubsystemBase {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         reset();
-        Timer.delay(2);
     }
 
     @Override
     public void periodic(){
         gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -90));
-        SmartDashboard.putNumber("Wrist Setpoint", elbow.getEncoder() - Math.PI/2 + winch.getEncoder() + (isHorizontal? 0: -90));
     }
 
     public void reset() {

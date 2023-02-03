@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.MathUsageId;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -166,8 +167,8 @@ public final class Constants {
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double kPIDGripperAngularToleranceRads = 1./180* Math.PI;
-        public static final double kPIDElbowAngularToleranceRads = 5./180* Math.PI;
-        public static final double kPIDWinchAngularToleranceRads = 5./180* Math.PI;
+        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(7);
+        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(7);
         public static final double kPIDRollAngularToleranceRads = 3./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
@@ -185,7 +186,7 @@ public final class Constants {
         public static final double kDWrist = 0;
 
         public static final double kPElbow = .3;
-        public static final double kIElbow = 0;
+        public static final double kIElbow = 0.1;
         public static final double kDElbow = 0;
 
         public static final double kPWinch = .7;
