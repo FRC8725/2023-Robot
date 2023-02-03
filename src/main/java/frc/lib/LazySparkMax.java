@@ -9,9 +9,17 @@ public class LazySparkMax extends CANSparkMax {
 
     public LazySparkMax(int deviceNumber, double gearRatio) {
         super(deviceNumber, MotorType.kBrushless);
-        setSmartCurrentLimit(50, 30);
+        setCurrent(false);
         encoder = getEncoder();
         encoder.setPositionConversionFactor(gearRatio);
+    }
+
+    public void setCurrent(boolean isHighCurrent) {
+        if (isHighCurrent){
+            setSmartCurrentLimit(60, 40);
+        } else {
+            setSmartCurrentLimit(50, 30);
+        }
     }
 
     public void setRadPosition(double rad) {

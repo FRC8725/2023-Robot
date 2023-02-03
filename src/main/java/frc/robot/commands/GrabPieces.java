@@ -21,7 +21,6 @@ public class GrabPieces extends SequentialCommandGroup {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
-        addRequirements(armSubsystem, gripperSubsystem);
         addCommands(
                 new RunArmToPosition(armSubsystem, gripperSubsystem, 1, .5, false),
                 new InstantCommand(() -> pneumatics.setGripper(true)),

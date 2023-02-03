@@ -31,6 +31,7 @@ public class Winch extends SubsystemBase {
 
     private Winch() {
         winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
+        winchMotor.setCurrent(true);
         winchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         winchMotor.setInverted(true);
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
@@ -39,14 +40,13 @@ public class Winch extends SubsystemBase {
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWinchAbsoluteEncoderOffset);
-        if (!absoluteEncoder.isConnected()) Timer.delay(.1);
         resetEncoder();
     }
 
     @Override
     public void periodic() {
-        winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(winchMotor.getPositionAsRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
-        SmartDashboard.putNumber("Winch Absolute", getAbsoluteEncoderRad());
+        winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
+        SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Winch Encoder", winchMotor.getPositionAsRad());
     }
 

@@ -36,7 +36,7 @@ public class RunArmToPosition extends CommandBase {
         this.xAxis = armPose.getFirst();
         this.yAxis = armPose.getSecond();
         this.isHorizontal = isHorizontal;
-        addRequirements(armSubsystem);
+        addRequirements(armSubsystem, gripperSubsystem);
     }
 
     @Override

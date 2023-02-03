@@ -40,7 +40,6 @@ public class Gripper extends SubsystemBase {
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
-        wristMotor.setRadPosition(getAbsoluteEncoderRad());
 
         wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
@@ -50,7 +49,6 @@ public class Gripper extends SubsystemBase {
         rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
         rollProfiledPIDController.disableContinuousInput();
         rollMotor.setRadPosition(0);
-        if (!absoluteEncoder.isConnected()) Timer.delay(.1);
         resetWristEncoder();
     }
 
@@ -58,7 +56,8 @@ public class Gripper extends SubsystemBase {
     public void periodic() {
         wristMotor.set(wristProfiledPIDController.calculate(wristMotor.getPositionAsRad()));
         rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()));
-        SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Wrist Absolute", getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Wrist Encoder", getWristEncoder());
     }
 
     public void resetWristEncoder() {
@@ -68,7 +67,7 @@ public class Gripper extends SubsystemBase {
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWristAbsoluteEncoderOffset;
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return measurement*2*Math.PI;
+        return -measurement*2*Math.PI; // Inverted
     }
 
     public void setWristSetpoint(double setpoint) {
@@ -86,13 +85,6 @@ public class Gripper extends SubsystemBase {
 
     public double getRollEncoder() {
         return rollMotor.getPositionAsRad();
-    }
-
-    public void stop() {
-        rollMotor.set(0);
-        rollProfiledPIDController.setGoal(rollMotor.get());
-        wristMotor.set(0);
-        wristProfiledPIDController.setGoal(wristMotor.get());
     }
 }
 

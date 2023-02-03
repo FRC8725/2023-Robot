@@ -30,6 +30,7 @@ public class Elbow extends SubsystemBase {
 
     private Elbow() {
         elbowMotor = new LazySparkMax(ElevatorPort.kElbowMotor, ElevatorConstants.kElbowGearRatio);
+        elbowMotor.setCurrent(true);
         elbowMotor.setInverted(true);
         elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
@@ -39,14 +40,13 @@ public class Elbow extends SubsystemBase {
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kElbowAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kElbowAbsoluteEncoderOffset);
-        if (!absoluteEncoder.isConnected()) Timer.delay(.1);
         resetEncoder();
     }
 
     @Override
     public void periodic() {
-        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(elbowMotor.getPositionAsRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
-        SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
+        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
+        SmartDashboard.putNumber("Elbow Absolute", getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Elbow Encoder", elbowMotor.getPositionAsRad());
     }
 

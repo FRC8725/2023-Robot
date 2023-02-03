@@ -23,14 +23,18 @@ public class ArmSubsystem extends SubsystemBase {
     private final Elbow elbow;
     private final Winch winch;
 
+    boolean isResetting;
+
     private ArmSubsystem() {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         reset();
+        Timer.delay(2);
     }
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
     }
 
     public void reset() {
@@ -40,6 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
         winch.resetEncoder();
         elbow.setSetpoint(Math.PI/2);
         winch.setSetpoint(0);
+        isResetting = true;
     }
 
     private double LawOfCosinesTheta(double a, double b, double c) {
@@ -49,25 +54,29 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setSetpoint(double xAxis, double yAxis) {
-
         double distanceSquared = Math.pow(xAxis, 2) + Math.pow(yAxis, 2);
-        if (distanceSquared >= Math.pow(ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength, 2)) return;
-        else if (distanceSquared <= Math.pow(ElevatorConstants.kUpperArmLength - ElevatorConstants.kForearmLength, 2)) return;
+        double distance = Math.sqrt(distanceSquared);
+        SmartDashboard.putNumber("Distance", distance);
+        if (distance >= ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength) return;
+        else if (distance <= ElevatorConstants.kUpperArmLength - ElevatorConstants.kForearmLength) return;
+
+        SmartDashboard.putNumber("setX", xAxis);
+        SmartDashboard.putNumber("setY", yAxis);
 
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
         double l2 = ElevatorConstants.kForearmLength;
-        double l3 = Math.sqrt(distanceSquared);
+        double l3 = distance;
         double theta1 = LawOfCosinesTheta(l1, l2, l3);
         thetaElbow = Math.PI - theta1;
         double theta2 = LawOfCosinesTheta(l1, l3, l2);
         if (Math.abs(yAxis / l3) > 1) return;
-        thetaWinch = Math.acos(yAxis / l3) * xAxis>0? 1: -1 - theta2;
+        thetaWinch = Math.acos(yAxis / l3) * (xAxis>0? 1: -1) - theta2;
 
         // Some insurance for the massive arm
         if (theta1 == -1 || theta2 == -1) return;
-        else if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
         else if (thetaElbow <  ElevatorConstants.kMinElbowAngle || thetaElbow > ElevatorConstants.kMaxElbowAngle) return;
+        else if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
     }
@@ -77,11 +86,13 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double spdX, double spdY) {
-        Transform2d vectorUpperArm = new Transform2d(new Translation2d(0, ElevatorConstants.kUpperArmLength), Rotation2d.fromRadians(winch.getEncoder()));
-        Transform2d vectorForearm = new Transform2d(new Translation2d(0, ElevatorConstants.kForearmLength), Rotation2d.fromRadians(winch.getEncoder() + elbow.getEncoder()));
-        Translation2d point = vectorUpperArm.plus(vectorForearm).getTranslation();
-        setSetpoint(point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
-        SmartDashboard.putNumber("xAxis", point.getX());
+        if (!atSetpoint() && isResetting) return;
+        isResetting = false;
+        Translation2d vectorUpperArm = new Translation2d(ElevatorConstants.kUpperArmLength, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
+        Translation2d vectorForearm = new Translation2d(ElevatorConstants.kForearmLength, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + elbow.getAbsoluteEncoderRad() + Math.PI/2));
+        Translation2d point = vectorUpperArm.plus(vectorForearm);
+        setSetpoint(-point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
+        SmartDashboard.putNumber("xAxis", -point.getX());
         SmartDashboard.putNumber("yAxis", point.getY());
     }
 //
