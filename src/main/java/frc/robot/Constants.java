@@ -62,15 +62,15 @@ public final class Constants {
         public static final boolean kFrontRightDriveReversed = false;
         public static final boolean kBackRightDriveReversed = false;
 
-        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
+        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed  = false;
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
-        public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
-        public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
+        public static final boolean kBackLeftDriveAbsoluteEncoderReversed   = false;
+        public static final boolean kBackRightDriveAbsoluteEncoderReversed  = false;
 
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetAngle = 178.9453;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetAngle = 133.0664;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetAngle = 121.99219;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetAngle = 34.54102;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetAngle  = 180. + 46.7;
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetAngle = 180. + 119.5;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetAngle   = 180. + 268.3;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetAngle  = 180. + 36.1;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = Units.feetToMeters(13.5);
         // Neo: 12; Falcon: 13.5
@@ -94,6 +94,10 @@ public final class Constants {
         public static final double kPXController = 1.;
         public static final double kPYController = 1.;
         public static final double kPThetaController = 1.5;
+
+        public static final double kCorrectPositionXController = .5;
+        public static final double kCorrectPositionYController = 2;
+        public static final double kCorrectPositionThetaController = 3;
 
         public static final TrapezoidProfile.Constraints kDriveControllerConstraints = //
                 new TrapezoidProfile.Constraints(

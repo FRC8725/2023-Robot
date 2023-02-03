@@ -2,12 +2,16 @@ package frc.robot.subsystems;
 
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,7 +56,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), new SwerveModulePosition[]{
+    // private final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
+    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getRotation2d(), new SwerveModulePosition[]{
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
     }, vision.getEstimatedGlobalPose().orElse(new Pose2d()));
     private final Field2d m_field = new Field2d();
@@ -60,7 +65,7 @@ public class SwerveSubsystem extends SubsystemBase {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                zeroHeading();
+                zeroHeading();  
                 resetEncoders();
             } catch (Exception ignored) {
             }
@@ -76,7 +81,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(-gyro.getAngle(), 360);
+        return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -88,7 +93,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getRoll() {
-        return gyro.getRoll();
+        return .0;
     }
 
     public Field2d getfield2d() {
@@ -103,6 +108,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
         SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putData(m_field);
         m_field.setRobotPose(getPose());
@@ -110,7 +116,6 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.putDashboard();
         frontLeft.putDashboard();
         frontRight.putDashboard();
-        SmartDashboard.putNumber("gyro Pitch", getRoll());
     }
 
     public void stopModules() {

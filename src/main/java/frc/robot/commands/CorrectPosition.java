@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionManager;
@@ -32,13 +33,13 @@ public class CorrectPosition extends CommandBase {
         addRequirements(swerveSubsystem);
 
         // Controller Settings
-        xController = new ProfiledPIDController(AutoConstants.kPXController, 0, 0, AutoConstants.kDriveControllerConstraints);
-        yController = new ProfiledPIDController(AutoConstants.kPYController, 0, 0, AutoConstants.kDriveControllerConstraints);
+        xController = new ProfiledPIDController(AutoConstants.kCorrectPositionXController, 0, 0, AutoConstants.kDriveControllerConstraints);
+        yController = new ProfiledPIDController(AutoConstants.kCorrectPositionYController, 0, 0, AutoConstants.kDriveControllerConstraints);
         thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        xController.setTolerance(.2);
-        yController.setTolerance(.2);
-        thetaController.setTolerance(Units.degreesToRadians(3));
+                AutoConstants.kCorrectPositionThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+        xController.setTolerance(.1);
+        yController.setTolerance(.1);
+        thetaController.setTolerance(2);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.limelight = Limelight.getInstance();
     }
@@ -50,12 +51,12 @@ public class CorrectPosition extends CommandBase {
     @Override
     public void execute() {
         var relativePos = limelight.getAprilTagRelative();
-        if (relativePos.isEmpty()) return;
+        if (relativePos.isEmpty()) swerveSubsystem.stopModules();;
         lastTarget = relativePos.get();
-        xController.setGoal(0);
+        xController.setGoal(-Units.inchesToMeters(16.113)-DriveConstants.kTrackWidth/2);
         yController.setGoal(0);
         thetaController.setGoal(0);
-        var xSpeed = xController.calculate(lastTarget.getX());
+        var xSpeed = xController.calculate(-lastTarget.getX());
         double ySpeed;
         switch (whereChase) {
             case 0:

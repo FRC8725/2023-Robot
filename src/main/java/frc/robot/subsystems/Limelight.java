@@ -47,7 +47,7 @@ public class Limelight extends SubsystemBase {
     var robotPoseArray = robotToTagSubscriber.get();
     Optional<Pose2d> CameraToTarget = Optional.empty();
     if (tagIDSubscriber.get() != -1) {
-      CameraToTarget = Optional.of(new Pose2d(-robotPoseArray[2], robotPoseArray[0], new Rotation2d(Units.degreesToRadians(robotPoseArray[4]))));
+      CameraToTarget = Optional.of(new Pose2d(robotPoseArray[2], robotPoseArray[0], new Rotation2d(Units.degreesToRadians(robotPoseArray[4]))));
     }
     return CameraToTarget;
   }
@@ -57,7 +57,7 @@ public class Limelight extends SubsystemBase {
     if(tagIDSubscriber.get() == -1) {
       return Optional.empty();
     } else {
-      var robotPose2d = new Pose2d(-robotPoseArray[2], robotPoseArray[0], new Rotation2d(Units.degreesToRadians(robotPoseArray[4])));
+      var robotPose2d = new Pose2d(robotPoseArray[2], robotPoseArray[0], new Rotation2d(Units.degreesToRadians(robotPoseArray[4])));
       return Optional.of(robotPose2d);
     }
   }
