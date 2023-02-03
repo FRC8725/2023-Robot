@@ -24,7 +24,7 @@ public class CorrectPosition extends CommandBase {
 
     private Pose2d lastTarget;
 
-    public CorrectPosition(SwerveSubsystem swerveSubsystem, int whereChase, VisionManager visionManager) {
+    public CorrectPosition(SwerveSubsystem swerveSubsystem, int whereChase) {
         // 0 stand for left side
         // 1 stand for middle
         // 2 stand for right side
@@ -70,7 +70,6 @@ public class CorrectPosition extends CommandBase {
         }
 
         var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
-        // var turningSpeed = 0;
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());

@@ -38,10 +38,10 @@ public class Barrel extends SequentialCommandGroup {
         );
 
         PathPlannerTrajectory firstTraj = pathGroup.get(0);
-        Pose2d initialPose = firstTraj.getInitialPose();
+        Pose2d pathInitialPose = firstTraj.getInitialPose();
         Command fullAuto = autoBuilder.fullAuto(pathGroup);
         addCommands(
-//                new BackToInitial(m_swerveSubsystem, initialPose),
+                new BackToInitial(m_swerveSubsystem, pathInitialPose),
                 fullAuto,
                 new InstantCommand(m_swerveSubsystem::stopModules));
     }

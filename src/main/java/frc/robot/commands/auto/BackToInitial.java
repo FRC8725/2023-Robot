@@ -10,7 +10,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.subsystems.VisionManager;
 import frc.robot.Constants.DriveConstants;
 
 
@@ -19,13 +18,13 @@ public class BackToInitial extends CommandBase {
     SwerveSubsystem swerveSubsystem;
 
     ProfiledPIDController xController, yController, thetaController;
-    Pose2d initialPose;
+    Pose2d pathInitialPose;
 
-    public BackToInitial(SwerveSubsystem swerveSubsystem, Pose2d initialPose) {
+    public BackToInitial(SwerveSubsystem swerveSubsystem, Pose2d pathInitialPose) {
         this.swerveSubsystem = swerveSubsystem;
         addRequirements(swerveSubsystem);
 
-        this.initialPose = initialPose;
+        this.pathInitialPose = pathInitialPose;
 
         // Controller Settings
         xController = new ProfiledPIDController(AutoConstants.kPXController, 0, 0, AutoConstants.kDriveControllerConstraints);
@@ -50,7 +49,7 @@ public class BackToInitial extends CommandBase {
     public void execute() {
         var robotPose = swerveSubsystem.getPose();
         var goalPose = robotPose.transformBy(
-                new Transform2d(initialPose.getTranslation(), new Rotation2d()));
+                new Transform2d(pathInitialPose.getTranslation(), new Rotation2d()));
 
             xController.setGoal(goalPose.getX());
             yController.setGoal(goalPose.getY());
@@ -71,7 +70,7 @@ public class BackToInitial extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        double distance = swerveSubsystem.getPose().getTranslation().getDistance(initialPose.getTranslation());
+        double distance = swerveSubsystem.getPose().getTranslation().getDistance(pathInitialPose.getTranslation());
         // TODO: Make this return true when this Command no longer needs to run execute()
         return distance < 1;
     }

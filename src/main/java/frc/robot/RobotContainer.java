@@ -9,15 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
+import frc.robot.commands.auto.TestMove;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.PoseConstants;
-
-import org.photonvision.PhotonCamera;
 
 
 /**
@@ -28,7 +25,6 @@ import org.photonvision.PhotonCamera;
  */
 public class RobotContainer {
     // Some default constants
-    private final PhotonCamera photonCamera = new PhotonCamera("");
 
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
@@ -66,9 +62,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         m_swerveJoystick.btn_triggerR.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
         // m_swerveJoystick.btn_A.whileTrue(new CorrectPositionReflectiveTape(m_swerveSubsystem, m_visionManager));
-        m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0, m_visionManager));
-        m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1, m_visionManager));
-        m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2, m_visionManager));
+        m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0));
+        m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1));
+        m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2));
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
         m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
@@ -83,7 +79,8 @@ public class RobotContainer {
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
         autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
-        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem, m_visionManager));
+        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
+        autoCommand.addOption("[test]Red path", new TestMove(m_swerveSubsystem));
         SmartDashboard.putData(autoCommand);
     }
 
