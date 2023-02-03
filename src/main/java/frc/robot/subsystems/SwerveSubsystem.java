@@ -6,9 +6,11 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -56,6 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
     }, vision.getEstimatedGlobalPose().orElse(new Pose2d()));
     private final Field2d m_field = new Field2d();
+
     public SwerveSubsystem() {
         new Thread(() -> {
             try {
@@ -88,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getRoll() {
-        return .0;
+        return gyro.getRoll();
     }
 
     public Field2d getfield2d() {
@@ -102,6 +105,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
+        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get(), Timer.getFPGATimestamp());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
@@ -133,5 +137,9 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+    }
+
+    public void setposition() {
+        if (vision.getEstimatedGlobalPose().isPresent()) SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, vision.getEstimatedGlobalPose().get());
     }
 }

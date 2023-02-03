@@ -31,10 +31,9 @@ public class TestMove extends SequentialCommandGroup {
 
 
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
-            "TestRed", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared));
+            "RedPath", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
     HashMap<String, Command> eventMap = new HashMap<>();
-    eventMap.put("balance", new BalanceCmd(m_swerveSubsystem));
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
             m_swerveSubsystem::getPose,
