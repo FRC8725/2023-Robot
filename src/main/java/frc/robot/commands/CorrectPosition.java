@@ -50,9 +50,8 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void execute() {
-        var relativePos = limelight.getAprilTagRelative();
-        if (relativePos.isEmpty()) swerveSubsystem.stopModules();;
-        lastTarget = relativePos.get();
+        if (!limelight.hasTarget()) {swerveSubsystem.stopModules();return;}
+        lastTarget = limelight.getAprilTagRelative().get();
         xController.setGoal(-Units.inchesToMeters(16.113)-DriveConstants.kTrackWidth/2);
         yController.setGoal(0);
         thetaController.setGoal(0);

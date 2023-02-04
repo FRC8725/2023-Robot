@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.BackToInitial;
 import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.commands.auto.TestMove;
@@ -83,10 +84,10 @@ public class RobotContainer {
         autoCommand.addOption("[test]Red path", new TestMove(m_swerveSubsystem));
         SmartDashboard.putData(autoCommand);
     }
-
+;
     public Command getAutonomousCommand() {
-        SmartDashboard.putData(m_swerveSubsystem.getfield2d());
-        m_swerveSubsystem.resetEncoders();
+        m_swerveSubsystem.setRobotPoseWithVision();
+        m_swerveSubsystem.zeroHeading();
         return autoCommand.getSelected();
     }
 }

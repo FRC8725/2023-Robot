@@ -33,20 +33,20 @@ public class TestMove extends SequentialCommandGroup {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
             "RedPath", new PathConstraints(Constants.AutoConstants.kMaxSpeedMetersPerSecond, Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
-    HashMap<String, Command> eventMap = new HashMap<>();
+    // HashMap<String, Command> eventMap = new HashMap<>();
 
-    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-            m_swerveSubsystem::getPose,
-            m_swerveSubsystem::resetOdometry,
-            Constants.DriveConstants.kDriveKinematics,
-            new PIDConstants(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDConstants(Constants.AutoConstants.kPThetaController, 0, 0),
-            m_swerveSubsystem::setModuleStates,
-            eventMap,
-            m_swerveSubsystem
-    );
+    // SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+    //         m_swerveSubsystem::getPose,
+    //         m_swerveSubsystem::resetOdometry,
+    //         Constants.DriveConstants.kDriveKinematics,
+    //         new PIDConstants(Constants.AutoConstants.kPXController, 0, 0),
+    //         new PIDConstants(Constants.AutoConstants.kPThetaController, 0, 0),
+    //         m_swerveSubsystem::setModuleStates,
+    //         eventMap,
+    //         m_swerveSubsystem
+    // );
     Pose2d pathInitialPose = pathGroup.get(0).getInitialPose();
-    Command fullAuto = autoBuilder.fullAuto(pathGroup);
-    addCommands(new BackToInitial(m_swerveSubsystem, pathInitialPose), fullAuto, new InstantCommand(m_swerveSubsystem::stopModules));
+    //Command fullAuto = autoBuilder.fullAuto(pathGroup);
+    addCommands(new BackToInitial(m_swerveSubsystem, pathInitialPose), new InstantCommand(m_swerveSubsystem::stopModules));
   }
 }

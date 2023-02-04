@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -105,7 +106,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
-        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get(), Timer.getFPGATimestamp());
+        if (DriverStation.isTeleop())updateRobotPoseWithVision();
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
@@ -137,5 +138,12 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+    }
+    public void updateRobotPoseWithVision() {
+        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get(), Timer.getFPGATimestamp());
+    }
+
+    public void setRobotPoseWithVision() {
+        if (vision.getEstimatedGlobalPose().isPresent())resetOdometry(vision.getEstimatedGlobalPose().get());
     }
 }

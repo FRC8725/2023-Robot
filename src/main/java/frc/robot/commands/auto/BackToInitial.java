@@ -51,16 +51,16 @@ public class BackToInitial extends CommandBase {
         var goalPose = robotPose.transformBy(
                 new Transform2d(pathInitialPose.getTranslation(), new Rotation2d()));
 
-            xController.setGoal(goalPose.getX());
-            yController.setGoal(goalPose.getY());
-            thetaController.setGoal(goalPose.getRotation().getRadians());
+            xController.setGoal(pathInitialPose.getX());
+            yController.setGoal(pathInitialPose.getY());
+            thetaController.setGoal(pathInitialPose.getRotation().getRadians());
 
         var xSpeed = xController.calculate(robotPose.getX());
         var ySpeed = yController.calculate(robotPose.getY());
-        var turningSpeed = thetaController.calculate(swerveSubsystem.getPose().getRotation().getRadians());
+        var turningSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+                xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());
 
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -70,9 +70,8 @@ public class BackToInitial extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        double distance = swerveSubsystem.getPose().getTranslation().getDistance(pathInitialPose.getTranslation());
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return distance < 1;
+        return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
     }
 
     @Override
