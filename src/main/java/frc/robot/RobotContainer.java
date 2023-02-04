@@ -65,7 +65,6 @@ public class RobotContainer {
         m_swerveJoystick.btn_X.whileTrue(new CorrectPosition(m_swerveSubsystem, 0));
         m_swerveJoystick.btn_Y.whileTrue(new CorrectPosition(m_swerveSubsystem, 1));
         m_swerveJoystick.btn_B.whileTrue(new CorrectPosition(m_swerveSubsystem, 2));
-        m_swerveJoystick.btn_A.whileTrue(new InstantCommand(m_swerveSubsystem::setposition));
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
         m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));

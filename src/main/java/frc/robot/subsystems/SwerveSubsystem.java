@@ -138,8 +138,4 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
     }
-
-    public void setposition() {
-        if (vision.getEstimatedGlobalPose().isPresent()) SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, vision.getEstimatedGlobalPose().get());
-    }
 }

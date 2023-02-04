@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FieldConstants;
 import edu.wpi.first.networktables.DoubleSubscriber;
 
 
@@ -28,7 +29,7 @@ public class Limelight extends SubsystemBase {
   }
   public Limelight() {
     robotToTagSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
-    robotPoseSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("robotpose").subscribe(new double[6]);
+    robotPoseSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose").subscribe(new double[6]);
     tagIDSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleTopic("tid").subscribe(-1);
     if (DriverStation.getAlliance() == Alliance.Blue) {
       robotTeamPoseSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[6]);
@@ -57,7 +58,7 @@ public class Limelight extends SubsystemBase {
     if(tagIDSubscriber.get() == -1) {
       return Optional.empty();
     } else {
-      var robotPose2d = new Pose2d(robotPoseArray[2], robotPoseArray[0], new Rotation2d(Units.degreesToRadians(robotPoseArray[4])));
+      var robotPose2d = new Pose2d(robotPoseArray[0] + FieldConstants.length / 2, robotPoseArray[1] + FieldConstants.width / 2 , new Rotation2d(Units.degreesToRadians(robotPoseArray[5])));
       return Optional.of(robotPose2d);
     }
   }
