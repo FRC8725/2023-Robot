@@ -54,10 +54,10 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        wristMotor.set(wristProfiledPIDController.calculate(absoluteEncoder.getAbsolutePosition()));
+        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
         rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()));
-        SmartDashboard.putNumber("Wrist Absolute", getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Wrist Encoder", getWristEncoder());
+        SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
     }
 
     public void resetWristEncoder() {
@@ -65,7 +65,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWristAbsoluteEncoderOffset;
+        double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return -measurement*2*Math.PI; // Inverted
     }

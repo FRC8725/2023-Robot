@@ -82,6 +82,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
+        SmartDashboard.putBoolean("atElbowSetpoint", elbow.atSetpoint());
+        SmartDashboard.putBoolean("atWinchSetpoint", winch.atSetpoint());
         return elbow.atSetpoint() && winch.atSetpoint();
     }
 
@@ -91,9 +93,10 @@ public class ArmSubsystem extends SubsystemBase {
         Translation2d vectorUpperArm = new Translation2d(ElevatorConstants.kUpperArmLength, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ElevatorConstants.kForearmLength, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + elbow.getAbsoluteEncoderRad() + Math.PI/2));
         Translation2d point = vectorUpperArm.plus(vectorForearm);
-        setSetpoint(-point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
         SmartDashboard.putNumber("xAxis", -point.getX());
         SmartDashboard.putNumber("yAxis", point.getY());
+        if (spdX == 0 && spdY == 0) return;
+        setSetpoint(-point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
     }
 //
 //    public void setArmSpeed(double speed) {

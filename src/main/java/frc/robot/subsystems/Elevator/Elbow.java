@@ -28,6 +28,8 @@ public class Elbow extends SubsystemBase {
     ProfiledPIDController elbowProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
 
+    double setpoint;
+
     private Elbow() {
         elbowMotor = new LazySparkMax(ElevatorPort.kElbowMotor, ElevatorConstants.kElbowGearRatio);
         elbowMotor.setCurrent(true);
@@ -45,9 +47,10 @@ public class Elbow extends SubsystemBase {
 
     @Override
     public void periodic() {
-        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
-        SmartDashboard.putNumber("Elbow Absolute", getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Elbow Encoder", elbowMotor.getPositionAsRad());
+        if (atSetpoint()) elbowMotor.set(0);
+        else elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
+        SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
     }
 
     public void resetEncoder() {
@@ -55,7 +58,7 @@ public class Elbow extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kElbowAbsoluteEncoderOffset;
+        double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
@@ -64,10 +67,11 @@ public class Elbow extends SubsystemBase {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinElbowAngle, ElevatorConstants.kMaxElbowAngle);
         SmartDashboard.putNumber("Elbow Setpoint", setpoint);
         elbowProfiledPIDController.setGoal(setpoint);
+        this.setpoint = setpoint;
     }
 
     public boolean atSetpoint() {
-        return elbowProfiledPIDController.atSetpoint();
+        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ElevatorConstants.kPIDWinchAngularToleranceRads;
     }
 
     public double getEncoder() {

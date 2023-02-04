@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +30,8 @@ public class Winch extends SubsystemBase {
     ProfiledPIDController winchProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
 
+    double setpoint;
+
     private Winch() {
         winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
         winchMotor.setCurrent(true);
@@ -45,9 +48,10 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
+        if(atSetpoint()) winchMotor.set(0);
+        else winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Winch Encoder", winchMotor.getPositionAsRad());
+        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
     }
 
     public void resetEncoder() {
@@ -55,7 +59,7 @@ public class Winch extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition()-ElevatorConstants.kWinchAbsoluteEncoderOffset;
+        double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
@@ -64,10 +68,11 @@ public class Winch extends SubsystemBase {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWinchAngle, ElevatorConstants.kMaxWinchAngle);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
         winchProfiledPIDController.setGoal(setpoint);
+        this.setpoint = setpoint;
     }
 
     public boolean atSetpoint() {
-        return winchProfiledPIDController.atSetpoint();
+        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ElevatorConstants.kPIDWinchAngularToleranceRads;
     }
 
     public double getEncoder() {

@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -71,8 +72,8 @@ public class RobotContainer {
         m_elevatorJoystick.btn_topR.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
         m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_pneumatics));
 //        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
-        m_elevatorJoystick.btn_Y.onTrue(new InstantCommand(() -> m_armSubsystem.setSetpoint(0.5, 1)));
-        m_elevatorJoystick.btn_A.onTrue(new InstantCommand(() -> m_armSubsystem.setSetpoint(-0.5, 0)));
+        m_elevatorJoystick.btn_Y.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, new Pair<>(1.2, .6), true));
+//        m_elevatorJoystick.btn_A.onTrue(new InstantCommand(() -> m_armSubsystem.setSetpoint(-0.5, 0)));
 //        m_elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
 //        m_elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
 //        m_elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));

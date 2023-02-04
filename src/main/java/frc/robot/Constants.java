@@ -158,8 +158,8 @@ public final class Constants {
         public static final double kUpperArmLength = Units.inchesToMeters(41);
         public static final double kForearmLength = Units.inchesToMeters(33);
 
-        public static final double xSpdConvertFactor = 0.5;
-        public static final double ySpdConvertFactor = 0.5;
+        public static final double xSpdConvertFactor = 0.05;
+        public static final double ySpdConvertFactor = 0.05;
 //        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
 //        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);
@@ -167,29 +167,30 @@ public final class Constants {
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double kPIDGripperAngularToleranceRads = 1./180* Math.PI;
-        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(7);
-        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(7);
+        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(1);
+        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(1);
         public static final double kPIDRollAngularToleranceRads = 3./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
         public static final double kRollMotorGearRatio = 1./20;
         // TODO: Change kWristGearRatio to the data we tested
         public static final double kWristGearRatio = 1./9;
-        public static final double kElbowGearRatio = 1./75;
-        public static final double kWinchGearRatio = 1./125 * 17 / 32;
+        public static final double kElbowGearRatio = 1./75 * 17 / 54;
+        public static final double kWinchGearRatio = 1./125 * 17 / 54;
 
-        public static final double kMaxWinchSpeed = .5;
-        public static final double kMaxElbowSpeed = .4;
+        public static final double kMaxWinchSpeed = .15;
+        public static final double kMaxElbowSpeed = .6;
+        public static final double kMaxWristSpeed = .1;
 
-        public static final double kPWrist = .2;
+        public static final double kPWrist = .1;
         public static final double kIWrist = 0;
         public static final double kDWrist = 0;
 
         public static final double kPElbow = .3;
-        public static final double kIElbow = 0.1;
+        public static final double kIElbow = 0;
         public static final double kDElbow = 0;
 
-        public static final double kPWinch = .7;
+        public static final double kPWinch = 1.4;
         public static final double kIWinch = 0;
         public static final double kDWinch = 0;
 
@@ -198,11 +199,11 @@ public final class Constants {
         public static final double kDRoll = 0;
 
         public static final double kWristAbsoluteEncoderOffset = 0.4858;
-        public static final double kElbowAbsoluteEncoderOffset = 0.5631;
-        public static final double kWinchAbsoluteEncoderOffset = 0.6702;
+        public static final double kElbowAbsoluteEncoderOffset = 0.054;
+        public static final double kWinchAbsoluteEncoderOffset = 0.7307;
 
-        public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI*2;
-        public static final double kMaxWristAngularAccelerationRadiansPerSecond = Math.PI*2*2;
+        public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxWristAngularAccelerationRadiansPerSecond = Math.PI*2;
         public static final double kMaxElbowAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxElbowAngularAccelerationRadiansPerSecond = Math.PI;
         public static final double kMaxWinchAngularSpeedRadiansPerSecond = Math.PI*3/2;

@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,6 +14,8 @@ import frc.robot.subsystems.Elevator.Winch;
 public class GripperSubsystem extends SubsystemBase {
 
     private final static GripperSubsystem INSTANCE = new GripperSubsystem();
+
+    AHRS gyro = new AHRS();
 
     @SuppressWarnings("WeakerAccess")
     public static GripperSubsystem getInstance() {
@@ -31,7 +36,7 @@ public class GripperSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -90));
+        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) - gyro.getPitch());
     }
 
     public void reset() {
