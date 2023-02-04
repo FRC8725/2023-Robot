@@ -67,9 +67,9 @@ public final class Constants {
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed   = false;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed  = false;
 
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetAngle  = 180. + 46.7;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetAngle  = 180. + 48.5;
         public static final double kFrontRightDriveAbsoluteEncoderOffsetAngle = 180. + 119.5;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetAngle   = 180. + 268.3;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetAngle   = 180. + 269.2;
         public static final double kBackRightDriveAbsoluteEncoderOffsetAngle  = 180. + 36.1;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = Units.feetToMeters(13.5);
@@ -93,7 +93,7 @@ public final class Constants {
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
         public static final double kPXController = .6;
         public static final double kPYController = 1.;
-        public static final double kPThetaController = .5;
+        public static final double kPThetaController = 1;
 
         public static final double kCorrectPositionXController = .5;
         public static final double kCorrectPositionYController = 2;
