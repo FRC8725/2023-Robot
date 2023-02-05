@@ -1,15 +1,10 @@
 package frc.robot.subsystems.Elevator;
 
 
-import com.fasterxml.jackson.core.sym.NameN;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
@@ -48,7 +43,13 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(atSetpoint()) winchMotor.set(0);
+        if(atSetpoint()) {
+            if (Math.abs(winchMotor.getVelocityAsRad()) > ElevatorConstants.kVelocityToleranceRads) {
+                winchMotor.set(ElevatorConstants.kSpdBrake * winchMotor.getVelocityAsRad() > 0 ? -1: 1);
+            } else {
+                winchMotor.set(0);
+            }
+        }
         else winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());

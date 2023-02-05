@@ -12,6 +12,7 @@ public class LazySparkMax extends CANSparkMax {
         setCurrent(false);
         encoder = getEncoder();
         encoder.setPositionConversionFactor(gearRatio);
+        encoder.setVelocityConversionFactor(gearRatio);
     }
 
     public void setCurrent(boolean isHighCurrent) {
@@ -28,6 +29,10 @@ public class LazySparkMax extends CANSparkMax {
 
     public double getPositionAsRad() {
         return encoder.getPosition()  * 2 * Math.PI;
+    }
+
+    public double getVelocityAsRad() {
+        return encoder.getVelocity()  * 2 * Math.PI;
     }
 
     public double getPositionAsMeters(double circumference) {
