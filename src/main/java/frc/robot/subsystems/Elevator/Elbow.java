@@ -47,13 +47,7 @@ public class Elbow extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(atSetpoint()) {
-            if (Math.abs(elbowMotor.getVelocityAsRad()) > ElevatorConstants.kVelocityToleranceRads) {
-                elbowMotor.set(ElevatorConstants.kSpdBrake * elbowMotor.getVelocityAsRad() > 0 ? -1: 1);
-            } else {
-                elbowMotor.set(0);
-            }
-        }
+        if(atSetpoint()) elbowMotor.set(0);
         else elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
