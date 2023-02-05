@@ -15,7 +15,6 @@ public class GripperSubsystem extends SubsystemBase {
 
     private final static GripperSubsystem INSTANCE = new GripperSubsystem();
 
-    AHRS gyro = new AHRS();
 
     @SuppressWarnings("WeakerAccess")
     public static GripperSubsystem getInstance() {
@@ -36,7 +35,7 @@ public class GripperSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) - gyro.getPitch());
+        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2));
     }
 
     public void reset() {

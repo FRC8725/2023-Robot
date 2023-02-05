@@ -2,6 +2,7 @@ package frc.robot.subsystems.Elevator;
 
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -30,6 +31,8 @@ public class Gripper extends SubsystemBase {
 
     DutyCycleEncoder absoluteEncoder;
 
+    AHRS gyro = new AHRS();
+
     private Gripper() {
         rollMotor = new LazyTalonFX(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
 //        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
@@ -54,8 +57,8 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
-        rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()));
+        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + gyro.getPitch()), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
+        rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + gyro.getRoll()));
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
     }
