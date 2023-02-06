@@ -38,7 +38,7 @@ public class Elbow extends SubsystemBase {
 
         elbowProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPElbow, ElevatorConstants.kIElbow, ElevatorConstants.kDElbow, ElevatorConstants.kElbowControllerConstraints);
         elbowProfiledPIDController.setTolerance(ElevatorConstants.kPIDElbowAngularToleranceRads);
-        elbowProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        elbowProfiledPIDController.disableContinuousInput();
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kElbowAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kElbowAbsoluteEncoderOffset);
@@ -80,7 +80,7 @@ public class Elbow extends SubsystemBase {
 
     public void stop() {
         elbowMotor.set(0);
-        elbowProfiledPIDController.setGoal(elbowMotor.getPositionAsRad());
+        elbowProfiledPIDController.setGoal(getAbsoluteEncoderRad());
     }
 }
 

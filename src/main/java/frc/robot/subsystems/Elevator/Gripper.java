@@ -6,6 +6,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,7 +47,7 @@ public class Gripper extends SubsystemBase {
 
         wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
-        wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        wristProfiledPIDController.disableContinuousInput();
 
         rollProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPRoll, ElevatorConstants.kIRoll, ElevatorConstants.kDRoll, ElevatorConstants.kRollControllerConstraints);
         rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
@@ -57,10 +58,11 @@ public class Gripper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + gyro.getPitch()), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
-        rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + gyro.getRoll()));
+        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
+        rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())));
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Wrist Setpoint", wristProfiledPIDController.getGoal().position);
     }
 
     public void resetWristEncoder() {

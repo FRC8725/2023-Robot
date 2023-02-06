@@ -76,7 +76,7 @@ public class Winch extends SubsystemBase {
 
     public void stop() {
         winchMotor.set(0);
-        winchProfiledPIDController.setGoal(winchMotor.getPositionAsRad());
+        winchProfiledPIDController.setGoal(getAbsoluteEncoderRad());
     }
 }
 

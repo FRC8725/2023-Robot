@@ -24,12 +24,13 @@ public class ArmSubsystem extends SubsystemBase {
     private final Winch winch;
 
     boolean isResetting;
+    double lastX = ElevatorConstants.kForearmLength;
+    double lastY = ElevatorConstants.kUpperArmLength;
 
     private ArmSubsystem() {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         reset();
-        Timer.delay(2);
     }
 
     @Override
@@ -44,6 +45,8 @@ public class ArmSubsystem extends SubsystemBase {
         winch.resetEncoder();
         elbow.setSetpoint(Math.PI/2);
         winch.setSetpoint(0);
+        lastX = ElevatorConstants.kForearmLength;
+        lastY = ElevatorConstants.kUpperArmLength;
         isResetting = true;
     }
 
@@ -62,6 +65,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("setX", xAxis);
         SmartDashboard.putNumber("setY", yAxis);
+        SmartDashboard.putNumber("lastX", lastX);
+        SmartDashboard.putNumber("lastY", lastY);
 
         double thetaElbow, thetaWinch;
         double l1 = ElevatorConstants.kUpperArmLength;
@@ -77,6 +82,8 @@ public class ArmSubsystem extends SubsystemBase {
         if (theta1 == -1 || theta2 == -1) return;
         else if (thetaElbow <  ElevatorConstants.kMinElbowAngle || thetaElbow > ElevatorConstants.kMaxElbowAngle) return;
         else if (thetaWinch <  ElevatorConstants.kMinWinchAngle || thetaWinch > ElevatorConstants.kMaxWinchAngle) return;
+        lastX = xAxis;
+        lastY = yAxis;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
     }
@@ -87,6 +94,7 @@ public class ArmSubsystem extends SubsystemBase {
         return elbow.atSetpoint() && winch.atSetpoint();
     }
 
+
     public void setSpeed(double spdX, double spdY) {
         if (!atSetpoint() && isResetting) return;
         isResetting = false;
@@ -96,7 +104,9 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("xAxis", -point.getX());
         SmartDashboard.putNumber("yAxis", point.getY());
         if (spdX == 0 && spdY == 0) return;
-        setSetpoint(-point.getX()+spdX*ElevatorConstants.xSpdConvertFactor, point.getY()+spdY*ElevatorConstants.ySpdConvertFactor);
+        if (spdX != 0) lastX = -point.getX();
+        if (spdY != 0) lastY = point.getY();
+        setSetpoint(lastX+spdX*ElevatorConstants.xSpdConvertFactor, lastY+spdY*ElevatorConstants.ySpdConvertFactor);
     }
 //
 //    public void setArmSpeed(double speed) {
