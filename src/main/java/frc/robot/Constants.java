@@ -170,8 +170,8 @@ public final class Constants {
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double kPIDGripperAngularToleranceRads = 1./180* Math.PI;
-        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(2);
-        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(2);
+        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(4);
+        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(4);
         public static final double kPIDRollAngularToleranceRads = 3./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
@@ -181,7 +181,7 @@ public final class Constants {
         public static final double kElbowGearRatio = 1./75 * 17 / 54;
         public static final double kWinchGearRatio = 1./125 * 17 / 54;
 
-        public static final double kMaxWinchSpeed = .4;
+        public static final double kMaxWinchSpeed = .6;
         public static final double kMaxElbowSpeed = .6;
         public static final double kMaxWristSpeed = .2;
 
@@ -191,11 +191,11 @@ public final class Constants {
 
         public static final double kPElbow = .7;
         public static final double kIElbow = 0;
-        public static final double kDElbow = 0;
+        public static final double kDElbow = 0.1;
 
         public static final double kPWinch = 1;
         public static final double kIWinch = 0;
-        public static final double kDWinch = 0;
+        public static final double kDWinch = 0.15;
 
         public static final double kPRoll = .7;
         public static final double kIRoll = 0;
