@@ -189,13 +189,13 @@ public final class Constants {
         public static final double kIWrist = 0;
         public static final double kDWrist = 0;
 
-        public static final double kPElbow = .7;
+        public static final double kPElbow = 1;
         public static final double kIElbow = 0;
-        public static final double kDElbow = 0.1;
+        public static final double kDElbow = 0.2;
 
-        public static final double kPWinch = 1;
+        public static final double kPWinch = 1.2;
         public static final double kIWinch = 0;
-        public static final double kDWinch = 0.15;
+        public static final double kDWinch = 0.3;
 
         public static final double kPRoll = .7;
         public static final double kIRoll = 0;
