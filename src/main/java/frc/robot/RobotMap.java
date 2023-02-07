@@ -21,7 +21,8 @@ public class RobotMap {
     }
 
     public static class ElevatorPort {
-        public static final int kWinchMotor = 13;
+        public static final int kRightWinchMotor = 13;
+        public static final int kLeftWinchMotor = 17;
         public static final int kElbowMotor = 14;
         public static final int kWristMotor = 15;
         public static final int kRollMotor = 16;

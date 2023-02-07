@@ -20,7 +20,7 @@ public class Winch extends SubsystemBase {
         return INSTANCE;
     }
 
-    LazySparkMax winchMotor;
+    LazySparkMax rightWinchMotor, leftWinchMotor;
 
     ProfiledPIDController winchProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
@@ -28,10 +28,16 @@ public class Winch extends SubsystemBase {
     double setpoint;
 
     private Winch() {
-        winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
-        winchMotor.setCurrent(true);
-        winchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        winchMotor.setInverted(true);
+        rightWinchMotor = new LazySparkMax(ElevatorPort.kRightWinchMotor, ElevatorConstants.kRightWinchGearRatio);
+        rightWinchMotor.setCurrent(true);
+        rightWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightWinchMotor.setInverted(true);
+        leftWinchMotor = new LazySparkMax(ElevatorPort.kLeftWinchMotor, ElevatorConstants.kLeftWinchGearRatio);
+        leftWinchMotor.setCurrent(true);
+        leftWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftWinchMotor.setInverted(!rightWinchMotor.getInverted());
+        leftWinchMotor.setGearRatioLeader(ElevatorConstants.kRightWinchGearRatio);
+
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
         winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
         winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -43,13 +49,20 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        winchMotor.set(MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed));
+        if (atSetpoint()) {
+            winchProfiledPIDController.setP(ElevatorConstants.kPBrake);
+        } else {
+            winchProfiledPIDController.setP(ElevatorConstants.kPWinch);
+        }
+        double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed);
+        rightWinchMotor.set(speed);
+        leftWinchMotor.setSpeedFollowGearRatio(speed);
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
     }
 
     public void resetEncoder() {
-        winchMotor.setRadPosition(getAbsoluteEncoderRad());
+        rightWinchMotor.setRadPosition(getAbsoluteEncoderRad());
     }
 
     public double getAbsoluteEncoderRad() {
@@ -70,11 +83,11 @@ public class Winch extends SubsystemBase {
     }
 
     public double getEncoder() {
-        return winchMotor.getPositionAsRad();
+        return rightWinchMotor.getPositionAsRad();
     }
 
     public void stop() {
-        winchMotor.set(0);
+        rightWinchMotor.set(0);
         winchProfiledPIDController.setGoal(getAbsoluteEncoderRad());
     }
 }
