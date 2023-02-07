@@ -2,14 +2,12 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.subsystems.Elevator.Elbow;
-import frc.robot.subsystems.Elevator.Winch;
+import frc.robot.subsystems.Arm.Elbow;
+import frc.robot.subsystems.Arm.Winch;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -43,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         elbow.resetEncoder();
         winch.resetEncoder();
-        elbow.setSetpoint(Math.PI/2);
+        elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
         winch.setSetpoint(0);
         lastX = ElevatorConstants.kForearmLength;
         lastY = ElevatorConstants.kUpperArmLength;
@@ -59,9 +57,11 @@ public class ArmSubsystem extends SubsystemBase {
     public void setSetpoint(double xAxis, double yAxis) {
         double distanceSquared = Math.pow(xAxis, 2) + Math.pow(yAxis, 2);
         double distance = Math.sqrt(distanceSquared);
-        SmartDashboard.putNumber("Distance", distance);
+
         if (distance >= ElevatorConstants.kForearmLength + ElevatorConstants.kUpperArmLength) return;
         else if (distance <= ElevatorConstants.kUpperArmLength - ElevatorConstants.kForearmLength) return;
+        else if (xAxis > ElevatorConstants.kMaxXAxis || xAxis < ElevatorConstants.kMinXAxis) return;
+        else if (yAxis > ElevatorConstants.kMaxYAxis || yAxis < ElevatorConstants.kMinYAxis) return;
 
         SmartDashboard.putNumber("setX", xAxis);
         SmartDashboard.putNumber("setY", yAxis);

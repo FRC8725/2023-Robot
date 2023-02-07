@@ -1,15 +1,11 @@
 package frc.robot.subsystems;
 
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Elevator.Elbow;
-import frc.robot.subsystems.Elevator.Gripper;
-import frc.robot.subsystems.Elevator.Winch;
+import frc.robot.subsystems.Arm.Elbow;
+import frc.robot.subsystems.Arm.Gripper;
+import frc.robot.subsystems.Arm.Winch;
 
 public class GripperSubsystem extends SubsystemBase {
 
@@ -24,18 +20,20 @@ public class GripperSubsystem extends SubsystemBase {
     Gripper gripper;
     Elbow elbow;
     Winch winch;
+    Pneumatics pneumatics;
     boolean isHorizontal;
 
     private GripperSubsystem() {
         gripper = Gripper.getInstance();
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
+        pneumatics = Pneumatics.getInstance();
         reset();
     }
 
     @Override
     public void periodic(){
-        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2));
+        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (pneumatics.getGripperStatus()? 0: Units.degreesToRadians(10)));
     }
 
     public void reset() {

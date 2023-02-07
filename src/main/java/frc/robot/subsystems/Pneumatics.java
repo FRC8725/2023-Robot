@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -16,7 +15,7 @@ public class Pneumatics extends SubsystemBase {
     Compressor compressor;
 
     DoubleSolenoid winchReleaser;
-    DoubleSolenoid gripperIntrance;
+    DoubleSolenoid gripperEntrance;
 
     PneumaticHub pneumaticHub;
 
@@ -28,10 +27,10 @@ public class Pneumatics extends SubsystemBase {
         RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[0], 
         RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[1]);
         winchReleaser.set(DoubleSolenoid.Value.kReverse);
-        gripperIntrance = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType, 
+        gripperEntrance = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType,
         RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[0], 
         RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[1]);
-        gripperIntrance.set(DoubleSolenoid.Value.kReverse);
+        gripperEntrance.set(DoubleSolenoid.Value.kReverse);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -50,14 +49,14 @@ public class Pneumatics extends SubsystemBase {
 
     public void setGripper(boolean isOpen) {
         SmartDashboard.putBoolean("isGripperOpen", isOpen);
-        gripperIntrance.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+        gripperEntrance.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
     }
 
     /**
      * @return isOpen
      */
     public boolean getGripperStatus() {
-        return gripperIntrance.get() != DoubleSolenoid.Value.kForward;
+        return gripperEntrance.get() != DoubleSolenoid.Value.kForward;
     }
 
 }

@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -218,6 +219,11 @@ public final class Constants {
 //        public static final double kMinElevatorHeight = 0;
 //        public static final double kMinElevatorHeight = Units.inchesToMeters(1);
 //        public static final double kMaxElevatorHeight = Units.inchesToMeters(6);
+
+        public static final double kMinXAxis = 0;
+        public static final double kMaxXAxis = 0;
+        public static final double kMinYAxis = 0;
+        public static final double kMaxYAxis = 0;
         public static final double kMinElbowAngle = Units.degreesToRadians(0);
         public static final double kMaxElbowAngle = Units.degreesToRadians(150);
         public static final double kMinWinchAngle = Units.degreesToRadians(-10);
@@ -247,11 +253,12 @@ public final class Constants {
     }
 
     public static final class PoseConstants {
-        // Position Order: Winch Elbow Wrist Row
-        public static final double[] kLowElevatorPose = {0, 0, Math.PI/2, -Math.PI/2};
-        public static final double[] kMidElevatorPose = {0, 0, 0, 0};
-        public static final double[] kHighElevatorPose = {0, 0, 0, 0};
-        public static final double[] kLoadingZoneElevatorPose = {0, 0, 0, 0};
-        public static final double[] kInitElevatorPose = {0, 0, 0, 0};
+        // Position Order: XAxis YAxis
+        public static final Pair<Double, Double> kLowArmPose = new Pair<>(0., 0.);
+        public static final Pair<Double, Double> kMidArmPose = new Pair<>(0., 0.);
+        public static final Pair<Double, Double> kHighArmPose = new Pair<>(0., 0.);
+        public static final Pair<Double, Double> kVisionArmPose = new Pair<>(0., 0.);
+        public static final Pair<Double, Double> kVerticalGrabArmPose = new Pair<>(0., 0.);
+        public static final Pair<Double, Double> kLoadingZoneArmPose = new Pair<>(0., 0.);
     }
 }
