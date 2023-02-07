@@ -8,23 +8,21 @@ import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.VisionManager;
 
 
-public class GrabPieces extends SequentialCommandGroup {
+public class IdentifyAndGrabPieces extends SequentialCommandGroup {
 
     ArmSubsystem armSubsystem;
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
 
-    public GrabPieces(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics, VisionManager visionManager) {
+    public IdentifyAndGrabPieces(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics, VisionManager visionManager) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
         addCommands(
-                new RunArmToPosition(armSubsystem, gripperSubsystem, 1, .5, false),
                 new InstantCommand(() -> pneumatics.setGripper(true)),
-                new AlignGripper(gripperSubsystem, visionManager),
-                new RunArmToPosition(armSubsystem, gripperSubsystem, 1, .3, false),
+                new RunArmToPosition(armSubsystem, gripperSubsystem, 1, .5, false),
                 new InstantCommand(() -> pneumatics.setGripper(false)),
                 new ResetArm(armSubsystem, gripperSubsystem, pneumatics)
                 );
