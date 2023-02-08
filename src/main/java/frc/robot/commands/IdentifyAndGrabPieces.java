@@ -26,7 +26,7 @@ public class IdentifyAndGrabPieces extends SequentialCommandGroup {
                 new InstantCommand(() -> pneumatics.setGripper(true)),
                 new AlignGripper(gripperSubsystem, visionManager),
                 new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.kVerticalGrabArmPose, false),
-                new InstantCommand(() -> pneumatics.setGripper(false)),
+                new CloseGripper(gripperSubsystem, pneumatics),
                 new ResetArm(armSubsystem, gripperSubsystem, pneumatics)
                 );
     }

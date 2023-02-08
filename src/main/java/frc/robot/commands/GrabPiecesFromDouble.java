@@ -28,13 +28,19 @@ public class GrabPiecesFromDouble extends CommandBase {
     }
 
     @Override
+    public void execute() {
+        gripperSubsystem.runIntake(true, false);
+    }
+
+    @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         pneumatics.setGripper(false);
+        gripperSubsystem.runIntake(false, false);
 
         // reset Arm
         armSubsystem.reset();

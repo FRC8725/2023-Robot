@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -24,7 +25,7 @@ public class GrabPieces extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> pneumatics.setGripper(true)),
                 new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.kLowArmPose, true),
-                new InstantCommand(() -> pneumatics.setGripper(false)),
+                new CloseGripper(gripperSubsystem, pneumatics),
                 new ResetArm(armSubsystem, gripperSubsystem, pneumatics)
                 );
     }

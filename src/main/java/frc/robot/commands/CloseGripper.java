@@ -4,24 +4,24 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Pneumatics;
-import frc.robot.subsystems.VisionManager;
 
 
-public class ReleaseGripper extends CommandBase {
-    Pneumatics pneumatics;
+public class CloseGripper extends CommandBase {
+
     GripperSubsystem gripperSubsystem;
+    Pneumatics pneumatics;
 
-    public ReleaseGripper(GripperSubsystem gripperSubsystem,Pneumatics pneumatics) {
-        this.pneumatics = pneumatics;
+    public CloseGripper(GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         this.gripperSubsystem = gripperSubsystem;
-        addRequirements();
+        this.pneumatics = pneumatics;
+        addRequirements(gripperSubsystem, pneumatics);
     }
 
     @Override
     public void initialize() {
-        pneumatics.setGripper(true);
-        gripperSubsystem.runIntake(true, true);
+        gripperSubsystem.runIntake(true, false);
         Timer.delay(1);
+        pneumatics.setGripper(false);
     }
 
     @Override

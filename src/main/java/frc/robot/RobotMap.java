@@ -26,6 +26,8 @@ public class RobotMap {
         public static final int kElbowMotor = 14;
         public static final int kWristMotor = 15;
         public static final int kRollMotor = 16;
+        public static final int kIntakeLeaderMotor = 18;
+        public static final int kIntakeFollowerMotor = 19;
 
         // DIO
         public static final int kElevatorLimitSwitch = 0;

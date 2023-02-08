@@ -182,10 +182,12 @@ public final class Constants {
 //        public static final double kRightWinchGearRatio = 1./125;
         public static final double kLeftWinchGearRatio = 1./100 * 17 / 36;
 //        public static final double kLeftWinchGearRatio = 1./100;
+        public static final double kIntakeGearRatio = 1.;
 
         public static final double kMaxWinchSpeed = .4;
         public static final double kMaxElbowSpeed = .6;
         public static final double kMaxWristSpeed = .2;
+        public static final double kIntakeSpeed = .5;
 
         public static final double kPWrist = .4;
         public static final double kIWrist = 0;

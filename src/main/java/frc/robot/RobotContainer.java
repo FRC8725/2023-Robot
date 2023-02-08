@@ -71,7 +71,7 @@ public class RobotContainer {
         m_elevatorJoystick.btn_topL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
         m_elevatorJoystick.btn_triggerL.onTrue(new IdentifyAndGrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_topR.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
-        m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_pneumatics));
+        m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_gripperSubsystem, m_pneumatics));
 //        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
         m_elevatorJoystick.btn_Y.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.kHighArmPose, true));
         m_elevatorJoystick.btn_X.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.kMidArmPose, true));

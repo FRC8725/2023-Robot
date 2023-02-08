@@ -24,7 +24,7 @@ public class Gripper extends SubsystemBase {
         return INSTANCE;
     }
 
-    LazySparkMax wristMotor;
+    LazySparkMax wristMotor, intakeLeader, intakeFollower;
     LazyTalonFX rollMotor;
 
     ProfiledPIDController wristProfiledPIDController, rollProfiledPIDController;
@@ -40,6 +40,12 @@ public class Gripper extends SubsystemBase {
 
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
         wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+        intakeLeader = new LazySparkMax(ElevatorPort.kIntakeLeaderMotor, ElevatorConstants.kIntakeGearRatio);
+        intakeLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        intakeFollower = new LazySparkMax(ElevatorPort.kIntakeFollowerMotor, ElevatorConstants.kIntakeGearRatio);
+        intakeFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        intakeFollower.follow(intakeLeader, true);
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
@@ -89,6 +95,10 @@ public class Gripper extends SubsystemBase {
 
     public double getRollEncoder() {
         return rollMotor.getPositionAsRad();
+    }
+
+    public void run(boolean isRun, boolean isInverted) {
+        intakeLeader.set((isRun? ElevatorConstants.kIntakeSpeed: 0) * (isInverted? -1: 1));
     }
 }
 

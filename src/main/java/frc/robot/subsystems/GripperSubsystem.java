@@ -54,5 +54,8 @@ public class GripperSubsystem extends SubsystemBase {
         gripper.setRollSetpoint(gripper.getRollEncoder()+variable);
     }
 
+    public void runIntake(boolean isRun, boolean isInverted) {
+        gripper.run(isRun, isInverted);
+    }
 }
 
