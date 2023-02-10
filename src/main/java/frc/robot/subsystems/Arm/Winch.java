@@ -31,7 +31,7 @@ public class Winch extends SubsystemBase {
         rightWinchMotor = new LazySparkMax(ElevatorPort.kRightWinchMotor, ElevatorConstants.kRightWinchGearRatio);
         rightWinchMotor.setCurrent(true);
         rightWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightWinchMotor.setInverted(true);
+        rightWinchMotor.setInverted(ElevatorConstants.kWinchMotorInverted);
         leftWinchMotor = new LazySparkMax(ElevatorPort.kLeftWinchMotor, ElevatorConstants.kLeftWinchGearRatio);
         leftWinchMotor.setCurrent(true);
         leftWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -68,7 +68,7 @@ public class Winch extends SubsystemBase {
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return measurement*2*Math.PI;
+        return measurement*2*Math.PI*(ElevatorConstants.kWinchAbosoluteEncoderInverted? -1: 1);
     }
 
     public void setSetpoint(double setpoint) {

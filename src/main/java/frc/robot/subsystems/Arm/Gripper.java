@@ -39,6 +39,7 @@ public class Gripper extends SubsystemBase {
         rollMotor.setNeutralMode(NeutralMode.Coast);
 
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
+        wristMotor.setInverted(ElevatorConstants.kWristMotorInverted);
         wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         intakeLeader = new LazySparkMax(ElevatorPort.kIntakeLeaderMotor, ElevatorConstants.kIntakeGearRatio);
@@ -77,7 +78,7 @@ public class Gripper extends SubsystemBase {
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return -measurement*2*Math.PI; // Inverted
+        return measurement*2*Math.PI*(ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
     }
 
     public void setWristSetpoint(double setpoint) {

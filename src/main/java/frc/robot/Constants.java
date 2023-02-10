@@ -178,10 +178,14 @@ public final class Constants {
         // TODO: Change kWristGearRatio to the data we tested
         public static final double kWristGearRatio = 1./9;
         public static final double kElbowGearRatio = 1./75 * 17 / 54;
-        public static final double kRightWinchGearRatio = 1./125 * 17 / 54;
+        public static final double kRightWinchGearRatio = 1./100 * 17 / 36;
 //        public static final double kRightWinchGearRatio = 1./125;
         public static final double kLeftWinchGearRatio = 1./100 * 17 / 36;
 //        public static final double kLeftWinchGearRatio = 1./100;
+
+        public static final boolean kWristMotorInverted = false;
+        public static final boolean kElbowMotorInverted = true;
+        public static final boolean kWinchMotorInverted = true;
         public static final double kIntakeGearRatio = 1.;
 
         public static final double kMaxWinchSpeed = .4;
@@ -208,6 +212,10 @@ public final class Constants {
         public static final double kWristAbsoluteEncoderOffset = 0.492;
         public static final double kElbowAbsoluteEncoderOffset = 0.029;
         public static final double kWinchAbsoluteEncoderOffset = 0.7307;
+
+        public static final boolean kWristAbosoluteEncoderInverted = false;
+        public static final boolean kElbowAbosoluteEncoderInverted = true;
+        public static final boolean kWinchAbosoluteEncoderInverted = true;
 
         public static final double kMaxWristAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxWristAngularAccelerationRadiansPerSecond = Math.PI*2;
