@@ -19,9 +19,7 @@ public class ReleaseGripper extends CommandBase {
 
     @Override
     public void initialize() {
-        pneumatics.setGripper(true);
-        gripperSubsystem.runIntake(true, true);
-        Timer.delay(1);
+        pneumatics.setGripper(true, false);
     }
 
     @Override
@@ -31,6 +29,5 @@ public class ReleaseGripper extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        gripperSubsystem.runIntake(false, false);
     }
 }

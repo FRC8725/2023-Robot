@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
         elbow.resetEncoder();
         winch.resetEncoder();
         elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
-        winch.setSetpoint(0);
+        winch.setSetpoint(ElevatorConstants.kMinWinchAngle);
         lastX = ElevatorConstants.kForearmLength;
         lastY = ElevatorConstants.kUpperArmLength;
         isResetting = true;

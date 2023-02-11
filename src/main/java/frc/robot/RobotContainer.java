@@ -68,7 +68,7 @@ public class RobotContainer {
         m_swerveJoystick.btn_triggerL.whileTrue(new BalanceCmd(m_swerveSubsystem));
 
 //        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
-        m_elevatorJoystick.btn_topL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
+        m_elevatorJoystick.btn_topL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_triggerL.onTrue(new IdentifyAndGrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_topR.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
         m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_gripperSubsystem, m_pneumatics));
@@ -76,7 +76,7 @@ public class RobotContainer {
         m_elevatorJoystick.btn_Y.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.kHighArmPose, true));
         m_elevatorJoystick.btn_X.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.kMidArmPose, true));
         m_elevatorJoystick.btn_A.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.kLowArmPose, true));
-        m_elevatorJoystick.btn_B.toggleOnTrue(new GrabPiecesFromDouble(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
+        m_elevatorJoystick.btn_B.toggleOnTrue(new GrabPiecesFromDouble(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_Back.whileTrue(new AlignGripper(m_gripperSubsystem, m_visionManager));
         m_elevatorJoystick.btn_Start.whileTrue(new SetGripperHorizontal(m_gripperSubsystem,false));
     }

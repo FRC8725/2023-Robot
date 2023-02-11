@@ -37,7 +37,7 @@ public class RobotMap {
         public static final int[] kGripperLimitSwitch = {4, 5};
 
         // Pneumatics
-        public static final int[] kWinchReleaseDoubleSolenoid = {14, 15};
+        public static final int[] kGripperPressureSwitcherDoubleSolenoid = {0, 1};
         public static final int[] kGripperReleaseDoubleSolenoid = {2, 3};
     }
 

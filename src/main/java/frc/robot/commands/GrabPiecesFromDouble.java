@@ -5,6 +5,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.VisionManager;
 
 
 public class GrabPiecesFromDouble extends CommandBase {
@@ -12,11 +13,13 @@ public class GrabPiecesFromDouble extends CommandBase {
     ArmSubsystem armSubsystem;
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
+    VisionManager visionManager;
 
-    public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
+    public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics, VisionManager visionManager) {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
+        this.visionManager = visionManager;
         addRequirements(armSubsystem, gripperSubsystem, pneumatics);
     }
 
@@ -24,12 +27,11 @@ public class GrabPiecesFromDouble extends CommandBase {
     public void initialize() {
         armSubsystem.setSetpoint(Constants.PoseConstants.kLoadingZoneArmPose.getFirst(), Constants.PoseConstants.kLoadingZoneArmPose.getSecond());
         gripperSubsystem.setHorizontal(true);
-        pneumatics.setGripper(true);
+        pneumatics.setGripper(true, false);
     }
 
     @Override
     public void execute() {
-        gripperSubsystem.runIntake(true, false);
     }
 
     @Override
@@ -39,11 +41,11 @@ public class GrabPiecesFromDouble extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        pneumatics.setGripper(false);
-        gripperSubsystem.runIntake(false, false);
+        pneumatics.setGripper(false, visionManager.isCone());
 
         // reset Arm
         armSubsystem.reset();
         gripperSubsystem.reset();
+        gripperSubsystem.setRollSetpoint(Math.PI);
     }
 }

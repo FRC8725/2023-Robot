@@ -42,6 +42,7 @@ public class RunArmToPosition extends CommandBase {
 
     @Override
     public void initialize() {
+        gripperSubsystem.setRollSetpoint(0);
         armSubsystem.setSetpoint(xAxis, yAxis);
         gripperSubsystem.setHorizontal(isHorizontal);
     }

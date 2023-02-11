@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.VisionManager;
 
 
 public class ResetArm extends CommandBase {
@@ -24,7 +25,7 @@ public class ResetArm extends CommandBase {
     public void initialize() {
         armSubsystem.reset();
         gripperSubsystem.reset();
-        pneumatics.setGripper(false);
+        pneumatics.setGripper(false, pneumatics.isHighPressure());
     }
 
     @Override

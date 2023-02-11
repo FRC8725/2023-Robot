@@ -177,7 +177,7 @@ public final class Constants {
         public static final double kRollMotorGearRatio = 1./20;
         // TODO: Change kWristGearRatio to the data we tested
         public static final double kWristGearRatio = 1./9;
-        public static final double kElbowGearRatio = 1./75 * 17 / 54;
+        public static final double kElbowGearRatio = 1./100 * 17 / 54;
         public static final double kRightWinchGearRatio = 1./100 * 17 / 36;
 //        public static final double kRightWinchGearRatio = 1./125;
         public static final double kLeftWinchGearRatio = 1./100 * 17 / 36;
@@ -236,7 +236,7 @@ public final class Constants {
         public static final double kMaxYAxis = 0;
         public static final double kMinElbowAngle = Units.degreesToRadians(0);
         public static final double kMaxElbowAngle = Units.degreesToRadians(150);
-        public static final double kMinWinchAngle = Units.degreesToRadians(-10);
+        public static final double kMinWinchAngle = Units.degreesToRadians(-8);
         public static final double kMaxWinchAngle = Units.degreesToRadians(60);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);
         public static final double kMaxWristAngle = Units.degreesToRadians(90);

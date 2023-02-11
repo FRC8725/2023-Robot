@@ -170,8 +170,8 @@ public class VisionManager extends SubsystemBase {
         return NetworkTableInstance.getDefault().getTable("Vision").getDoubleTopic("ConeAngle").subscribe(0.).get();
     }
 
-    private double norml2(double[] a, double[] b) {
-        return Math.sqrt(Math.pow(a[0] - b[0], 2)) + Math.sqrt(Math.pow(a[1] - b[1], 2));
+    public boolean isCone() {
+        return NetworkTableInstance.getDefault().getTable("Vision").getBooleanTopic("isCone").subscribe(false).get();
     }
 
     boolean isFirstConnected = true;

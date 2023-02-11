@@ -14,8 +14,8 @@ public class Pneumatics extends SubsystemBase {
     private final static Pneumatics INSTANCE = new Pneumatics();
     Compressor compressor;
 
-    DoubleSolenoid winchReleaser;
-    DoubleSolenoid gripperEntrance;
+    DoubleSolenoid gripperPressureSwitcher;
+    DoubleSolenoid gripperReleaser;
 
     PneumaticHub pneumaticHub;
 
@@ -23,14 +23,14 @@ public class Pneumatics extends SubsystemBase {
         PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
         pneumaticHub = new PneumaticHub(RobotMap.PneumaticsPort.kREVPHPort);
         compressor = new Compressor(RobotMap.PneumaticsPort.kREVPHPort, moduleType);
-        winchReleaser = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType, 
-        RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[0], 
-        RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[1]);
-        winchReleaser.set(DoubleSolenoid.Value.kReverse);
-        gripperEntrance = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType,
+        gripperPressureSwitcher = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType,
+        RobotMap.ElevatorPort.kGripperPressureSwitcherDoubleSolenoid[0],
+        RobotMap.ElevatorPort.kGripperPressureSwitcherDoubleSolenoid[1]);
+        gripperPressureSwitcher.set(DoubleSolenoid.Value.kForward);
+        gripperReleaser = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType,
         RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[0], 
         RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[1]);
-        gripperEntrance.set(DoubleSolenoid.Value.kReverse);
+        gripperReleaser.set(DoubleSolenoid.Value.kReverse);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -43,20 +43,21 @@ public class Pneumatics extends SubsystemBase {
         compressor.enableDigital();
     }
 
-    public void toggleArm() {
-        winchReleaser.toggle();
-    }
-
-    public void setGripper(boolean isOpen) {
+    public void setGripper(boolean isOpen, boolean isHighPressure) {
         SmartDashboard.putBoolean("isGripperOpen", isOpen);
-        gripperEntrance.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+        gripperPressureSwitcher.set(isHighPressure? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+        gripperReleaser.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
     }
 
     /**
      * @return isOpen
      */
     public boolean getGripperStatus() {
-        return gripperEntrance.get() != DoubleSolenoid.Value.kForward;
+        return gripperReleaser.get() != DoubleSolenoid.Value.kForward;
+    }
+
+    public boolean isHighPressure() {
+        return gripperPressureSwitcher.get() == DoubleSolenoid.Value.kForward;
     }
 
 }
