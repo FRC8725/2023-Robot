@@ -231,9 +231,9 @@ public final class Constants {
 //        public static final double kMaxElevatorHeight = Units.inchesToMeters(6);
 
         public static final double kMinXAxis = 0;
-        public static final double kMaxXAxis = 0;
-        public static final double kMinYAxis = 0;
-        public static final double kMaxYAxis = 0;
+        public static final double kMaxXAxis = 1.32;
+        public static final double kMinYAxis = -0.4;
+        public static final double kMaxYAxis = 0.9;
         public static final double kMinElbowAngle = Units.degreesToRadians(0);
         public static final double kMaxElbowAngle = Units.degreesToRadians(150);
         public static final double kMinWinchAngle = Units.degreesToRadians(-8);
@@ -264,11 +264,11 @@ public final class Constants {
 
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
-        public static final Pair<Double, Double> kLowArmPose = new Pair<>(0., 0.);
-        public static final Pair<Double, Double> kMidArmPose = new Pair<>(0., 0.);
-        public static final Pair<Double, Double> kHighArmPose = new Pair<>(0., 0.);
-        public static final Pair<Double, Double> kVisionArmPose = new Pair<>(0., 0.);
-        public static final Pair<Double, Double> kVerticalGrabArmPose = new Pair<>(0., 0.);
-        public static final Pair<Double, Double> kLoadingZoneArmPose = new Pair<>(0., 0.);
+        public static final Pair<Double, Double> kLowArmPose = new Pair<>(0.543, -0.306);
+        public static final Pair<Double, Double> kMidArmPose = new Pair<>(0.744, 0.549);
+        public static final Pair<Double, Double> kHighArmPose = new Pair<>(1.279, 0.865);
+        public static final Pair<Double, Double> kVisionArmPose = new Pair<>(0.5, 0.5);
+        public static final Pair<Double, Double> kVerticalGrabArmPose = new Pair<>(0.5, 0.5);
+        public static final Pair<Double, Double> kLoadingZoneArmPose = new Pair<>(0.765, 0.668);
     }
 }
