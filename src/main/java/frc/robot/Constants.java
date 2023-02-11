@@ -190,7 +190,7 @@ public final class Constants {
 
         public static final double kMaxWinchSpeed = .4;
         public static final double kMaxElbowSpeed = .6;
-        public static final double kMaxWristSpeed = .2;
+        public static final double kMaxWristSpeed = .1;
         public static final double kIntakeSpeed = .5;
 
         public static final double kPWrist = .4;
@@ -233,10 +233,10 @@ public final class Constants {
         public static final double kMinXAxis = 0;
         public static final double kMaxXAxis = 1.32;
         public static final double kMinYAxis = -0.4;
-        public static final double kMaxYAxis = 0.9;
+        public static final double kMaxYAxis = 1.1;
         public static final double kMinElbowAngle = Units.degreesToRadians(0);
         public static final double kMaxElbowAngle = Units.degreesToRadians(150);
-        public static final double kMinWinchAngle = Units.degreesToRadians(-8);
+        public static final double kMinWinchAngle = Units.degreesToRadians(-15);
         public static final double kMaxWinchAngle = Units.degreesToRadians(60);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);
         public static final double kMaxWristAngle = Units.degreesToRadians(90);

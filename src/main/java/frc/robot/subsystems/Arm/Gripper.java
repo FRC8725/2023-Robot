@@ -24,10 +24,10 @@ public class Gripper extends SubsystemBase {
         return INSTANCE;
     }
 
-    LazySparkMax wristMotor, intakeLeader, intakeFollower;
+    LazySparkMax intakeLeader, intakeFollower;
     LazyTalonFX rollMotor;
 
-    ProfiledPIDController wristProfiledPIDController, rollProfiledPIDController;
+    ProfiledPIDController rollProfiledPIDController;
 
     DutyCycleEncoder absoluteEncoder;
 
@@ -38,10 +38,6 @@ public class Gripper extends SubsystemBase {
 //        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
         rollMotor.setNeutralMode(NeutralMode.Coast);
 
-        wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
-        wristMotor.setInverted(ElevatorConstants.kWristMotorInverted);
-        wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
         intakeLeader = new LazySparkMax(ElevatorPort.kIntakeLeaderMotor, ElevatorConstants.kIntakeGearRatio);
         intakeLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeFollower = new LazySparkMax(ElevatorPort.kIntakeFollowerMotor, ElevatorConstants.kIntakeGearRatio);
@@ -51,28 +47,15 @@ public class Gripper extends SubsystemBase {
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
 
-        wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
-        wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
-        wristProfiledPIDController.disableContinuousInput();
-
         rollProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPRoll, ElevatorConstants.kIRoll, ElevatorConstants.kDRoll, ElevatorConstants.kRollControllerConstraints);
         rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
         rollProfiledPIDController.disableContinuousInput();
         rollMotor.setRadPosition(0);
-        resetWristEncoder();
     }
 
     @Override
     public void periodic() {
-        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
         rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())));
-        SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Wrist Setpoint", wristProfiledPIDController.getGoal().position);
-    }
-
-    public void resetWristEncoder() {
-        wristMotor.setRadPosition(getAbsoluteEncoderRad());
     }
 
     public double getAbsoluteEncoderRad() {
@@ -81,13 +64,8 @@ public class Gripper extends SubsystemBase {
         return measurement*2*Math.PI*(ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
     }
 
-    public void setWristSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWristAngle, ElevatorConstants.kMaxWristAngle);
-        wristProfiledPIDController.setGoal(setpoint);
-    }
-
-    public double getWristEncoder() {
-        return wristMotor.getPositionAsRad();
+    public double getRollSetpoint() {
+        return rollProfiledPIDController.getGoal().position;
     }
 
     public void setRollSetpoint(double setpoint) {

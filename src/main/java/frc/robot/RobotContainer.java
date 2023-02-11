@@ -54,7 +54,6 @@ public class RobotContainer {
                 () -> m_elevatorJoystick.get_LStickY(),
                 () -> m_elevatorJoystick.get_RStickY()
         ));
-        m_gripperSubsystem.setDefaultCommand(new SetGripperHorizontal(m_gripperSubsystem, true));
         configureButtonBindings();
         putToDashboard();
     }
@@ -78,7 +77,6 @@ public class RobotContainer {
         m_elevatorJoystick.btn_A.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.kLowArmPose, true));
         m_elevatorJoystick.btn_B.toggleOnTrue(new GrabPiecesFromDouble(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_Back.whileTrue(new AlignGripper(m_gripperSubsystem, m_visionManager));
-        m_elevatorJoystick.btn_Start.whileTrue(new SetGripperHorizontal(m_gripperSubsystem,false));
     }
 
     private void putToDashboard() {

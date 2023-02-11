@@ -18,32 +18,16 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
-    Elbow elbow;
-    Winch winch;
-    Pneumatics pneumatics;
     boolean isHorizontal;
 
     private GripperSubsystem() {
         gripper = Gripper.getInstance();
-        elbow = Elbow.getInstance();
-        winch = Winch.getInstance();
-        pneumatics = Pneumatics.getInstance();
         reset();
     }
 
-    @Override
-    public void periodic(){
-        gripper.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (pneumatics.getGripperStatus()? 0: Units.degreesToRadians(10)));
-    }
-
     public void reset() {
-        gripper.resetWristEncoder();
         gripper.setRollSetpoint(0);
         isHorizontal = true;
-    }
-
-    public void setHorizontal(boolean isHorizontal) {
-        this.isHorizontal = isHorizontal;
     }
 
     public void setRollSetpoint(double setpoint) {

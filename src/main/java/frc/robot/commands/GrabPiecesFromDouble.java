@@ -26,7 +26,8 @@ public class GrabPiecesFromDouble extends CommandBase {
     @Override
     public void initialize() {
         armSubsystem.setSetpoint(Constants.PoseConstants.kLoadingZoneArmPose.getFirst(), Constants.PoseConstants.kLoadingZoneArmPose.getSecond());
-        gripperSubsystem.setHorizontal(true);
+        armSubsystem.setTransporting(false);
+        armSubsystem.setHorizontal(true);
         pneumatics.setGripper(true, false);
     }
 

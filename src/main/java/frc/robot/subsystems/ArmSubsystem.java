@@ -3,11 +3,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Arm.Elbow;
 import frc.robot.subsystems.Arm.Winch;
+import frc.robot.subsystems.Arm.Wrist;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -20,19 +22,27 @@ public class ArmSubsystem extends SubsystemBase {
 
     private final Elbow elbow;
     private final Winch winch;
+    private final Wrist wrist;
+    private final Pneumatics pneumatics;
 
     boolean isResetting;
     double lastX = ElevatorConstants.kForearmLength;
     double lastY = ElevatorConstants.kUpperArmLength;
 
+    boolean isHorizontal = true;
+    boolean isTransporting = true;
+
     private ArmSubsystem() {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
+        wrist = Wrist.getInstance();
+        pneumatics = Pneumatics.getInstance();
         reset();
     }
 
     @Override
     public void periodic() {
+        wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (pneumatics.getGripperStatus()? 0: Units.degreesToRadians(10) + (isTransporting? 70: 0)));
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
     }
 
@@ -41,11 +51,14 @@ public class ArmSubsystem extends SubsystemBase {
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         elbow.resetEncoder();
         winch.resetEncoder();
+        wrist.resetEncoder();
+
         elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
         winch.setSetpoint(ElevatorConstants.kMinWinchAngle);
         lastX = ElevatorConstants.kForearmLength;
         lastY = ElevatorConstants.kUpperArmLength;
         isResetting = true;
+        isTransporting = true;
     }
 
     private double LawOfCosinesTheta(double a, double b, double c) {
@@ -114,6 +127,13 @@ public class ArmSubsystem extends SubsystemBase {
 //        elbow.setSetpoint(elbow.getEncoder() + speed/ElevatorConstants.kPElbow);
 //    }
 //
+    public void setHorizontal(boolean isHorizontal) {
+        this.isHorizontal = isHorizontal;
+    }
+
+    public void setTransporting(boolean isTransporting) {
+        this.isTransporting = isTransporting;
+    }
 
     public void stop() {
         elbow.stop();
