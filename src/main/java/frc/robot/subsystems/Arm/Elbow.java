@@ -56,8 +56,9 @@ public class Elbow extends SubsystemBase {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
+        measurement *= ElevatorConstants.kElbowAbosoluteEncoderInverted? -1: 1;
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return measurement*2*Math.PI*(ElevatorConstants.kElbowAbosoluteEncoderInverted? -1: 1);
+        return measurement*2*Math.PI;
     }
 
     public void setSetpoint(double setpoint) {

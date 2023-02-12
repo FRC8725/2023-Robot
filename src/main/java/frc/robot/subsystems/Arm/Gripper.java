@@ -25,27 +25,23 @@ public class Gripper extends SubsystemBase {
     }
 
     LazySparkMax intakeLeader, intakeFollower;
-    LazyTalonFX rollMotor;
+    LazySparkMax rollMotor;
 
     ProfiledPIDController rollProfiledPIDController;
-
-    DutyCycleEncoder absoluteEncoder;
 
     AHRS gyro = new AHRS();
 
     private Gripper() {
-        rollMotor = new LazyTalonFX(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
+        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
 //        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
-        rollMotor.setNeutralMode(NeutralMode.Coast);
+        rollMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        rollMotor.setRadPosition(0);
 
         intakeLeader = new LazySparkMax(ElevatorPort.kIntakeLeaderMotor, ElevatorConstants.kIntakeGearRatio);
         intakeLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeFollower = new LazySparkMax(ElevatorPort.kIntakeFollowerMotor, ElevatorConstants.kIntakeGearRatio);
         intakeFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeFollower.follow(intakeLeader, true);
-
-        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
-        absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
 
         rollProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPRoll, ElevatorConstants.kIRoll, ElevatorConstants.kDRoll, ElevatorConstants.kRollControllerConstraints);
         rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
@@ -56,12 +52,6 @@ public class Gripper extends SubsystemBase {
     @Override
     public void periodic() {
         rollMotor.set(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())));
-    }
-
-    public double getAbsoluteEncoderRad() {
-        double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return measurement*2*Math.PI*(ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
     }
 
     public double getRollSetpoint() {

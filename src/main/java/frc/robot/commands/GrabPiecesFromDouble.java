@@ -47,6 +47,5 @@ public class GrabPiecesFromDouble extends CommandBase {
         // reset Arm
         armSubsystem.reset();
         gripperSubsystem.reset();
-        gripperSubsystem.setRollSetpoint(Math.PI);
     }
 }

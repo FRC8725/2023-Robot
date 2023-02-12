@@ -22,18 +22,18 @@ public class RobotMap {
 
     public static class ElevatorPort {
         public static final int kRightWinchMotor = 13;
-        public static final int kLeftWinchMotor = 17;
-        public static final int kElbowMotor = 14;
-        public static final int kWristMotor = 15;
-        public static final int kRollMotor = 16;
+        public static final int kLeftWinchMotor = 14;
+        public static final int kElbowMotor = 15;
+        public static final int kWristMotor = 16;
+        public static final int kRollMotor = 17;
         public static final int kIntakeLeaderMotor = 18;
         public static final int kIntakeFollowerMotor = 19;
 
         // DIO
         public static final int kElevatorLimitSwitch = 0;
+        public static final int kWinchAbsoluteEncoder = 0;
         public static final int kElbowAbsoluteEncoder = 1;
         public static final int kWristAbsoluteEncoder = 2;
-        public static final int kWinchAbsoluteEncoder = 3;
         public static final int[] kGripperLimitSwitch = {4, 5};
 
         // Pneumatics

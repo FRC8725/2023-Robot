@@ -59,8 +59,9 @@ public class Wrist extends SubsystemBase {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
+        measurement *= (ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return measurement*2*Math.PI*(ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
+        return measurement*2*Math.PI;
     }
 
     public void setWristSetpoint(double setpoint) {

@@ -40,7 +40,7 @@ public class Winch extends SubsystemBase {
 
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
         winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
-        winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        winchProfiledPIDController.disableContinuousInput();
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWinchAbsoluteEncoderOffset);
@@ -49,16 +49,13 @@ public class Winch extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (atSetpoint()) {
-            winchProfiledPIDController.setP(ElevatorConstants.kPBrake);
-        } else {
-            winchProfiledPIDController.setP(ElevatorConstants.kPWinch);
-        }
-        double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed);
-        rightWinchMotor.set(speed);
-        leftWinchMotor.setSpeedFollowGearRatio(speed);
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
+        if (atSetpoint()) winchProfiledPIDController.setP(ElevatorConstants.kPBrake);
+        double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed);
+        SmartDashboard.putNumber("Winch Speed", speed);
+        rightWinchMotor.set(speed);
+        leftWinchMotor.setSpeedFollowGearRatio(speed);
     }
 
     public void resetEncoder() {
@@ -67,13 +64,15 @@ public class Winch extends SubsystemBase {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
+        measurement *= (ElevatorConstants.kWinchAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
-        return measurement*2*Math.PI*(ElevatorConstants.kWinchAbosoluteEncoderInverted? -1: 1);
+        return measurement*2*Math.PI;
     }
 
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWinchAngle, ElevatorConstants.kMaxWinchAngle);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
+        winchProfiledPIDController.setP(ElevatorConstants.kPWinch);
         winchProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }
