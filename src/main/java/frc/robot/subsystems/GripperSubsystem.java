@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Arm.Elbow;
 import frc.robot.subsystems.Arm.Gripper;
@@ -21,6 +22,7 @@ public class GripperSubsystem extends SubsystemBase {
     boolean isHorizontal;
 
     private GripperSubsystem() {
+        Timer.delay(1.5);
         gripper = Gripper.getInstance();
         reset();
     }

@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
@@ -33,6 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
     boolean isTransporting = true;
 
     private ArmSubsystem() {
+        Timer.delay(1.5);
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         wrist = Wrist.getInstance();
@@ -49,14 +51,13 @@ public class ArmSubsystem extends SubsystemBase {
     public void reset() {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
-        elbow.resetEncoder();
-        winch.resetEncoder();
-        wrist.resetEncoder();
-
-        elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
         winch.setSetpoint(ElevatorConstants.kMinWinchAngle);
-        lastX = ElevatorConstants.kForearmLength;
-        lastY = ElevatorConstants.kUpperArmLength;
+        elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
+        Translation2d vectorUpperArm = new Translation2d(ElevatorConstants.kUpperArmLength, Rotation2d.fromRadians(ElevatorConstants.kMinWinchAngle + Math.PI/2));
+        Translation2d vectorForearm = new Translation2d(ElevatorConstants.kForearmLength, Rotation2d.fromRadians(ElevatorConstants.kMinWinchAngle + ElevatorConstants.kMaxElbowAngle + Math.PI/2));
+        Translation2d point = vectorUpperArm.plus(vectorForearm);
+        lastX = -point.getX();
+        lastY = point.getY();
         isResetting = true;
         isTransporting = true;
     }

@@ -47,7 +47,7 @@ public class Elbow extends SubsystemBase {
     public void periodic() {
         elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
+//        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
     }
 
     public void resetEncoder() {
@@ -55,6 +55,7 @@ public class Elbow extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
+        if (!absoluteEncoder.isConnected()) return elbowMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= ElevatorConstants.kElbowAbosoluteEncoderInverted? -1: 1;
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
@@ -70,10 +71,6 @@ public class Elbow extends SubsystemBase {
 
     public boolean atSetpoint() {
         return Math.abs(setpoint - getAbsoluteEncoderRad()) < ElevatorConstants.kPIDWinchAngularToleranceRads;
-    }
-
-    public double getEncoder() {
-        return elbowMotor.getPositionAsRad();
     }
 
     public void stop() {

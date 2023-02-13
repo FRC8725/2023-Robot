@@ -49,8 +49,8 @@ public class Wrist extends SubsystemBase {
     public void periodic() {
         wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Wrist Setpoint", wristProfiledPIDController.getGoal().position);
+//        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
+        SmartDashboard.putNumber("Wrist Setpoint Degrees", Units.radiansToDegrees(wristProfiledPIDController.getGoal().position));
     }
 
     public void resetEncoder() {
@@ -58,6 +58,7 @@ public class Wrist extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
+        if (!absoluteEncoder.isConnected()) return wristMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= (ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;

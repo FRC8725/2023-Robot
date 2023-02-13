@@ -168,15 +168,15 @@ public final class Constants {
 //        public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
-        public static final double kPIDGripperAngularToleranceRads = 1./180* Math.PI;
-        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(3);
-        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(3);
+        public static final double kPIDGripperAngularToleranceRads = Units.degreesToRadians(2.5);
+        public static final double kPIDElbowAngularToleranceRads = Units.degreesToRadians(2.5);
+        public static final double kPIDWinchAngularToleranceRads = Units.degreesToRadians(2.5);
         public static final double kPIDRollAngularToleranceRads = 3./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
         public static final double kRollMotorGearRatio = 1./9;
         // TODO: Change kWristGearRatio to the data we tested
-        public static final double kWristGearRatio = 1./16;
+        public static final double kWristGearRatio = 1./80;
         public static final double kElbowGearRatio = 1./100 * 17 / 54;
         public static final double kRightWinchGearRatio = 1./100 * 17 / 36;
 //        public static final double kRightWinchGearRatio = 1./125;
@@ -190,10 +190,10 @@ public final class Constants {
 
         public static final double kMaxWinchSpeed = .2;
         public static final double kMaxElbowSpeed = .5;
-        public static final double kMaxWristSpeed = .1;
+        public static final double kMaxWristSpeed = .3;
         public static final double kIntakeSpeed = .5;
 
-        public static final double kPWrist = .4;
+        public static final double kPWrist = .5;
         public static final double kIWrist = 0;
         public static final double kDWrist = 0;
 
@@ -210,8 +210,8 @@ public final class Constants {
         public static final double kDRoll = 0;
 
         public static final double kWristAbsoluteEncoderOffset = 0.8394;
-        public static final double kElbowAbsoluteEncoderOffset = 0.1628;
-        public static final double kWinchAbsoluteEncoderOffset = 0.5102;
+        public static final double kElbowAbsoluteEncoderOffset = 0.154;
+        public static final double kWinchAbsoluteEncoderOffset = 0.025;
 
         public static final boolean kWristAbosoluteEncoderInverted = false;
         public static final boolean kElbowAbosoluteEncoderInverted = true;
@@ -235,11 +235,11 @@ public final class Constants {
         public static final double kMinYAxis = -0.4;
         public static final double kMaxYAxis = 1.1;
         public static final double kMinElbowAngle = Units.degreesToRadians(15);
-        public static final double kMaxElbowAngle = Units.degreesToRadians(140);
-        public static final double kMinWinchAngle = Units.degreesToRadians(-5);
+        public static final double kMaxElbowAngle = Units.degreesToRadians(150);
+        public static final double kMinWinchAngle = Units.degreesToRadians(-10);
         public static final double kMaxWinchAngle = Units.degreesToRadians(60);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);
-        public static final double kMaxWristAngle = Units.degreesToRadians(130);
+        public static final double kMaxWristAngle = Units.degreesToRadians(150);
 
         public static final TrapezoidProfile.Constraints kWristControllerConstraints = //
                 new TrapezoidProfile.Constraints(

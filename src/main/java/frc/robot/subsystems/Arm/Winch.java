@@ -35,7 +35,7 @@ public class Winch extends SubsystemBase {
         leftWinchMotor = new LazySparkMax(ElevatorPort.kLeftWinchMotor, ElevatorConstants.kLeftWinchGearRatio);
         leftWinchMotor.setCurrent(true);
         leftWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftWinchMotor.setInverted(!rightWinchMotor.getInverted());
+        leftWinchMotor.setInverted(!ElevatorConstants.kWinchMotorInverted);
         leftWinchMotor.setGearRatioLeader(ElevatorConstants.kRightWinchGearRatio);
 
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
@@ -50,10 +50,10 @@ public class Winch extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
+//        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
         if (atSetpoint()) winchProfiledPIDController.setP(ElevatorConstants.kPBrake);
         double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed);
-        SmartDashboard.putNumber("Winch Speed", speed);
+//        SmartDashboard.putNumber("Winch Speed", speed);
         rightWinchMotor.set(speed);
         leftWinchMotor.setSpeedFollowGearRatio(speed);
     }
@@ -63,6 +63,7 @@ public class Winch extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
+        if (!absoluteEncoder.isConnected()) return rightWinchMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= (ElevatorConstants.kWinchAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
@@ -79,10 +80,6 @@ public class Winch extends SubsystemBase {
 
     public boolean atSetpoint() {
         return Math.abs(setpoint - getAbsoluteEncoderRad()) < ElevatorConstants.kPIDWinchAngularToleranceRads;
-    }
-
-    public double getEncoder() {
-        return rightWinchMotor.getPositionAsRad();
     }
 
     public void stop() {
