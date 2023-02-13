@@ -11,8 +11,6 @@ public class LazySparkMax extends CANSparkMax {
     public LazySparkMax(int deviceNumber, double gearRatio) {
         super(deviceNumber, MotorType.kBrushless);
         setCurrent(false);
-        getEncoder().setPositionConversionFactor(gearRatio);
-        getEncoder().setVelocityConversionFactor(gearRatio);
         this.gearRatio = gearRatio;
     }
 
@@ -29,7 +27,7 @@ public class LazySparkMax extends CANSparkMax {
     }
 
     public void setRadPosition(double rad) {
-        getEncoder().setPosition(rad / (2 * Math.PI));
+        getEncoder().setPosition(rad / (2 * Math.PI) / gearRatio);
     }
 
     /**
@@ -40,14 +38,14 @@ public class LazySparkMax extends CANSparkMax {
     }
 
     public double getPositionAsRad() {
-        return getEncoder().getPosition()  * 2 * Math.PI;
+        return getEncoder().getPosition()  * 2 * Math.PI * gearRatio;
     }
 
     public double getVelocityAsRad() {
-        return getEncoder().getVelocity()  * 2 * Math.PI;
+        return getEncoder().getVelocity() * gearRatio  * 2 * Math.PI;
     }
 
     public double getPositionAsMeters(double circumference) {
-        return getEncoder().getPosition() * circumference;
+        return getEncoder().getPosition() * gearRatio * circumference;
     }
 }
