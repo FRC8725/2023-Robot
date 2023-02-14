@@ -50,6 +50,7 @@ public class Winch extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Winch Encoder", rightWinchMotor.getPositionAsRad());
 //        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
         if (atSetpoint()) winchProfiledPIDController.setP(ElevatorConstants.kPBrake);
         double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed);

@@ -10,8 +10,10 @@ public class LazySparkMax extends CANSparkMax {
 
     public LazySparkMax(int deviceNumber, double gearRatio) {
         super(deviceNumber, MotorType.kBrushless);
+        restoreFactoryDefaults();
         setCurrent(false);
         this.gearRatio = gearRatio;
+        burnFlash();
     }
 
     public void setGearRatioLeader(double gearRatioLeader) {

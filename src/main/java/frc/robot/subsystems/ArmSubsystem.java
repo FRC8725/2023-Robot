@@ -45,6 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (pneumatics.getGripperStatus()? 0: Units.degreesToRadians(10)) + (isTransporting? Units.degreesToRadians(70): 0));
+//        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
     }
 
@@ -52,6 +53,8 @@ public class ArmSubsystem extends SubsystemBase {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         winch.setSetpoint(ElevatorConstants.kMinWinchAngle);
+        elbow.setSetpoint(Math.PI / 2);
+        Timer.delay(1);
         elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
         Translation2d vectorUpperArm = new Translation2d(ElevatorConstants.kUpperArmLength, Rotation2d.fromRadians(ElevatorConstants.kMinWinchAngle + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ElevatorConstants.kForearmLength, Rotation2d.fromRadians(ElevatorConstants.kMinWinchAngle + ElevatorConstants.kMaxElbowAngle + Math.PI/2));

@@ -37,7 +37,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     public void addRollSetpoint(double variable) {
-        gripper.setRollSetpoint(gripper.getRollEncoder()+variable);
+        gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
     }
 }
 

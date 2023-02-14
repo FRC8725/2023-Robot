@@ -47,6 +47,7 @@ public class Elbow extends SubsystemBase {
     public void periodic() {
         elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Elbow Encoder", elbowMotor.getPositionAsRad());
 //        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
     }
 
