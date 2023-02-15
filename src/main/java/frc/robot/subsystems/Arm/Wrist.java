@@ -28,8 +28,6 @@ public class Wrist extends SubsystemBase {
 
     DutyCycleEncoder absoluteEncoder;
 
-    AHRS gyro = new AHRS();
-
     private Wrist() {
 
         wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
@@ -47,7 +45,8 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
-        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
+//        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
+        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
 //        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Wrist Setpoint Degrees", Units.radiansToDegrees(wristProfiledPIDController.getGoal().position));

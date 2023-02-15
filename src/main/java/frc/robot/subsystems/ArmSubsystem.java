@@ -53,8 +53,6 @@ public class ArmSubsystem extends SubsystemBase {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         winch.setSetpoint(ElevatorConstants.kMinWinchAngle);
-        elbow.setSetpoint(Math.PI / 2);
-        Timer.delay(1);
         elbow.setSetpoint(ElevatorConstants.kMaxElbowAngle);
         Translation2d vectorUpperArm = new Translation2d(ElevatorConstants.kUpperArmLength, Rotation2d.fromRadians(ElevatorConstants.kMinWinchAngle + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ElevatorConstants.kForearmLength, Rotation2d.fromRadians(ElevatorConstants.kMinWinchAngle + ElevatorConstants.kMaxElbowAngle + Math.PI/2));

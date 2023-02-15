@@ -29,8 +29,6 @@ public class Gripper extends SubsystemBase {
 
     ProfiledPIDController rollProfiledPIDController;
 
-    AHRS gyro = new AHRS();
-
     private Gripper() {
         rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
 //        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
@@ -50,7 +48,8 @@ public class Gripper extends SubsystemBase {
     @Override
     public void periodic() {
         if (atRollSetpoint()) rollMotor.set(0);
-        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())), -ElevatorConstants.kMaxRollSpeed, ElevatorConstants.kMaxRollSpeed));
+//        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())), -ElevatorConstants.kMaxRollSpeed, ElevatorConstants.kMaxRollSpeed));
+        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()), -ElevatorConstants.kMaxRollSpeed, ElevatorConstants.kMaxRollSpeed));
     }
 
     public double getRollSetpoint() {
