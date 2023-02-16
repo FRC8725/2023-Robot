@@ -43,6 +43,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (isResetting) {
+            if (atSetpoint()) isResetting = false;
+            else if (winch.atSetpoint()) elbow.setSetpoint(ArmConstants.kMaxElbowAngle);
+        }
         wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (isPlacing? 0: Units.degreesToRadians(10)) + (isTransporting? Units.degreesToRadians(70): 0));
 //        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
@@ -52,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         winch.setSetpoint(ArmConstants.kMinWinchAngle);
-        elbow.setSetpoint(ArmConstants.kMaxElbowAngle);
+//        elbow.setSetpoint(ArmConstants.kMaxElbowAngle); // Move to periodic()
         Translation2d vectorUpperArm = new Translation2d(ArmConstants.kUpperArmLength, Rotation2d.fromRadians(ArmConstants.kMinWinchAngle + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ArmConstants.kForearmLength, Rotation2d.fromRadians(ArmConstants.kMinWinchAngle + ArmConstants.kMaxElbowAngle + Math.PI/2));
         Translation2d point = vectorUpperArm.plus(vectorForearm);
@@ -60,6 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
         lastY = point.getY();
         isResetting = true;
         isTransporting = true;
+        isHorizontal = true;
         isPlacing = false;
     }
 
@@ -111,8 +116,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void setSpeed(double spdX, double spdY) {
-        if (!atSetpoint() && isResetting) return;
-        isResetting = false;
+        if (isResetting) return;
         Translation2d vectorUpperArm = new Translation2d(ArmConstants.kUpperArmLength, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ArmConstants.kForearmLength, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + elbow.getAbsoluteEncoderRad() + Math.PI/2));
         Translation2d point = vectorUpperArm.plus(vectorForearm);

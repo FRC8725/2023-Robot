@@ -19,7 +19,6 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
-    boolean isHorizontal;
 
     private GripperSubsystem() {
         Timer.delay(1.5);
@@ -29,7 +28,6 @@ public class GripperSubsystem extends SubsystemBase {
 
     public void reset() {
         gripper.setRollSetpoint(0);
-        isHorizontal = true;
     }
 
     public void setRollSetpoint(double setpoint) {
