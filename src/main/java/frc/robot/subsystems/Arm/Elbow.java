@@ -7,8 +7,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.RobotMap.ElevatorPort;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.RobotMap.ArmPort;
 import frc.lib.LazySparkMax;
 
 public class Elbow extends SubsystemBase {
@@ -29,25 +29,25 @@ public class Elbow extends SubsystemBase {
     double setpoint;
 
     private Elbow() {
-        elbowMotor = new LazySparkMax(ElevatorPort.kElbowMotor, ElevatorConstants.kElbowGearRatio);
+        elbowMotor = new LazySparkMax(ArmPort.kElbowMotor, ArmConstants.kElbowGearRatio);
         elbowMotor.setCurrent(true);
-        elbowMotor.setInverted(ElevatorConstants.kElbowMotorInverted);
+        elbowMotor.setInverted(ArmConstants.kElbowMotorInverted);
         elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        elbowProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPElbow, ElevatorConstants.kIElbow, ElevatorConstants.kDElbow, ElevatorConstants.kElbowControllerConstraints);
-        elbowProfiledPIDController.setTolerance(ElevatorConstants.kPIDElbowAngularToleranceRads);
+        elbowProfiledPIDController = new ProfiledPIDController(ArmConstants.kPElbow, ArmConstants.kIElbow, ArmConstants.kDElbow, ArmConstants.kElbowControllerConstraints);
+        elbowProfiledPIDController.setTolerance(ArmConstants.kPIDElbowAngularToleranceRads);
         elbowProfiledPIDController.disableContinuousInput();
 
-        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kElbowAbsoluteEncoder);
-        absoluteEncoder.setPositionOffset(ElevatorConstants.kElbowAbsoluteEncoderOffset);
+        absoluteEncoder = new DutyCycleEncoder(ArmPort.kElbowAbsoluteEncoder);
+        absoluteEncoder.setPositionOffset(ArmConstants.kElbowAbsoluteEncoderOffset);
         resetEncoder();
     }
 
     @Override
     public void periodic() {
-        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxElbowSpeed, ElevatorConstants.kMaxElbowSpeed));
+        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.kMaxElbowSpeed, ArmConstants.kMaxElbowSpeed));
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Elbow Encoder", elbowMotor.getPositionAsRad());
+        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
     }
 
@@ -58,20 +58,20 @@ public class Elbow extends SubsystemBase {
     public double getAbsoluteEncoderRad() {
         if (!absoluteEncoder.isConnected()) return elbowMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= ElevatorConstants.kElbowAbosoluteEncoderInverted? -1: 1;
+        measurement *= ArmConstants.kElbowAbosoluteEncoderInverted? -1: 1;
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
 
     public void setSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinElbowAngle, ElevatorConstants.kMaxElbowAngle);
+        setpoint = MathUtil.clamp(setpoint, ArmConstants.kMinElbowAngle, ArmConstants.kMaxElbowAngle);
         SmartDashboard.putNumber("Elbow Setpoint", setpoint);
         elbowProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }
 
     public boolean atSetpoint() {
-        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ElevatorConstants.kPIDWinchAngularToleranceRads;
+        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ArmConstants.kPIDWinchAngularToleranceRads;
     }
 
     public void stop() {

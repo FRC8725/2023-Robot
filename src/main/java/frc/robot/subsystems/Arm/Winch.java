@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.RobotMap.ElevatorPort;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.RobotMap.ArmPort;
 
 public class Winch extends SubsystemBase {
 
@@ -28,35 +28,33 @@ public class Winch extends SubsystemBase {
     double setpoint;
 
     private Winch() {
-        rightWinchMotor = new LazySparkMax(ElevatorPort.kRightWinchMotor, ElevatorConstants.kRightWinchGearRatio);
+        rightWinchMotor = new LazySparkMax(ArmPort.kRightWinchMotor, ArmConstants.kRightWinchGearRatio);
         rightWinchMotor.setCurrent(true);
         rightWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightWinchMotor.setInverted(ElevatorConstants.kWinchMotorInverted);
-        leftWinchMotor = new LazySparkMax(ElevatorPort.kLeftWinchMotor, ElevatorConstants.kLeftWinchGearRatio);
+        rightWinchMotor.setInverted(ArmConstants.kWinchMotorInverted);
+        leftWinchMotor = new LazySparkMax(ArmPort.kLeftWinchMotor, ArmConstants.kLeftWinchGearRatio);
         leftWinchMotor.setCurrent(true);
         leftWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        leftWinchMotor.setInverted(!ElevatorConstants.kWinchMotorInverted);
-        leftWinchMotor.setGearRatioLeader(ElevatorConstants.kRightWinchGearRatio);
+        leftWinchMotor.follow(rightWinchMotor, true);
 
-        winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
-        winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
+        winchProfiledPIDController = new ProfiledPIDController(ArmConstants.kPWinch, ArmConstants.kIWinch, ArmConstants.kDWinch, ArmConstants.kWinchControllerConstraints);
+        winchProfiledPIDController.setTolerance(ArmConstants.kPIDWinchAngularToleranceRads);
         winchProfiledPIDController.disableContinuousInput();
 
-        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
-        absoluteEncoder.setPositionOffset(ElevatorConstants.kWinchAbsoluteEncoderOffset);
+        absoluteEncoder = new DutyCycleEncoder(ArmPort.kWinchAbsoluteEncoder);
+        absoluteEncoder.setPositionOffset(ArmConstants.kWinchAbsoluteEncoderOffset);
         resetEncoder();
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Winch Encoder", rightWinchMotor.getPositionAsRad());
+        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
-        if (atSetpoint()) winchProfiledPIDController.setP(ElevatorConstants.kPBrake);
-        double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWinchSpeed, ElevatorConstants.kMaxWinchSpeed);
+        if (atSetpoint()) winchProfiledPIDController.setP(ArmConstants.kPBrake);
+        double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.kMaxWinchSpeed, ArmConstants.kMaxWinchSpeed);
 //        SmartDashboard.putNumber("Winch Speed", speed);
         rightWinchMotor.set(speed);
-        leftWinchMotor.setSpeedFollowGearRatio(speed);
     }
 
     public void resetEncoder() {
@@ -66,21 +64,21 @@ public class Winch extends SubsystemBase {
     public double getAbsoluteEncoderRad() {
         if (!absoluteEncoder.isConnected()) return rightWinchMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= (ElevatorConstants.kWinchAbosoluteEncoderInverted? -1: 1);
+        measurement *= (ArmConstants.kWinchAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
 
     public void setSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWinchAngle, ElevatorConstants.kMaxWinchAngle);
+        setpoint = MathUtil.clamp(setpoint, ArmConstants.kMinWinchAngle, ArmConstants.kMaxWinchAngle);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
-        winchProfiledPIDController.setP(ElevatorConstants.kPWinch);
+        winchProfiledPIDController.setP(ArmConstants.kPWinch);
         winchProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }
 
     public boolean atSetpoint() {
-        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ElevatorConstants.kPIDWinchAngularToleranceRads;
+        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ArmConstants.kPIDWinchAngularToleranceRads;
     }
 
     public void stop() {

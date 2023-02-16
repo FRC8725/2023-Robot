@@ -14,7 +14,7 @@ public class RunArmToPosition extends CommandBase {
     double elevatorPosition;
     double xAxis;
     double yAxis;
-    boolean isHorizontal;
+    boolean isHorizontal, isPlacing;
 
     public RunArmToPosition(ArmSubsystem armSubsystem,
                             GripperSubsystem gripperSubsystem,
@@ -31,12 +31,14 @@ public class RunArmToPosition extends CommandBase {
     public RunArmToPosition(ArmSubsystem armSubsystem,
                             GripperSubsystem gripperSubsystem,
                             Pair<Double, Double> armPose,
-                            boolean isHorizontal) {
+                            boolean isHorizontal,
+                            boolean isPlacing) {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.xAxis = armPose.getFirst();
         this.yAxis = armPose.getSecond();
         this.isHorizontal = isHorizontal;
+        this.isPlacing = isPlacing;
         addRequirements(armSubsystem, gripperSubsystem);
     }
 
@@ -45,6 +47,7 @@ public class RunArmToPosition extends CommandBase {
         armSubsystem.setSetpoint(xAxis, yAxis);
         armSubsystem.setTransporting(false);
         armSubsystem.setHorizontal(isHorizontal);
+        armSubsystem.setPlacing(isPlacing);
 
     }
 

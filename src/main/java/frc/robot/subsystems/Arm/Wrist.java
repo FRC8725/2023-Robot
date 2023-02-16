@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Arm;
 
 
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -10,8 +9,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.RobotMap.ElevatorPort;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.RobotMap.ArmPort;
 
 public class Wrist extends SubsystemBase {
 
@@ -30,15 +29,15 @@ public class Wrist extends SubsystemBase {
 
     private Wrist() {
 
-        wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
-        wristMotor.setInverted(ElevatorConstants.kWristMotorInverted);
+        wristMotor = new LazySparkMax(ArmPort.kWristMotor, ArmConstants.kWristGearRatio);
+        wristMotor.setInverted(ArmConstants.kWristMotorInverted);
         wristMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
-        absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
+        absoluteEncoder = new DutyCycleEncoder(ArmPort.kWristAbsoluteEncoder);
+        absoluteEncoder.setPositionOffset(ArmConstants.kWristAbsoluteEncoderOffset);
 
-        wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
-        wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
+        wristProfiledPIDController = new ProfiledPIDController(ArmConstants.kPWrist, ArmConstants.kIWrist, ArmConstants.kDWrist, ArmConstants.kWristControllerConstraints);
+        wristProfiledPIDController.setTolerance(ArmConstants.kPIDGripperAngularToleranceRads);
         wristProfiledPIDController.disableContinuousInput();
         resetEncoder();
     }
@@ -46,7 +45,7 @@ public class Wrist extends SubsystemBase {
     @Override
     public void periodic() {
 //        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
-        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
+        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.kMaxWristSpeed, ArmConstants.kMaxWristSpeed));
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
 //        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Wrist Setpoint Degrees", Units.radiansToDegrees(wristProfiledPIDController.getGoal().position));
@@ -59,13 +58,13 @@ public class Wrist extends SubsystemBase {
     public double getAbsoluteEncoderRad() {
         if (!absoluteEncoder.isConnected()) return wristMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= (ElevatorConstants.kWristAbosoluteEncoderInverted? -1: 1);
+        measurement *= (ArmConstants.kWristAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
 
     public void setWristSetpoint(double setpoint) {
-        setpoint = MathUtil.clamp(setpoint, ElevatorConstants.kMinWristAngle, ElevatorConstants.kMaxWristAngle);
+        setpoint = MathUtil.clamp(setpoint, ArmConstants.kMinWristAngle, ArmConstants.kMaxWristAngle);
         wristProfiledPIDController.setGoal(setpoint);
     }
 

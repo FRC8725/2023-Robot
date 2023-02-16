@@ -6,7 +6,7 @@ import com.revrobotics.RelativeEncoder;
 public class LazySparkMax extends CANSparkMax {
 
     private final double gearRatio;
-    private double gearRatioLeader = 1;
+//    private double gearRatioLeader = 1;
 
     public LazySparkMax(int deviceNumber, double gearRatio) {
         super(deviceNumber, MotorType.kBrushless);
@@ -16,9 +16,9 @@ public class LazySparkMax extends CANSparkMax {
         burnFlash();
     }
 
-    public void setGearRatioLeader(double gearRatioLeader) {
-        this.gearRatioLeader = gearRatioLeader;
-    }
+//    public void setGearRatioLeader(double gearRatioLeader) {
+//        this.gearRatioLeader = gearRatioLeader;
+//    }
 
     public void setCurrent(boolean isHighCurrent) {
         if (isHighCurrent){
@@ -33,11 +33,11 @@ public class LazySparkMax extends CANSparkMax {
     }
 
     /**
-     * You need to setGearRatioFollow() with the leaderGearRatio before this function.
+     * You need to setGearRatioFollow() with the leaderGearRatio before using this function.
      */
-    public void setSpeedFollowGearRatio(double speed) {
-        set(speed / gearRatio * gearRatioLeader);
-    }
+//    public void setSpeedFollowGearRatio(double speed) {
+//        set(speed / gearRatio * gearRatioLeader);
+//    }
 
     public double getPositionAsRad() {
         return getEncoder().getPosition()  * 2 * Math.PI * gearRatio;

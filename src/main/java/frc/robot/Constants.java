@@ -153,7 +153,7 @@ public final class Constants {
         public static final double kReflectiveTrapeTargetHeight = 0.8;
     }
 
-    public static final class ElevatorConstants {
+    public static final class ArmConstants {
 
         public static final double kUpperArmLength = Units.inchesToMeters(29.5);
         public static final double kForearmLength = Units.inchesToMeters(32.5);
@@ -188,9 +188,9 @@ public final class Constants {
         public static final boolean kWinchMotorInverted = false;
         public static final double kIntakeGearRatio = 1.;
 
-        public static final double kMaxWinchSpeed = .8;
-        public static final double kMaxElbowSpeed = 1;
-        public static final double kMaxWristSpeed = .3;
+        public static final double kMaxWinchSpeed = .3;
+        public static final double kMaxElbowSpeed = .5;
+        public static final double kMaxWristSpeed = .25;
         public static final double kMaxRollSpeed = .2;
         public static final double kIntakeSpeed = .5;
 
@@ -211,7 +211,7 @@ public final class Constants {
         public static final double kDRoll = 0;
 
         public static final double kWristAbsoluteEncoderOffset = 0.7984;
-        public static final double kElbowAbsoluteEncoderOffset = 0.217;
+        public static final double kElbowAbsoluteEncoderOffset = 0.206;
         public static final double kWinchAbsoluteEncoderOffset = 0.025;
 
         public static final boolean kWristAbosoluteEncoderInverted = false;
@@ -236,10 +236,10 @@ public final class Constants {
         public static final double kMinYAxis = -0.4;
         public static final double kMaxYAxis = 1.1;
         public static final double kMinElbowAngle = Units.degreesToRadians(15);
-//        public static final double kMaxElbowAngle = Units.degreesToRadians(90);
-        public static final double kMaxElbowAngle = Units.degreesToRadians(155);
-//        public static final double kMinWinchAngle = Units.degreesToRadians(0);
-        public static final double kMinWinchAngle = Units.degreesToRadians(-12);
+        public static final double kMaxElbowAngle = Units.degreesToRadians(90);
+//        public static final double kMaxElbowAngle = Units.degreesToRadians(150);
+        public static final double kMinWinchAngle = Units.degreesToRadians(0);
+//        public static final double kMinWinchAngle = Units.degreesToRadians(-10);
         public static final double kMaxWinchAngle = Units.degreesToRadians(60);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);
         public static final double kMaxWristAngle = Units.degreesToRadians(150);

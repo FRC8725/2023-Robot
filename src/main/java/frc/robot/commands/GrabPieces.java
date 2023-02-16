@@ -26,7 +26,7 @@ public class GrabPieces extends SequentialCommandGroup {
         this.visionManager = visionManager;
         addCommands(
                 new InstantCommand(() -> pneumatics.setGripper(true, false)),
-                new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.kLowArmPose, true),
+                new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.kLowArmPose, true, false),
                 new InstantCommand(() -> pneumatics.setGripper(false, visionManager.isCone())),
                 new ResetArm(armSubsystem, gripperSubsystem, pneumatics)
                 );

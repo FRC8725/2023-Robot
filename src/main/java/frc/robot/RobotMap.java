@@ -20,7 +20,7 @@ public class RobotMap {
 
     }
 
-    public static class ElevatorPort {
+    public static class ArmPort {
         public static final int kRightWinchMotor = 13;
         public static final int kLeftWinchMotor = 14;
         public static final int kElbowMotor = 15;
@@ -30,15 +30,14 @@ public class RobotMap {
         public static final int kIntakeFollowerMotor = 19;
 
         // DIO
-        public static final int kElevatorLimitSwitch = 0;
         public static final int kWinchAbsoluteEncoder = 0;
         public static final int kElbowAbsoluteEncoder = 1;
         public static final int kWristAbsoluteEncoder = 2;
         public static final int[] kGripperLimitSwitch = {4, 5};
 
         // Pneumatics
-        public static final int[] kGripperPressureSwitcherDoubleSolenoid = {0, 1};
-        public static final int[] kGripperReleaseDoubleSolenoid = {2, 3};
+        public static final int[] kGripperReleaseDoubleSolenoid = {0, 1};
+        public static final int[] kGripperPressureSwitcherDoubleSolenoid = {2, 3};
     }
 
     public static class PneumaticsPort {

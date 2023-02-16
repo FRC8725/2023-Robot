@@ -21,12 +21,12 @@ public class Pneumatics extends SubsystemBase {
         pneumaticHub = new PneumaticHub(RobotMap.PneumaticsPort.kREVPHPort);
         compressor = new Compressor(RobotMap.PneumaticsPort.kREVPHPort, moduleType);
         gripperPressureSwitcher = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType,
-        RobotMap.ElevatorPort.kGripperPressureSwitcherDoubleSolenoid[0],
-        RobotMap.ElevatorPort.kGripperPressureSwitcherDoubleSolenoid[1]);
+        RobotMap.ArmPort.kGripperPressureSwitcherDoubleSolenoid[0],
+        RobotMap.ArmPort.kGripperPressureSwitcherDoubleSolenoid[1]);
         gripperPressureSwitcher.set(DoubleSolenoid.Value.kForward);
         gripperReleaser = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType,
-        RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[0], 
-        RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[1]);
+        RobotMap.ArmPort.kGripperReleaseDoubleSolenoid[0],
+        RobotMap.ArmPort.kGripperReleaseDoubleSolenoid[1]);
         gripperReleaser.set(DoubleSolenoid.Value.kReverse);
     }
 

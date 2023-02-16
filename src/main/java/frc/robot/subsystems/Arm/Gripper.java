@@ -1,19 +1,13 @@
 package frc.robot.subsystems.Arm;
 
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
-import frc.lib.LazyTalonFX;
-import frc.robot.RobotMap.ElevatorPort;
-import frc.robot.Constants.ElevatorConstants;
+import frc.robot.RobotMap.ArmPort;
+import frc.robot.Constants.ArmConstants;
 
 public class Gripper extends SubsystemBase {
 
@@ -30,18 +24,18 @@ public class Gripper extends SubsystemBase {
     ProfiledPIDController rollProfiledPIDController;
 
     private Gripper() {
-        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
+        rollMotor = new LazySparkMax(ArmPort.kRollMotor, ArmConstants.kRollMotorGearRatio);
 //        rollMotor = new LazySparkMax(ElevatorPort.kRollMotor, ElevatorConstants.kRollMotorGearRatio);
         rollMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        intakeLeader = new LazySparkMax(ElevatorPort.kIntakeLeaderMotor, ElevatorConstants.kIntakeGearRatio);
+        intakeLeader = new LazySparkMax(ArmPort.kIntakeLeaderMotor, ArmConstants.kIntakeGearRatio);
         intakeLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        intakeFollower = new LazySparkMax(ElevatorPort.kIntakeFollowerMotor, ElevatorConstants.kIntakeGearRatio);
+        intakeFollower = new LazySparkMax(ArmPort.kIntakeFollowerMotor, ArmConstants.kIntakeGearRatio);
         intakeFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeFollower.follow(intakeLeader, true);
 
-        rollProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPRoll, ElevatorConstants.kIRoll, ElevatorConstants.kDRoll, ElevatorConstants.kRollControllerConstraints);
-        rollProfiledPIDController.setTolerance(ElevatorConstants.kPIDRollAngularToleranceRads);
+        rollProfiledPIDController = new ProfiledPIDController(ArmConstants.kPRoll, ArmConstants.kIRoll, ArmConstants.kDRoll, ArmConstants.kRollControllerConstraints);
+        rollProfiledPIDController.setTolerance(ArmConstants.kPIDRollAngularToleranceRads);
         rollProfiledPIDController.disableContinuousInput();
     }
 
@@ -49,7 +43,7 @@ public class Gripper extends SubsystemBase {
     public void periodic() {
         if (atRollSetpoint()) rollMotor.set(0);
 //        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())), -ElevatorConstants.kMaxRollSpeed, ElevatorConstants.kMaxRollSpeed));
-        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()), -ElevatorConstants.kMaxRollSpeed, ElevatorConstants.kMaxRollSpeed));
+        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()), -ArmConstants.kMaxRollSpeed, ArmConstants.kMaxRollSpeed));
     }
 
     public double getRollSetpoint() {
@@ -57,7 +51,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public boolean atRollSetpoint() {
-        return Math.abs(rollProfiledPIDController.getSetpoint().position - rollMotor.getPositionAsRad()) < ElevatorConstants.kPIDRollAngularToleranceRads;
+        return Math.abs(rollProfiledPIDController.getSetpoint().position - rollMotor.getPositionAsRad()) < ArmConstants.kPIDRollAngularToleranceRads;
     }
 
     public void setRollSetpoint(double setpoint) {
@@ -69,7 +63,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public void run(boolean isRun, boolean isInverted) {
-        intakeLeader.set((isRun? ElevatorConstants.kIntakeSpeed: 0) * (isInverted? -1: 1));
+        intakeLeader.set((isRun? ArmConstants.kIntakeSpeed: 0) * (isInverted? -1: 1));
     }
 }
 
