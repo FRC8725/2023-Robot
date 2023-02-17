@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Arm.Elbow;
 import frc.robot.subsystems.Arm.Gripper;
-import frc.robot.subsystems.Arm.Winch;
 
 public class GripperSubsystem extends SubsystemBase {
 
@@ -21,9 +18,14 @@ public class GripperSubsystem extends SubsystemBase {
     Gripper gripper;
 
     private GripperSubsystem() {
-        Timer.delay(1.5);
+        Timer.delay(2);
         gripper = Gripper.getInstance();
         reset();
+    }
+
+    @Override
+    public void periodic() {
+        gripper.calculate();
     }
 
     public void reset() {

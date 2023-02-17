@@ -6,14 +6,11 @@ import com.revrobotics.RelativeEncoder;
 public class LazySparkMax extends CANSparkMax {
 
     private final double gearRatio;
-//    private double gearRatioLeader = 1;
 
     public LazySparkMax(int deviceNumber, double gearRatio) {
         super(deviceNumber, MotorType.kBrushless);
-        restoreFactoryDefaults();
         setCurrent(false);
         this.gearRatio = gearRatio;
-        burnFlash();
     }
 
 //    public void setGearRatioLeader(double gearRatioLeader) {

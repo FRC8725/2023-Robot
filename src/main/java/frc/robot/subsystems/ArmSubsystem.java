@@ -25,10 +25,9 @@ public class ArmSubsystem extends SubsystemBase {
     private final Winch winch;
     private final Wrist wrist;
 
-    boolean isResetting;
-    double lastX = ArmConstants.kForearmLength;
-    double lastY = ArmConstants.kUpperArmLength;
+    double lastX, lastY;
 
+    boolean isResetting = true;
     boolean isHorizontal = true;
     boolean isTransporting = true;
     boolean isPlacing = false;
@@ -50,6 +49,9 @@ public class ArmSubsystem extends SubsystemBase {
         wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (isPlacing? 0: Units.degreesToRadians(10)) + (isTransporting? Units.degreesToRadians(70): 0));
 //        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
+        elbow.calculate();
+        winch.calculate();
+        wrist.calculate();
     }
 
     public void reset() {
@@ -104,6 +106,7 @@ public class ArmSubsystem extends SubsystemBase {
         else if (thetaWinch <  ArmConstants.kMinWinchAngle || thetaWinch > ArmConstants.kMaxWinchAngle) return;
         lastX = xAxis;
         lastY = yAxis;
+        isResetting = false;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
     }

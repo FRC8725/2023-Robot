@@ -7,12 +7,11 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.RobotMap.ArmPort;
 
-public class Wrist extends SubsystemBase {
+public class Wrist {
 
     private final static Wrist INSTANCE = new Wrist();
 
@@ -38,12 +37,11 @@ public class Wrist extends SubsystemBase {
 
         wristProfiledPIDController = new ProfiledPIDController(ArmConstants.kPWrist, ArmConstants.kIWrist, ArmConstants.kDWrist, ArmConstants.kWristControllerConstraints);
         wristProfiledPIDController.setTolerance(ArmConstants.kPIDGripperAngularToleranceRads);
-        wristProfiledPIDController.disableContinuousInput();
+        wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
         resetEncoder();
     }
 
-    @Override
-    public void periodic() {
+    public void calculate() {
 //        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.kMaxWristSpeed, ElevatorConstants.kMaxWristSpeed));
         wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.kMaxWristSpeed, ArmConstants.kMaxWristSpeed));
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
@@ -56,7 +54,6 @@ public class Wrist extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        if (!absoluteEncoder.isConnected()) return wristMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= (ArmConstants.kWristAbosoluteEncoderInverted? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;

@@ -211,8 +211,8 @@ public final class Constants {
         public static final double kDRoll = 0;
 
         public static final double kWristAbsoluteEncoderOffset = 0.7984;
-        public static final double kElbowAbsoluteEncoderOffset = 0.206;
-        public static final double kWinchAbsoluteEncoderOffset = 0.025;
+        public static final double kElbowAbsoluteEncoderOffset = 0.166;
+        public static final double kWinchAbsoluteEncoderOffset = 0.012;
 
         public static final boolean kWristAbosoluteEncoderInverted = false;
         public static final boolean kElbowAbosoluteEncoderInverted = true;

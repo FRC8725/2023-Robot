@@ -4,12 +4,11 @@ package frc.robot.subsystems.Arm;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.RobotMap.ArmPort;
 import frc.robot.Constants.ArmConstants;
 
-public class Gripper extends SubsystemBase {
+public class Gripper {
 
     private final static Gripper INSTANCE = new Gripper();
 
@@ -39,8 +38,7 @@ public class Gripper extends SubsystemBase {
         rollProfiledPIDController.disableContinuousInput();
     }
 
-    @Override
-    public void periodic() {
+    public void calculate() {
         if (atRollSetpoint()) rollMotor.set(0);
 //        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())), -ElevatorConstants.kMaxRollSpeed, ElevatorConstants.kMaxRollSpeed));
         rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()), -ArmConstants.kMaxRollSpeed, ArmConstants.kMaxRollSpeed));

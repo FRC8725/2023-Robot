@@ -6,12 +6,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.RobotMap.ArmPort;
 import frc.lib.LazySparkMax;
 
-public class Elbow extends SubsystemBase {
+public class Elbow {
 
     private final static Elbow INSTANCE = new Elbow();
 
@@ -36,16 +35,22 @@ public class Elbow extends SubsystemBase {
 
         elbowProfiledPIDController = new ProfiledPIDController(ArmConstants.kPElbow, ArmConstants.kIElbow, ArmConstants.kDElbow, ArmConstants.kElbowControllerConstraints);
         elbowProfiledPIDController.setTolerance(ArmConstants.kPIDElbowAngularToleranceRads);
-        elbowProfiledPIDController.disableContinuousInput();
+        elbowProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+//        elbowProfiledPIDController.disableContinuousInput();
 
         absoluteEncoder = new DutyCycleEncoder(ArmPort.kElbowAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ArmConstants.kElbowAbsoluteEncoderOffset);
+
+        setpoint = Integer.MAX_VALUE;
+
         resetEncoder();
     }
 
-    @Override
-    public void periodic() {
-        elbowMotor.set(MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.kMaxElbowSpeed, ArmConstants.kMaxElbowSpeed));
+    public void calculate() {
+        double speed;
+        if (setpoint < ArmConstants.kMinElbowAngle || setpoint > ArmConstants.kMaxElbowAngle) speed = 0;
+        else speed = MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.kMaxElbowSpeed, ArmConstants.kMaxElbowSpeed);
+        elbowMotor.set(speed);
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
@@ -56,7 +61,6 @@ public class Elbow extends SubsystemBase {
     }
 
     public double getAbsoluteEncoderRad() {
-        if (!absoluteEncoder.isConnected()) return elbowMotor.getPositionAsRad();
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= ArmConstants.kElbowAbosoluteEncoderInverted? -1: 1;
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
