@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.*;
-import frc.robot.commands.auto.Barrel;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.commands.auto.TestMove;
+import frc.robot.commands.auto.TurnOpposite;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.PoseConstants;
 
@@ -77,7 +78,7 @@ public class RobotContainer {
 
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
-        autoCommand.addOption("Barrel", new Barrel(m_swerveSubsystem));
+        autoCommand.addOption("turn and docking", new SequentialCommandGroup(new TurnOpposite(), new DriveUntilDocked()));
         autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
         autoCommand.addOption("[test]Red path", new TestMove(m_swerveSubsystem));
         SmartDashboard.putData(autoCommand);

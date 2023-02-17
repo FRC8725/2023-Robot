@@ -17,12 +17,12 @@ public class DriveUntilDocked extends CommandBase {
     /**
      * Creates a new balance.
      */
-    SwerveSubsystem m_swerveSubsystem;
+    SwerveSubsystem swerveSubsystem;
     PIDController controller = new PIDController(BalanceConstants.kPBalance, BalanceConstants.kIBalance, BalanceConstants.kDBalance);
 
-    public DriveUntilDocked(SwerveSubsystem swerveSubsystem) {
+    public DriveUntilDocked() {
         // Use addRequirements() here to declare subsystem dependencies.
-        m_swerveSubsystem = swerveSubsystem;
+        swerveSubsystem = SwerveSubsystem.getInstance();
         controller.setTolerance(6);
         addRequirements(swerveSubsystem);
     }
@@ -30,25 +30,26 @@ public class DriveUntilDocked extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_swerveSubsystem.stopModules();
+        swerveSubsystem.stopModules();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (Math.abs(m_swerveSubsystem.getRoll()) > BalanceConstants.halfOnStageTheta)m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.copySign(0.6, -m_swerveSubsystem.getRoll()), 0, 0)));
-        else m_swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, -controller.calculate(m_swerveSubsystem.getRoll(), 0)), 0, 0)));
+        if (Math.abs(swerveSubsystem.getRoll()) > BalanceConstants.halfOnStageTheta)
+            swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.copySign(0.6, -swerveSubsystem.getRoll()), 0, 0)));
+        else swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, -controller.calculate(swerveSubsystem.getRoll(), 0)), 0, 0)));
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_swerveSubsystem.stopModules();
+        swerveSubsystem.stopModules();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(m_swerveSubsystem.getRoll()) > BalanceConstants.xSpeedThreshold && m_swerveSubsystem.getZAcc() > 1.2;
+        return Math.abs(swerveSubsystem.getRoll()) > BalanceConstants.xSpeedThreshold && swerveSubsystem.getZAcc() > 1.2;
     }
 }

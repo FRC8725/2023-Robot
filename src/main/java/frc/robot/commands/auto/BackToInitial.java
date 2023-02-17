@@ -30,7 +30,7 @@ public class BackToInitial extends CommandBase {
         xController = new ProfiledPIDController(AutoConstants.kPXController, 0, 0, AutoConstants.kDriveControllerConstraints);
         yController = new ProfiledPIDController(AutoConstants.kPYController, 0, 0, AutoConstants.kDriveControllerConstraints);
         thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+                AutoConstants.kPThetaController*.6, 0, 0, AutoConstants.kThetaControllerConstraints);
         xController.setTolerance(.2);
         yController.setTolerance(.2);
         thetaController.setTolerance(Units.degreesToRadians(3));
@@ -60,7 +60,7 @@ public class BackToInitial extends CommandBase {
         var turningSpeed = thetaController.calculate(robotPose.getRotation().getRadians());
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());
+                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
