@@ -41,8 +41,6 @@ public class Elbow {
         absoluteEncoder = new DutyCycleEncoder(ArmPort.kElbowAbsoluteEncoder);
         absoluteEncoder.setPositionOffset(ArmConstants.kElbowAbsoluteEncoderOffset);
 
-        setpoint = Integer.MAX_VALUE;
-
         resetEncoder();
     }
 

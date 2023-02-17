@@ -46,7 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
             if (atSetpoint()) isResetting = false;
             else if (winch.atSetpoint()) elbow.setSetpoint(ArmConstants.kMaxElbowAngle);
         }
-        wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (isPlacing? 0: Units.degreesToRadians(10)) + (isTransporting? Units.degreesToRadians(70): 0));
+//        isTransporting = false;
+        wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (isPlacing? Units.degreesToRadians(10) : 0) + (isTransporting? Units.degreesToRadians(70): 0));
 //        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
         elbow.calculate();
@@ -58,6 +59,7 @@ public class ArmSubsystem extends SubsystemBase {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         winch.setSetpoint(ArmConstants.kMinWinchAngle);
+        elbow.setSetpoint((3 * ArmConstants.kMaxElbowAngle + 1 * ArmConstants.kMinElbowAngle) / 4);
 //        elbow.setSetpoint(ArmConstants.kMaxElbowAngle); // Move to periodic()
         Translation2d vectorUpperArm = new Translation2d(ArmConstants.kUpperArmLength, Rotation2d.fromRadians(ArmConstants.kMinWinchAngle + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ArmConstants.kForearmLength, Rotation2d.fromRadians(ArmConstants.kMinWinchAngle + ArmConstants.kMaxElbowAngle + Math.PI/2));

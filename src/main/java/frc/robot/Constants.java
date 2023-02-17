@@ -177,7 +177,7 @@ public final class Constants {
         public static final double kRollMotorGearRatio = 1./9;
         // TODO: Change kWristGearRatio to the data we tested
         public static final double kWristGearRatio = 1./80;
-        public static final double kElbowGearRatio = 1./100 * 18 / 42 * 36 / 54;
+        public static final double kElbowGearRatio = 1./100;
         public static final double kRightWinchGearRatio = 1./100 * 17 / 36;
 //        public static final double kRightWinchGearRatio = 1./125;
         public static final double kLeftWinchGearRatio = 1./100 * 17 / 36;
@@ -188,8 +188,8 @@ public final class Constants {
         public static final boolean kWinchMotorInverted = false;
         public static final double kIntakeGearRatio = 1.;
 
-        public static final double kMaxWinchSpeed = .3;
-        public static final double kMaxElbowSpeed = .5;
+        public static final double kMaxWinchSpeed = .1;
+        public static final double kMaxElbowSpeed = .2;
         public static final double kMaxWristSpeed = .25;
         public static final double kMaxRollSpeed = .2;
         public static final double kIntakeSpeed = .5;
@@ -210,9 +210,9 @@ public final class Constants {
         public static final double kIRoll = 0;
         public static final double kDRoll = 0;
 
-        public static final double kWristAbsoluteEncoderOffset = 0.7984;
+        public static final double kWristAbsoluteEncoderOffset = 0.8734;
         public static final double kElbowAbsoluteEncoderOffset = 0.166;
-        public static final double kWinchAbsoluteEncoderOffset = 0.012;
+        public static final double kWinchAbsoluteEncoderOffset = 0.0307;
 
         public static final boolean kWristAbosoluteEncoderInverted = false;
         public static final boolean kElbowAbosoluteEncoderInverted = true;
@@ -236,10 +236,10 @@ public final class Constants {
         public static final double kMinYAxis = -0.4;
         public static final double kMaxYAxis = 1.1;
         public static final double kMinElbowAngle = Units.degreesToRadians(15);
-        public static final double kMaxElbowAngle = Units.degreesToRadians(90);
-//        public static final double kMaxElbowAngle = Units.degreesToRadians(150);
-        public static final double kMinWinchAngle = Units.degreesToRadians(0);
-//        public static final double kMinWinchAngle = Units.degreesToRadians(-10);
+//        public static final double kMaxElbowAngle = Units.degreesToRadians(90);
+        public static final double kMaxElbowAngle = Units.degreesToRadians(155);
+//        public static final double kMinWinchAngle = Units.degreesToRadians(0);
+        public static final double kMinWinchAngle = Units.degreesToRadians(-10);
         public static final double kMaxWinchAngle = Units.degreesToRadians(60);
         public static final double kMinWristAngle = Units.degreesToRadians(-90);
         public static final double kMaxWristAngle = Units.degreesToRadians(150);
@@ -267,7 +267,7 @@ public final class Constants {
 
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
-        public static final Pair<Double, Double> kLowArmPose = new Pair<>(0.543, -0.306);
+        public static final Pair<Double, Double> kLowArmPose = new Pair<>(0.683, -0.306);
         public static final Pair<Double, Double> kMidArmPose = new Pair<>(0.744, 0.549);
         public static final Pair<Double, Double> kHighArmPose = new Pair<>(1.279, 0.865);
         public static final Pair<Double, Double> kVisionArmPose = new Pair<>(0.5, 0.5);
