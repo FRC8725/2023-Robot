@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class LazyTalonFX extends WPI_TalonFX {
 
-    private double gearRatio = 1;
+    private final double gearRatio;
     public LazyTalonFX(int deviceNumber, double gearRatio) {
         super(deviceNumber);
     //         if the motor is for chassis, won't set the current limit.
@@ -30,20 +30,11 @@ public class LazyTalonFX extends WPI_TalonFX {
         setSelectedSensorPosition(rad / (2 * Math.PI) * (2048. / gearRatio));
     }
 
-//    public double getPositionAsDegrees() {
-//        return getSelectedSensorPosition() / (2048. / gearRatio) * 360.;
-//    }
-
     public double getVelocityAsMPS(double circumference) {
         double motorRPM = getSelectedSensorVelocity() * (600. / 2048.);
         double mechRPM = motorRPM * gearRatio;
-        double mechMPS = (mechRPM * circumference) / 60;
-        return mechMPS;
+        return (mechRPM * circumference) / 60;
     }
-//
-//    public void setPositionAsDegrees(double setpoint) {
-//        set(TalonFXControlMode.Position, setpoint / 360.* (2048. / gearRatio));
-//    }
 
     public double getPositionAsRad() {
         return getSelectedSensorPosition() / (2048 / gearRatio) * 2 * Math.PI;

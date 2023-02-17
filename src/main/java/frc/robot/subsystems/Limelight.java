@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FieldConstants;
-import edu.wpi.first.networktables.DoubleSubscriber;
 
 
 import java.util.Optional;
@@ -61,7 +60,7 @@ public class Limelight extends SubsystemBase {
       return Optional.empty();
     } else {
       var robotPose2d = new Pose2d(robotPoseArray[0] + FieldConstants.length / 2, robotPoseArray[1] + FieldConstants.width / 2 , new Rotation2d(Units.degreesToRadians(robotPoseArray[5])));
-      return Optional.of(new Pair<Pose2d, Double>(robotPose2d, robotPoseArray[6]));
+      return Optional.of(new Pair<>(robotPose2d, robotPoseArray[6]));
     }
   }
 

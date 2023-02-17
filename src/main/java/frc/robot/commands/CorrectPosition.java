@@ -4,11 +4,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Limelight;
@@ -16,11 +14,11 @@ import frc.robot.subsystems.Limelight;
 
 public class CorrectPosition extends CommandBase {
 
-    private SwerveSubsystem swerveSubsystem;
-    private ProfiledPIDController xController, yController, thetaController;
-    private Limelight limelight;
+    private final SwerveSubsystem swerveSubsystem;
+    private final ProfiledPIDController xController, yController, thetaController;
+    private final Limelight limelight;
     private final int whereChase;
-    private double socialDistanceM;
+    private final double socialDistanceM;
 
     private Pose2d lastTarget;
 
@@ -34,10 +32,10 @@ public class CorrectPosition extends CommandBase {
         addRequirements(swerveSubsystem);
 
         // Controller Settings
-        xController = new ProfiledPIDController(AutoConstants.kCorrectPositionXController, 0, 0, AutoConstants.kDriveControllerConstraints);
-        yController = new ProfiledPIDController(AutoConstants.kCorrectPositionYController, 0, 0, AutoConstants.kDriveControllerConstraints);
+        xController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_X_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
+        yController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_Y_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
         thetaController = new ProfiledPIDController(
-                AutoConstants.kCorrectPositionThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+                AutoConstants.CORRECT_POSITION_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
         xController.setTolerance(.1);
         yController.setTolerance(.1);
         thetaController.setTolerance(2);
@@ -51,19 +49,19 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void execute() {
-        if (!limelight.hasTarget()) {swerveSubsystem.stopModules();return;}
-        lastTarget = limelight.getAprilTagRelative().get();
-        xController.setGoal(-socialDistanceM-DriveConstants.kTrackWidth/2);
+        // if (!limelight.hasTarget()) {swerveSubsystem.stopModules();return;}
+        if (limelight.getAprilTagRelative().isPresent())lastTarget = limelight.getAprilTagRelative().get();
+        xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH /2);
         yController.setGoal(0);
         thetaController.setGoal(0);
         var xSpeed = xController.calculate(-lastTarget.getX());
         double ySpeed;
         switch (whereChase) {
             case 0:
-                ySpeed = yController.calculate(lastTarget.getY()-VisionConstants.yoffset);
+                ySpeed = yController.calculate(lastTarget.getY()-VisionConstants.Y_OFFSET);
                 break;
             case 2:
-                ySpeed = yController.calculate(lastTarget.getY()+VisionConstants.yoffset);
+                ySpeed = yController.calculate(lastTarget.getY()+VisionConstants.Y_OFFSET);
                 break;
             default:
                 ySpeed = yController.calculate(lastTarget.getY());
@@ -75,7 +73,7 @@ public class CorrectPosition extends CommandBase {
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
 
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
         swerveSubsystem.setModuleStates(moduleStates);
     }

@@ -22,15 +22,8 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
 
     public RightOneGamePieceAndBalance(SwerveSubsystem m_swerveSubsystem) {
 
-//        this.m_swerveSubsystem = m_swerveSubsystem;
-
-//        xController = new PIDController(AutoConstants.kPXController, 0, 0);
-//        yController = new PIDController(AutoConstants.kPYController, 0, 0);
-//        thetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
-//        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
-                "Left2Middle", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
+                "Left2Middle", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("balance", new DriveUntilDocked());
@@ -38,9 +31,9 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 m_swerveSubsystem::getPose,
                 m_swerveSubsystem::resetOdometry,
-                DriveConstants.kDriveKinematics,
-                new PIDConstants(AutoConstants.kPXController, 0, 0),
-                new PIDConstants(AutoConstants.kPThetaController, 0, 0),
+                DriveConstants.DRIVE_KINEMATICS,
+                new PIDConstants(AutoConstants.PX_CONTROLLER, 0, 0),
+                new PIDConstants(AutoConstants.PTHETA_CONTROLLER, 0, 0),
                 m_swerveSubsystem::setModuleStates,
                 eventMap,
                 true,
@@ -50,28 +43,4 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
         Command fullAuto = autoBuilder.fullAuto(pathGroup);
         addCommands(new BackToInitial(m_swerveSubsystem, pathInitialPose), fullAuto, new InstantCommand(m_swerveSubsystem::stopModules));
     }
-
-    /*
-    PIDController xController, yController, thetaController;
-
-    private SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    // Reset odometry for the first path you run during auto
-                    if(isFirstPath){
-                        m_swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
-                    }
-                }),
-                new PPSwerveControllerCommand(
-                        traj,
-                        m_swerveSubsystem::getPose, // Pose supplier
-                        DriveConstants.kDriveKinematics,
-                        xController,yController, thetaController,
-                        m_swerveSubsystem::setModuleStates, // Module states consumer
-                        m_swerveSubsystem // Requires this drive subsystem
-                )
-        );
-    }
-
-    */
 }

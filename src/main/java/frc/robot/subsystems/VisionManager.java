@@ -34,13 +34,13 @@ public class VisionManager extends SubsystemBase {
         if (cvSink.grabFrame(img) == 0) {
             outputStream.notifyError(cvSink.getError());
             return false;
-        };
+        }
         Imgproc.cvtColor(img, img, Imgproc.COLOR_BGR2HSV);
         double[] centerColor = img.get(VisionConstants.UsbCameraResolution[1]/2, VisionConstants.UsbCameraResolution[0]/2);
         SmartDashboard.putNumberArray("centerColor", centerColor);
-        return !(centerColor[0] < VisionConstants.kYellowLowThreshold[0] || centerColor[0] > VisionConstants.kYellowHighThreshold[0] ||
-                centerColor[1] < VisionConstants.kYellowLowThreshold[1] || centerColor[1] > VisionConstants.kYellowHighThreshold[1] ||
-                centerColor[2] < VisionConstants.kYellowLowThreshold[2] || centerColor[2] > VisionConstants.kYellowHighThreshold[2]
+        return !(centerColor[0] < VisionConstants.YELLOW_LOW_THRESHOLD[0] || centerColor[0] > VisionConstants.YELLOW_HIGH_THRESHOLD[0] ||
+                centerColor[1] < VisionConstants.YELLOW_LOW_THRESHOLD[1] || centerColor[1] > VisionConstants.YELLOW_HIGH_THRESHOLD[1] ||
+                centerColor[2] < VisionConstants.YELLOW_LOW_THRESHOLD[2] || centerColor[2] > VisionConstants.YELLOW_HIGH_THRESHOLD[2]
         );
     }
 

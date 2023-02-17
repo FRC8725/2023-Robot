@@ -35,18 +35,18 @@ public class Arm extends SubsystemBase {
         armMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         limitSwitch = new DigitalInput(ElevatorPort.ARM_LIMIT_SWITCH);
         armPIDController = new PIDController(ElevatorConstants.kPArm, ElevatorConstants.kIArm, ElevatorConstants.kDArm);
-        armPIDController.setTolerance(ElevatorConstants.kPIDArmPositionTolerance);
+        armPIDController.setTolerance(ElevatorConstants.PID_ARM_POSITION_TOLERANCE);
     }
 
     @Override
     public void periodic() {
-        double output = armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
+        double output = armPIDController.calculate(armMotor.getPositionAsMeters(ElevatorConstants.ARM_REEL_CIRCUMFERENCE_METERS));
         if (isPIDControlled) {
             if (armPIDController.atSetpoint()) speed = 0;
             else speed = MathUtil.clamp(output, -ElevatorConstants.kArmSpeed, ElevatorConstants.kArmSpeed);
         }
         armMotor.set(speed);
-        SmartDashboard.putNumber("arm position", armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters));
+        SmartDashboard.putNumber("arm position", armMotor.getPositionAsMeters(ElevatorConstants.ARM_REEL_CIRCUMFERENCE_METERS));
         SmartDashboard.putNumber("arm setpoint", armPIDController.getSetpoint());
     }
 
@@ -61,7 +61,7 @@ public class Arm extends SubsystemBase {
     }
 
     public double getEncoder() {
-        return armMotor.getPositionAsMeters(ElevatorConstants.kArmReelCircumferenceMeters);
+        return armMotor.getPositionAsMeters(ElevatorConstants.ARM_REEL_CIRCUMFERENCE_METERS);
     }
 
     public void set(double speed) {

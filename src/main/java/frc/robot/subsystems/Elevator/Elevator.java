@@ -34,7 +34,7 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         limitSwitch = new DigitalInput(ElevatorPort.ELEVATOR_LIMIT_SWITCH);
         elevatorPIDController = new PIDController(ElevatorConstants.kPElevator, ElevatorConstants.kIElevator, ElevatorConstants.kDElevator);
-        elevatorPIDController.setTolerance(ElevatorConstants.kPIDElevatorPositionTolerance);
+        elevatorPIDController.setTolerance(ElevatorConstants.PID_ELEVATOR_POSITION_TOLERANCE);
     }
 
     @Override

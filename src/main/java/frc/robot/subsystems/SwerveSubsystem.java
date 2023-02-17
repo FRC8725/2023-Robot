@@ -23,40 +23,40 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
             DriverPort.FRONT_LEFT_DRIVE_MOTOR_PORT,
             DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT,
-            DriveConstants.kFrontLeftDriveReversed,
-            DriveConstants.kFrontLeftTurningReversed,
+            DriveConstants.FRONT_LEFT_DRIVE_REVERSED,
+            DriveConstants.FRONT_LEFT_TURNING_REVERSED,
             DriverPort.FRONT_LEFT_DRIVE_ABS_ENCODER_PORT,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetAngle,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
+            DriveConstants.FRONT_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE,
+            DriveConstants.FRONT_LEFT_DRIVE_ABSOLUTE_ENCODER_REVERSED);
     private final SwerveModule frontRight = new SwerveModule(
             DriverPort.FRONT_RIGHT_DRIVE_MOTOR_PORT,
             DriverPort.FRONT_RIGHT_TURNING_MOTOR_PORT,
-            DriveConstants.kFrontRightDriveReversed,
-            DriveConstants.kFrontRightTurningReversed,
+            DriveConstants.FRONT_RIGHT_DRIVE_REVERSED,
+            DriveConstants.FRONT_RIGHT_TURNING_REVERSED,
             DriverPort.FRONT_RIGHT_DRIVE_ABS_ENCODER_PORT,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetAngle,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
+            DriveConstants.FRONT_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE,
+            DriveConstants.FRONT_RIGHT_DRIVE_ABSOLUTE_ENCODER_REVERSED);
     private final SwerveModule backLeft = new SwerveModule(
             DriverPort.BACK_LEFT_DRIVE_MOTOR_PORT,
             DriverPort.BACK_LEFT_TURNING_MOTOR_PORT,
-            DriveConstants.kBackLeftDriveReversed,
-            DriveConstants.kBackLeftTurningReversed,
+            DriveConstants.BACK_LEFT_DRIVE_REVERSED,
+            DriveConstants.BACK_LEFT_TURNING_REVERSED,
             DriverPort.BACK_LEFT_DRIVE_ABS_ENCODER_PORT,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetAngle,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
+            DriveConstants.BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE,
+            DriveConstants.BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_REVERSED);
     private final SwerveModule backRight = new SwerveModule(
             DriverPort.BACK_RIGHT_DRIVE_MOTOR_PORT,
             DriverPort.BACK_RIGHT_TURNING_MOTOR_PORT,
-            DriveConstants.kBackRightDriveReversed,
-            DriveConstants.kBackRightTurningReversed,
+            DriveConstants.BACK_RIGHT_DRIVE_REVERSED,
+            DriveConstants.BACK_RIGHT_TURNING_REVERSED,
             DriverPort.BACK_RIGHT_DRIVE_ABS_ENCODER_PORT,
-            DriveConstants.kBackRightDriveAbsoluteEncoderOffsetAngle,
-            DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+            DriveConstants.BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE,
+            DriveConstants.BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_REVERSED);
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getRotation2d(), new SwerveModulePosition[]{
+    private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.DRIVE_KINEMATICS, getRotation2d(), new SwerveModulePosition[]{
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
     }, new Pose2d());
-    private final Field2d m_field = new Field2d();
+    private final Field2d field = new Field2d();
 
     public SwerveSubsystem() {
         new Thread(() -> {
@@ -90,20 +90,12 @@ public class SwerveSubsystem extends SubsystemBase {
         return SwerveEstimator.getEstimatedPosition();
     }
 
-    public double getRoll() {
-        return gyro.getRoll();
-    }
-
-    public double getYaw() {
-        return gyro.getYaw();
-    }
-
     public double getPitch() {
         return gyro.getPitch();
     }
 
     public Field2d getfield2d() {
-        return m_field;
+        return field;
     }
 
     public double getXAcc() {return gyro.getRawAccelX();}
@@ -121,8 +113,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
         SmartDashboard.putNumber("Acc", getXAcc());
-        SmartDashboard.putData(m_field);
-        m_field.setRobotPose(getPose());
+        SmartDashboard.putData(field);
+        field.setRobotPose(getPose());
         backLeft.putDashboard();
         backRight.putDashboard();
         frontLeft.putDashboard();
@@ -144,7 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);

@@ -9,12 +9,11 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class TurnOpposite extends CommandBase {
-    SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
-    private double targetPosition;
-    ProfiledPIDController controller;
+    final SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
+    final ProfiledPIDController controller;
     public TurnOpposite() {
         addRequirements(swerveSubsystem);
-        controller = new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        controller = new ProfiledPIDController(Constants.AutoConstants.PTHETA_CONTROLLER, 0, 0, Constants.AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
     }
     @Override
     public void initialize() {
@@ -25,7 +24,7 @@ public class TurnOpposite extends CommandBase {
     public void execute() {
         var turningSpeed = controller.calculate(swerveSubsystem.getHeading());
         var chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, turningSpeed, swerveSubsystem.getRotation2d());
-        SwerveModuleState[] moduleStates = Constants.DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         swerveSubsystem.setModuleStates(moduleStates);
     }
 

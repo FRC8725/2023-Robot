@@ -39,18 +39,18 @@ public class SwerveModule {
         absoluteEncoder.configAllSettings(absoluteEncoderConfiguration);
         absoluteEncoder.setPositionToAbsolute();
 
-        double driveGearRatio = SwerveModuleConstants.kDriveMotorGearRatio;
+        double driveGearRatio = SwerveModuleConstants.DRIVE_MOTOR_GEAR_RATIO;
         driveMotor = new LazyTalonFX(driveMotorId, driveGearRatio);
         configDriveMotor(driveMotorReversed);
 
-        double turningGearRatio = SwerveModuleConstants.kTurningMotorGearRatio;
+        double turningGearRatio = SwerveModuleConstants.TURNING_MOTOR_GEAR_RATIO;
         turningMotor = new LazyTalonFX(turningMotorId, turningGearRatio);
         configTurningMotor(turningMotorReversed);
 
 
 //         turning Motor configuration
 
-        turningPIDController = new PIDController(SwerveModuleConstants.kPTurning, SwerveModuleConstants.kITurning, SwerveModuleConstants.kDTurning);
+        turningPIDController = new PIDController(SwerveModuleConstants.P_TURNING, SwerveModuleConstants.I_TURNING, SwerveModuleConstants.D_TURNING);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
         resetEncoders();
         putDashboard();
@@ -79,15 +79,15 @@ public class SwerveModule {
     }
 
     public double getDriveVelocity() {
-        return driveMotor.getVelocityAsMPS(SwerveModuleConstants.kWheelCircumference);
+        return driveMotor.getVelocityAsMPS(SwerveModuleConstants.WHEEL_CIRCUMFERENCE);
     }
 
     public double getTurningVelocity() {
-        return turningMotor.getVelocityAsMPS(SwerveModuleConstants.kWheelCircumference);
+        return turningMotor.getVelocityAsMPS(SwerveModuleConstants.WHEEL_CIRCUMFERENCE);
     }
 
     public double getDriveMeters() {
-        return driveMotor.getPositionAsRad() * SwerveModuleConstants.kWheelDiameterMeters / 2;
+        return driveMotor.getPositionAsRad() * SwerveModuleConstants.WHEEL_DIAMETER_METERS / 2;
     }
 
     public double getAbsoluteEncoderRad() {
@@ -115,7 +115,7 @@ public class SwerveModule {
             return;
         }
         state = SwerveModuleState.optimize(state, getState().angle);
-        driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
         turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] state", state.toString());
         putDashboard();
@@ -142,8 +142,6 @@ public class SwerveModule {
     public void putDashboard() {
         SmartDashboard.putNumber("ABS angle " + absoluteEncoder.getDeviceID(), getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Abs Position " + absoluteEncoder.getDeviceID(), absoluteEncoder.getAbsolutePosition());
-        // SmartDashboard.putNumber("Position " + absoluteEncoder.getDeviceID(), absoluteEncoder.getPosition());
-//       SmartDashboard.putNumber("Turing position " + turningMotor.getDeviceID(), turningMotor.getPositionAsDegrees());
     }
 
 }

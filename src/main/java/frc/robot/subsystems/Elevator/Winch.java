@@ -28,7 +28,7 @@ public class Winch extends SubsystemBase {
         winchMotor = new LazySparkMax(ElevatorPort.WINCH_MOTOR, ElevatorConstants.kWinchGearRatio);
         winchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
-        winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
+        winchProfiledPIDController.setTolerance(ElevatorConstants.PID_WINCH_ANGULAR_TOLERANCE_RADS);
         winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
         absoluteEncoder = new DutyCycleEncoder(ElevatorPort.WINCH_ABS_ENCODER);

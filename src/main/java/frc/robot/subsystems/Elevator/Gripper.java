@@ -47,7 +47,7 @@ public class Gripper extends SubsystemBase {
         wristMotor.setRadPosition(getAbsoluteEncoderRad());
 
         wristProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWrist, ElevatorConstants.kIWrist, ElevatorConstants.kDWrist, ElevatorConstants.kWristControllerConstraints);
-        wristProfiledPIDController.setTolerance(ElevatorConstants.kPIDGripperAngularToleranceRads);
+        wristProfiledPIDController.setTolerance(ElevatorConstants.PID_GRIPPER_ANGULAR_TOLERANCE_RADS);
         wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
         wristProfiledPIDController.reset(getAbsoluteEncoderRad());
 

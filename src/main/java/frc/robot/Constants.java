@@ -1,13 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-
-import java.util.List;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -21,151 +17,127 @@ public final class Constants {
 
     public static final class Joystick {
 
-        public static final double kDeadband = 0.2;
+        public static final double DEADBAND = 0.2;
     }
 
     public static final class SwerveModuleConstants {
-        public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
-        public static final double kDriveMotorGearRatio = 1 / 8.14;
-        public static final double kTurningMotorGearRatio = 7. / 150.;
-        public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-        public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
-        public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-        public static final double kWheelCircumference = kWheelDiameterMeters * 2 * Math.PI;
-        public static final double kPTurning = .4;
-        public static final double kITurning = 0;
-        public static final double kDTurning = 0;
+        public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
+        public static final double DRIVE_MOTOR_GEAR_RATIO = 1 / 8.14;
+        public static final double TURNING_MOTOR_GEAR_RATIO = 7. / 150.;
+        public static final double DRIVE_ENCODER_ROT_2_METER = DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
+        public static final double DRIVE_ENCODER_RPM_2_METER_PER_SEC = DRIVE_ENCODER_ROT_2_METER / 60;
+        public static final double TURNING_ENCODER_ROT_2_RAD = TURNING_MOTOR_GEAR_RATIO * 2 * Math.PI;
+        public static final double TURNING_ENCODER_RPM_2_RAD_PER_SEC = TURNING_ENCODER_ROT_2_RAD / 60;
+        public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_METERS * 2 * Math.PI;
+        public static final double P_TURNING = .4;
+        public static final double I_TURNING = 0;
+        public static final double D_TURNING = 0;
     }
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(24);
+        public static final double TRACK_WIDTH = Units.inchesToMeters(24);
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(24);
+        public static final double WHEEL_BASE = Units.inchesToMeters(24);
         // Distance between front and back wheels
-        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-                new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-                new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-                new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
+                new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2),
+                new Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2));
 
 
-        public static final boolean kFrontLeftTurningReversed = true;
-        public static final boolean kBackLeftTurningReversed = true;
-        public static final boolean kFrontRightTurningReversed = true;
-        public static final boolean kBackRightTurningReversed = true;
+        public static final boolean FRONT_LEFT_TURNING_REVERSED = true;
+        public static final boolean BACK_LEFT_TURNING_REVERSED = true;
+        public static final boolean FRONT_RIGHT_TURNING_REVERSED = true;
+        public static final boolean BACK_RIGHT_TURNING_REVERSED = true;
 
-        public static final boolean kFrontLeftDriveReversed = true;
-        public static final boolean kBackLeftDriveReversed = true;
+        public static final boolean FRONT_LEFT_DRIVE_REVERSED = true;
+        public static final boolean BACK_LEFT_DRIVE_REVERSED = true;
         // CAUTION : next line is only for neo, cause by the different diraction. (default should be false)
-        public static final boolean kFrontRightDriveReversed = false;
-        public static final boolean kBackRightDriveReversed = false;
+        public static final boolean FRONT_RIGHT_DRIVE_REVERSED = false;
+        public static final boolean BACK_RIGHT_DRIVE_REVERSED = false;
 
-        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed  = false;
-        public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
-        public static final boolean kBackLeftDriveAbsoluteEncoderReversed   = false;
-        public static final boolean kBackRightDriveAbsoluteEncoderReversed  = false;
+        public static final boolean FRONT_LEFT_DRIVE_ABSOLUTE_ENCODER_REVERSED = false;
+        public static final boolean FRONT_RIGHT_DRIVE_ABSOLUTE_ENCODER_REVERSED = false;
+        public static final boolean BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_REVERSED = false;
+        public static final boolean BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_REVERSED = false;
 
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetAngle  = 180. + 48.5;
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetAngle = 180. + 119.5;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetAngle   = 180. + 269.2;
-        public static final double kBackRightDriveAbsoluteEncoderOffsetAngle  = 180. + 36.1;
+        public static final double FRONT_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 180. + 48.5;
+        public static final double FRONT_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 180. + 119.5;
+        public static final double BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 180. + 269.2;
+        public static final double BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 180. + 36.1;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = Units.feetToMeters(13.5);
+        public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = Units.feetToMeters(13.5);
         // Neo: 12; Falcon: 13.5
-        public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
+        public static final double PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
 
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;
-        public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-                kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
-        public static final double kDecreaseDrivingSpeedFactor = .25;
-        public static final double kDecreaseTurningSpeedFactor = .6;
+        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 2;
+        public static final double TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
+                PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 4;
+        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 3;
+        public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
+        public static final double DECREASE_DRIVING_SPEED_FACTOR = .25;
+        public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 2;
-        public static final double kMaxAngularSpeedRadiansPerSecond = //
-                DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
-        public static final double kPXController = .6;
-        public static final double kPYController = 1.;
-        public static final double kPThetaController = 1;
+        public static final double MAX_SPEED_METERS_PER_SECOND = DriveConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 2;
+        public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
+                DriveConstants.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 2;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+        public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = Math.PI / 4;
+        public static final double PX_CONTROLLER = .6;
+        public static final double PY_CONTROLLER = 1.;
+        public static final double PTHETA_CONTROLLER = 1;
 
-        public static final double kCorrectPositionXController = .5;
-        public static final double kCorrectPositionYController = 2;
-        public static final double kCorrectPositionThetaController = 3;
+        public static final double CORRECT_POSITION_X_CONTROLLER = .5;
+        public static final double CORRECT_POSITION_Y_CONTROLLER = 2;
+        public static final double CORRECT_POSITION_THETA_CONTROLLER = 3;
 
-        public static final TrapezoidProfile.Constraints kDriveControllerConstraints = //
+        public static final TrapezoidProfile.Constraints DRIVE_CONTROLLER_CONSTRAINTS = //
                 new TrapezoidProfile.Constraints(
-                        kMaxSpeedMetersPerSecond,
-                        kMaxAccelerationMetersPerSecondSquared);
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
+                        MAX_SPEED_METERS_PER_SECOND,
+                        MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+        public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONSTRAINTS = //
                 new TrapezoidProfile.Constraints(
-                        kMaxAngularSpeedRadiansPerSecond,
-                        kMaxAngularAccelerationRadiansPerSecondSquared);
+                        MAX_ANGULAR_SPEED_RADIANS_PER_SECOND,
+                        MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED);
     }
 
     public static final class VisionConstants {
-        public static final Transform3d Photon2Robot = new Transform3d(
-                new Translation3d(-DriveConstants.kWheelBase / 2, 0, 0.5),
-                new Rotation3d());
-        public static final Transform3d Robot2Photon = Photon2Robot.inverse();
-        public static final Transform3d Tag2Goal =
-                new Transform3d(
-                        new Translation3d(Units.inchesToMeters(16.113), 0, 0),
-                        new Rotation3d(0, 0, Math.PI));
-        public static final Transform3d GoalMid2Left = new Transform3d(new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
-        public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
-        public static final double yoffset = Units.inchesToMeters(21.319);
+        public static final double Y_OFFSET = Units.inchesToMeters(21.319);
 
         // UsbCamera
         public static final int[] UsbCameraResolution = {320, 240};
-        public static final int[] kYellowLowThreshold = {0, 100, 50};
-        public static final int[] kYellowHighThreshold = {40, 255, 255};
+        public static final int[] YELLOW_LOW_THRESHOLD = {0, 100, 50};
+        public static final int[] YELLOW_HIGH_THRESHOLD = {40, 255, 255};
     }
 
     public static final class BalanceConstants {
-        public static final double kPBalance = 0.05;
-        public static final double kIBalance = .0;
-        public static final double kDBalance = .0;
+        public static final double P_BALANCE = 0.05;
+        public static final double I_BALANCE = .0;
+        public static final double D_BALANCE = .0;
         public static final double xSpeedMax = 2;
         public static final double pitchThreshold = 3;
-        public static final double halfOnStageTheta = 8.;
     }
 
     public static final class FieldConstants {
         // set the red alliance as reflection of the blue one.
         // Blue is on the left of the field
-        public static final AprilTag aprilTag1 = new AprilTag(1, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Rotation2d.fromDegrees(0))));
-        public static final AprilTag aprilTag2 = new AprilTag(2, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Rotation2d.fromDegrees(0))));
-        public static final AprilTag aprilTag3 = new AprilTag(3, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(0))));
-//        public static final AprilTag aprilTag4 = new AprilTag(4, new Pose3d(new Pose2d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Rotation2d.fromDegrees(180))));
-//        public static final AprilTag aprilTag5 = new AprilTag(5, new Pose3d(new Pose2d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Rotation2d.fromDegrees(0))));
-        public static final AprilTag aprilTag6 = new AprilTag(6, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Rotation2d.fromDegrees(0))));
-        public static final AprilTag aprilTag7 = new AprilTag(7, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Rotation2d.fromDegrees(0))));
-        public static final AprilTag aprilTag8 = new AprilTag(8, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(0))));
         public static final double length = Units.feetToMeters(54.27083);
         public static final double width = Units.feetToMeters(26.2916);
-        public static final AprilTagFieldLayout aprilTagField = new AprilTagFieldLayout(
-                List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag6, aprilTag7, aprilTag8),
-                FieldConstants.length, FieldConstants.width);
-
-        public static final double kReflectiveTrapeTargetHeight = 0.8;
     }
 
     public static final class ElevatorConstants {
-        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
-        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
-        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);
-        public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
-        public static final double kPIDElevatorPositionTolerance = 0.001;
-        public static final double kPIDArmPositionTolerance = .001;
-        public static final double kPIDGripperAngularToleranceRads = 10./180* Math.PI;
-        public static final double kPIDWinchAngularToleranceRads = 10./180* Math.PI;
+        public static final double ELEVATOR_REEL_DIAMETER_METERS = Units.inchesToMeters(0.75);
+        public static final double kElevatorReelCircumferenceMeters = ELEVATOR_REEL_DIAMETER_METERS * Math.PI;
+        public static final double ARM_REEL_DIAMETER_METERS = Units.inchesToMeters(0.75);
+        public static final double ARM_REEL_CIRCUMFERENCE_METERS = ARM_REEL_DIAMETER_METERS * Math.PI;
+        public static final double PID_ELEVATOR_POSITION_TOLERANCE = 0.001;
+        public static final double PID_ARM_POSITION_TOLERANCE = .001;
+        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = 10./180* Math.PI;
+        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = 10./180* Math.PI;
 
         public static final double kElevatorGearRatio = 1./9;
         public static final double kIntakeGearRatio = 1;

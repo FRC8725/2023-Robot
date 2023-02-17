@@ -2,8 +2,6 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -15,10 +13,10 @@ import frc.robot.Constants.DriveConstants;
 
 public class BackToInitial extends CommandBase {
 
-    SwerveSubsystem swerveSubsystem;
+    final SwerveSubsystem swerveSubsystem;
 
-    ProfiledPIDController xController, yController, thetaController;
-    Pose2d pathInitialPose;
+    final ProfiledPIDController xController, yController, thetaController;
+    final Pose2d pathInitialPose;
 
     public BackToInitial(SwerveSubsystem swerveSubsystem, Pose2d pathInitialPose) {
         this.swerveSubsystem = swerveSubsystem;
@@ -27,10 +25,10 @@ public class BackToInitial extends CommandBase {
         this.pathInitialPose = pathInitialPose;
 
         // Controller Settings
-        xController = new ProfiledPIDController(AutoConstants.kPXController, 0, 0, AutoConstants.kDriveControllerConstraints);
-        yController = new ProfiledPIDController(AutoConstants.kPYController, 0, 0, AutoConstants.kDriveControllerConstraints);
+        xController = new ProfiledPIDController(AutoConstants.PX_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
+        yController = new ProfiledPIDController(AutoConstants.PY_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
         thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController*.6, 0, 0, AutoConstants.kThetaControllerConstraints);
+                AutoConstants.PTHETA_CONTROLLER *.6, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
         xController.setTolerance(.2);
         yController.setTolerance(.2);
         thetaController.setTolerance(Units.degreesToRadians(3));
@@ -48,8 +46,6 @@ public class BackToInitial extends CommandBase {
     @Override
     public void execute() {
         var robotPose = swerveSubsystem.getPose();
-        var goalPose = robotPose.transformBy(
-                new Transform2d(pathInitialPose.getTranslation(), new Rotation2d()));
 
             xController.setGoal(pathInitialPose.getX());
             yController.setGoal(pathInitialPose.getY());
@@ -63,7 +59,7 @@ public class BackToInitial extends CommandBase {
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
 
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
         swerveSubsystem.setModuleStates(moduleStates);
     }

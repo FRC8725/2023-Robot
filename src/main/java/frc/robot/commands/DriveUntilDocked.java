@@ -17,9 +17,9 @@ public class DriveUntilDocked extends CommandBase {
     /**
      * Creates a new balance.
      */
-    SwerveSubsystem swerveSubsystem;
+    final SwerveSubsystem swerveSubsystem;
     private boolean on = false;
-    PIDController controller = new PIDController(BalanceConstants.kPBalance, BalanceConstants.kIBalance, BalanceConstants.kDBalance);
+    final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
     public DriveUntilDocked() {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -39,11 +39,11 @@ public class DriveUntilDocked extends CommandBase {
     @Override
     public void execute() {
         if (Math.abs(swerveSubsystem.getPitch()) > BalanceConstants.pitchThreshold){
-            swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax*.4, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax*.4, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
             on = true;
         }
         if (!on) {
-            swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)));
         }
     }
 
