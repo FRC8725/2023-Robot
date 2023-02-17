@@ -11,7 +11,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionManager;
 import frc.robot.subsystems.Limelight;
 
 
@@ -21,15 +20,17 @@ public class CorrectPosition extends CommandBase {
     private ProfiledPIDController xController, yController, thetaController;
     private Limelight limelight;
     private final int whereChase;
+    private double socialDistanceM;
 
     private Pose2d lastTarget;
 
-    public CorrectPosition(SwerveSubsystem swerveSubsystem, int whereChase) {
+    public CorrectPosition(int whereChase, double socialDistanceM) {
         // 0 stand for left side
         // 1 stand for middle
         // 2 stand for right side
-        this.swerveSubsystem = swerveSubsystem;
+        this.swerveSubsystem = SwerveSubsystem.getInstance();
         this.whereChase = whereChase;
+        this.socialDistanceM = socialDistanceM;
         addRequirements(swerveSubsystem);
 
         // Controller Settings
@@ -52,7 +53,7 @@ public class CorrectPosition extends CommandBase {
     public void execute() {
         if (!limelight.hasTarget()) {swerveSubsystem.stopModules();return;}
         lastTarget = limelight.getAprilTagRelative().get();
-        xController.setGoal(-Units.inchesToMeters(16.113)-DriveConstants.kTrackWidth/2);
+        xController.setGoal(-socialDistanceM-DriveConstants.kTrackWidth/2);
         yController.setGoal(0);
         thetaController.setGoal(0);
         var xSpeed = xController.calculate(-lastTarget.getX());

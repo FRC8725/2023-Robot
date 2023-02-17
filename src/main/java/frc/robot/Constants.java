@@ -132,8 +132,8 @@ public final class Constants {
         public static final double kPBalance = 0.05;
         public static final double kIBalance = .0;
         public static final double kDBalance = .0;
-        public static final double xSpeedMax = .4;
-        public static final double xSpeedThreshold = 2;
+        public static final double xSpeedMax = 2;
+        public static final double pitchThreshold = 3;
         public static final double halfOnStageTheta = 8.;
     }
 

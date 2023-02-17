@@ -33,7 +33,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 "Left2Middle", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("balance", new DriveUntilDocked(m_swerveSubsystem));
+        eventMap.put("balance", new DriveUntilDocked());
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 m_swerveSubsystem::getPose,

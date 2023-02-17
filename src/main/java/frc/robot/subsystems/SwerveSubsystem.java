@@ -94,11 +94,19 @@ public class SwerveSubsystem extends SubsystemBase {
         return gyro.getRoll();
     }
 
+    public double getYaw() {
+        return gyro.getYaw();
+    }
+
+    public double getPitch() {
+        return gyro.getPitch();
+    }
+
     public Field2d getfield2d() {
         return m_field;
     }
 
-    public double getZAcc() {return gyro.getRawAccelZ();}
+    public double getXAcc() {return gyro.getRawAccelX();}
 
     public void resetOdometry(Pose2d pose) {
         SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
@@ -109,8 +117,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
         if (DriverStation.isTeleop())updateRobotPoseWithVision();
         SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("Robot Pitch", getPitch());
         SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        SmartDashboard.putNumber("Acc", getXAcc());
         SmartDashboard.putData(m_field);
         m_field.setRobotPose(getPose());
         backLeft.putDashboard();

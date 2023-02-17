@@ -18,6 +18,7 @@ public class DriveUntilDocked extends CommandBase {
      * Creates a new balance.
      */
     SwerveSubsystem swerveSubsystem;
+    private boolean on = false;
     PIDController controller = new PIDController(BalanceConstants.kPBalance, BalanceConstants.kIBalance, BalanceConstants.kDBalance);
 
     public DriveUntilDocked() {
@@ -31,14 +32,19 @@ public class DriveUntilDocked extends CommandBase {
     @Override
     public void initialize() {
         swerveSubsystem.stopModules();
+        on = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (Math.abs(swerveSubsystem.getRoll()) > BalanceConstants.halfOnStageTheta)
-            swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.copySign(0.6, -swerveSubsystem.getRoll()), 0, 0)));
-        else swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, -controller.calculate(swerveSubsystem.getRoll(), 0)), 0, 0)));
+        if (Math.abs(swerveSubsystem.getPitch()) > BalanceConstants.pitchThreshold){
+            swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax*.4, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
+            on = true;
+        }
+        if (!on) {
+            swerveSubsystem.setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)));
+        }
     }
 
     // Called once the command ends or is interrupted.
@@ -50,6 +56,6 @@ public class DriveUntilDocked extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(swerveSubsystem.getRoll()) > BalanceConstants.xSpeedThreshold && swerveSubsystem.getZAcc() > 1.2;
+        return Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold && on;
     }
 }
