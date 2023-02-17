@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.commands.BalanceCmd;
+import frc.robot.commands.DriveUntilDocked;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 "Left2Middle", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("balance", new BalanceCmd(m_swerveSubsystem));
+        eventMap.put("balance", new DriveUntilDocked(m_swerveSubsystem));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 m_swerveSubsystem::getPose,
@@ -43,6 +43,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 new PIDConstants(AutoConstants.kPThetaController, 0, 0),
                 m_swerveSubsystem::setModuleStates,
                 eventMap,
+                true,
                 m_swerveSubsystem
         );
         Pose2d pathInitialPose = pathGroup.get(0).getInitialPose();

@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -22,15 +21,15 @@ public class Pneumatics extends SubsystemBase {
 
     private Pneumatics() {
         PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
-        pneumaticHub = new PneumaticHub(RobotMap.PneumaticsPort.kREVPHPort);
-        compressor = new Compressor(RobotMap.PneumaticsPort.kREVPHPort, moduleType);
-        winchReleaser = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType, 
-        RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[0], 
-        RobotMap.ElevatorPort.kWinchReleaseDoubleSolenoid[1]);
+        pneumaticHub = new PneumaticHub(RobotMap.PneumaticsPort.REV_PH_PORT);
+        compressor = new Compressor(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType);
+        winchReleaser = new DoubleSolenoid(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType,
+        RobotMap.ElevatorPort.WINCH_RELEASE_DOUBLE_SOLENOID[0],
+        RobotMap.ElevatorPort.WINCH_RELEASE_DOUBLE_SOLENOID[1]);
         winchReleaser.set(DoubleSolenoid.Value.kReverse);
-        gripperIntrance = new DoubleSolenoid(RobotMap.PneumaticsPort.kREVPHPort, moduleType, 
-        RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[0], 
-        RobotMap.ElevatorPort.kGripperReleaseDoubleSolenoid[1]);
+        gripperIntrance = new DoubleSolenoid(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType,
+        RobotMap.ElevatorPort.GRIPPER_RELEASE_DOUBLE_SOLENOID[0],
+        RobotMap.ElevatorPort.GRIPPER_RELEASE_DOUBLE_SOLENOID[1]);
         gripperIntrance.set(DoubleSolenoid.Value.kReverse);
     }
 

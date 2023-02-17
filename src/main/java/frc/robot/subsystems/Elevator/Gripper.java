@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Elevator;
 
 
-import com.revrobotics.SparkMaxAbsoluteEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -35,15 +34,15 @@ public class Gripper extends SubsystemBase {
     ArrayList<DigitalInput> limitSwitch;
 
     private Gripper() {
-        leftMotor = new LazyTalonFX(ElevatorPort.kLeftIntakeMotor, ElevatorConstants.kIntakeGearRatio);
-        rightMotor = new LazyTalonFX(ElevatorPort.kRightIntakeMotor, ElevatorConstants.kIntakeGearRatio);
+        leftMotor = new LazyTalonFX(ElevatorPort.LEFT_INTAKE_MOTOR, ElevatorConstants.kIntakeGearRatio);
+        rightMotor = new LazyTalonFX(ElevatorPort.RIGHT_INTAKE_MOTOR, ElevatorConstants.kIntakeGearRatio);
         rightMotor.setInverted(true);
         intakeMotorGroup = new MotorControllerGroup(leftMotor, rightMotor);
         intakeMotorGroup.setInverted(true);
 
-        wristMotor = new LazySparkMax(ElevatorPort.kWristMotor, ElevatorConstants.kWristGearRatio);
+        wristMotor = new LazySparkMax(ElevatorPort.WRIST_MOTOR, ElevatorConstants.kWristGearRatio);
 
-        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWristAbsoluteEncoder);
+        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.WRIST_ABS_ENCODER);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWristAbsoluteEncoderOffset);
         wristMotor.setRadPosition(getAbsoluteEncoderRad());
 
@@ -53,8 +52,8 @@ public class Gripper extends SubsystemBase {
         wristProfiledPIDController.reset(getAbsoluteEncoderRad());
 
         limitSwitch = new ArrayList<DigitalInput>();
-        limitSwitch.add(new DigitalInput(ElevatorPort.kGripperLimitSwitch[0]));
-        limitSwitch.add(new DigitalInput(ElevatorPort.kGripperLimitSwitch[1]));
+        limitSwitch.add(new DigitalInput(ElevatorPort.GRIPPER_LIMIT_SWITCH[0]));
+        limitSwitch.add(new DigitalInput(ElevatorPort.GRIPPER_LIMIT_SWITCH[1]));
     }
 
     @Override

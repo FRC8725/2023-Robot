@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.LazySparkMax;
 import frc.robot.Constants.ElevatorConstants;
@@ -31,9 +30,9 @@ public class Elevator extends SubsystemBase {
     double speed = 0;
 
     private Elevator() {
-        elevatorMotor = new LazySparkMax(ElevatorPort.kElevatorMotor, ElevatorConstants.kElevatorGearRatio);
+        elevatorMotor = new LazySparkMax(ElevatorPort.ELEVATOR_MOTOR, ElevatorConstants.kElevatorGearRatio);
         elevatorMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitch = new DigitalInput(ElevatorPort.kElevatorLimitSwitch);
+        limitSwitch = new DigitalInput(ElevatorPort.ELEVATOR_LIMIT_SWITCH);
         elevatorPIDController = new PIDController(ElevatorConstants.kPElevator, ElevatorConstants.kIElevator, ElevatorConstants.kDElevator);
         elevatorPIDController.setTolerance(ElevatorConstants.kPIDElevatorPositionTolerance);
     }

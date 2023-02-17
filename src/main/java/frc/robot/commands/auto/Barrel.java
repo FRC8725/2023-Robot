@@ -1,6 +1,5 @@
 package frc.robot.commands.auto;
 
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;

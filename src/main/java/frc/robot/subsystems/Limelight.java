@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
@@ -19,23 +20,24 @@ import java.util.Optional;
 
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
-  final private DoubleArraySubscriber robotToTagSubscriber;
-  final private DoubleArraySubscriber robotPoseSubscriber;
-  private final DoubleArraySubscriber robotTeamPoseSubscriber;
-  final private DoubleSubscriber tagIDSubscriber;
-  final static Limelight INSTANCE = new Limelight();
-  public static Limelight getInstance() {
-    return INSTANCE;
-  }
+  private final DoubleArraySubscriber robotToTagSubscriber;
+  private final DoubleArraySubscriber robotPoseSubscriber;
+  private final DoubleSubscriber tagIDSubscriber;
+  private static final Limelight INSTANCE = new Limelight();
+
   public Limelight() {
     robotToTagSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
     robotPoseSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose").subscribe(new double[6]);
     tagIDSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleTopic("tid").subscribe(-1);
     if (DriverStation.getAlliance() == Alliance.Blue) {
-      robotTeamPoseSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[6]);
+      NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[6]);
     } else {
-      robotTeamPoseSubscriber = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose_wpired").subscribe(new double[6]);
+      NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("botpose_wpired").subscribe(new double[6]);
     }
+  }
+
+  public static Limelight getInstance() {
+    return INSTANCE;
   }
 
   @Override
@@ -53,13 +55,13 @@ public class Limelight extends SubsystemBase {
     return CameraToTarget;
   }
 
-  public Optional<Pose2d> getEstimatedGlobalPose() {
+  public Optional<Pair<Pose2d, Double>> getEstimatedGlobalPose() {
     var robotPoseArray = robotPoseSubscriber.get();
-    if(!hasTarget()) {
+    if (!hasTarget()) {
       return Optional.empty();
     } else {
       var robotPose2d = new Pose2d(robotPoseArray[0] + FieldConstants.length / 2, robotPoseArray[1] + FieldConstants.width / 2 , new Rotation2d(Units.degreesToRadians(robotPoseArray[5])));
-      return Optional.of(robotPose2d);
+      return Optional.of(new Pair<Pose2d, Double>(robotPose2d, robotPoseArray[6]));
     }
   }
 

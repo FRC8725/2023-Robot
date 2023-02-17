@@ -6,7 +6,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,45 +18,44 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.RobotMap.DriverPort;
 
 public class SwerveSubsystem extends SubsystemBase {
-
     private final static SwerveSubsystem instance = new SwerveSubsystem();
     private final Limelight vision = Limelight.getInstance();
     private final SwerveModule frontLeft = new SwerveModule(
-            DriverPort.kFrontLeftDriveMotorPort,
-            DriverPort.kFrontLeftTurningMotorPort,
+            DriverPort.FRONT_LEFT_DRIVE_MOTOR_PORT,
+            DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT,
             DriveConstants.kFrontLeftDriveReversed,
             DriveConstants.kFrontLeftTurningReversed,
-            DriverPort.kFrontLeftDriveAbsoluteEncoderPort,
+            DriverPort.FRONT_LEFT_DRIVE_ABS_ENCODER_PORT,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
     private final SwerveModule frontRight = new SwerveModule(
-            DriverPort.kFrontRightDriveMotorPort,
-            DriverPort.kFrontRightTurningMotorPort,
+            DriverPort.FRONT_RIGHT_DRIVE_MOTOR_PORT,
+            DriverPort.FRONT_RIGHT_TURNING_MOTOR_PORT,
             DriveConstants.kFrontRightDriveReversed,
             DriveConstants.kFrontRightTurningReversed,
-            DriverPort.kFrontRightDriveAbsoluteEncoderPort,
+            DriverPort.FRONT_RIGHT_DRIVE_ABS_ENCODER_PORT,
             DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
     private final SwerveModule backLeft = new SwerveModule(
-            DriverPort.kBackLeftDriveMotorPort,
-            DriverPort.kBackLeftTurningMotorPort,
+            DriverPort.BACK_LEFT_DRIVE_MOTOR_PORT,
+            DriverPort.BACK_LEFT_TURNING_MOTOR_PORT,
             DriveConstants.kBackLeftDriveReversed,
             DriveConstants.kBackLeftTurningReversed,
-            DriverPort.kBackLeftDriveAbsoluteEncoderPort,
+            DriverPort.BACK_LEFT_DRIVE_ABS_ENCODER_PORT,
             DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
     private final SwerveModule backRight = new SwerveModule(
-            DriverPort.kBackRightDriveMotorPort,
-            DriverPort.kBackRightTurningMotorPort,
+            DriverPort.BACK_RIGHT_DRIVE_MOTOR_PORT,
+            DriverPort.BACK_RIGHT_TURNING_MOTOR_PORT,
             DriveConstants.kBackRightDriveReversed,
             DriveConstants.kBackRightTurningReversed,
-            DriverPort.kBackRightDriveAbsoluteEncoderPort,
+            DriverPort.BACK_RIGHT_DRIVE_ABS_ENCODER_PORT,
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetAngle,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getRotation2d(), new SwerveModulePosition[]{
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
-    }, vision.getEstimatedGlobalPose().orElse(new Pose2d()));
+    }, new Pose2d());
     private final Field2d m_field = new Field2d();
 
     public SwerveSubsystem() {
@@ -66,6 +64,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 Thread.sleep(1000);
                 zeroHeading();  
                 resetEncoders();
+                setRobotPoseWithVision();
             } catch (Exception ignored) {
             }
         }).start();
@@ -98,6 +97,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public Field2d getfield2d() {
         return m_field;
     }
+
+    public double getZAcc() {return gyro.getRawAccelZ();}
 
     public void resetOdometry(Pose2d pose) {
         SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
@@ -140,10 +141,10 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[3]);
     }
     public void updateRobotPoseWithVision() {
-        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get(), Timer.getFPGATimestamp());
+        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get().getFirst(), Timer.getFPGATimestamp() + vision.getEstimatedGlobalPose().get().getSecond());
     }
 
     public void setRobotPoseWithVision() {
-        if (vision.getEstimatedGlobalPose().isPresent())resetOdometry(vision.getEstimatedGlobalPose().get());
+        if (vision.getEstimatedGlobalPose().isPresent())resetOdometry(vision.getEstimatedGlobalPose().get().getFirst());
     }
 }

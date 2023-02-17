@@ -31,9 +31,9 @@ public class Arm extends SubsystemBase {
     double speed = 0;
 
     private Arm() {
-        armMotor = new LazySparkMax(ElevatorPort.kArmMotor, ElevatorConstants.kArmGearRatio);
+        armMotor = new LazySparkMax(ElevatorPort.ARM_MOTOR, ElevatorConstants.kArmGearRatio);
         armMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        limitSwitch = new DigitalInput(ElevatorPort.kArmLimitSwitch);
+        limitSwitch = new DigitalInput(ElevatorPort.ARM_LIMIT_SWITCH);
         armPIDController = new PIDController(ElevatorConstants.kPArm, ElevatorConstants.kIArm, ElevatorConstants.kDArm);
         armPIDController.setTolerance(ElevatorConstants.kPIDArmPositionTolerance);
     }

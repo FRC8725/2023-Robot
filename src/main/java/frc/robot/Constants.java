@@ -134,6 +134,7 @@ public final class Constants {
         public static final double kDBalance = .0;
         public static final double xSpeedMax = .4;
         public static final double xSpeedThreshold = 2;
+        public static final double halfOnStageTheta = 8.;
     }
 
     public static final class FieldConstants {

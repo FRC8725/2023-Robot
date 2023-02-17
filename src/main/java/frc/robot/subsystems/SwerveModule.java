@@ -126,12 +126,12 @@ public class SwerveModule {
         driveMotor.set(ControlMode.PercentOutput, 0);
 
         switch (turningMotor.getDeviceID()) {
-            case (RobotMap.DriverPort.kFrontLeftTurningMotorPort):
-            case (RobotMap.DriverPort.kBackRightTurningMotorPort):
+            case (RobotMap.DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT):
+            case (RobotMap.DriverPort.BACK_RIGHT_TURNING_MOTOR_PORT):
                 turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), -Math.PI / 4));
                 break;
-            case (RobotMap.DriverPort.kFrontRightTurningMotorPort):
-            case (RobotMap.DriverPort.kBackLeftTurningMotorPort):
+            case (RobotMap.DriverPort.FRONT_RIGHT_TURNING_MOTOR_PORT):
+            case (RobotMap.DriverPort.BACK_LEFT_TURNING_MOTOR_PORT):
                 turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), Math.PI / 4));
                 break;
         }

@@ -25,13 +25,13 @@ public class Winch extends SubsystemBase {
     DutyCycleEncoder absoluteEncoder;
 
     private Winch() {
-        winchMotor = new LazySparkMax(ElevatorPort.kWinchMotor, ElevatorConstants.kWinchGearRatio);
+        winchMotor = new LazySparkMax(ElevatorPort.WINCH_MOTOR, ElevatorConstants.kWinchGearRatio);
         winchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         winchProfiledPIDController = new ProfiledPIDController(ElevatorConstants.kPWinch, ElevatorConstants.kIWinch, ElevatorConstants.kDWinch, ElevatorConstants.kWinchControllerConstraints);
         winchProfiledPIDController.setTolerance(ElevatorConstants.kPIDWinchAngularToleranceRads);
         winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.kWinchAbsoluteEncoder);
+        absoluteEncoder = new DutyCycleEncoder(ElevatorPort.WINCH_ABS_ENCODER);
         absoluteEncoder.setPositionOffset(ElevatorConstants.kWinchAbsoluteEncoderOffset);
         winchMotor.setRadPosition(getAbsoluteEncoderRad());
     }
