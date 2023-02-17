@@ -8,9 +8,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.commands.auto.TestMove;
@@ -29,65 +27,66 @@ public class RobotContainer {
     // Some default constants
 
     // The robot's subsystems and commands are defined here...
-    private final SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
-    private final ElevatorSubsystem m_elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private final SwerveSubsystem m_swerveSubsystem = SwerveSubsystem.getInstance();
+    private final ArmSubsystem m_armSubsystem = ArmSubsystem.getInstance();
     private final GripperSubsystem m_gripperSubsystem = GripperSubsystem.getInstance();
     private final Pneumatics m_pneumatics = Pneumatics.getInstance();
     private final GamepadJoystick swerveJoystick = new GamepadJoystick(0);
-    private final GamepadJoystick elevatorJoystick = new GamepadJoystick(1);
+    private final GamepadJoystick m_elevatorJoystick = new GamepadJoystick(1);
     private final VisionManager m_visionManager = new VisionManager();
     private final SendableChooser<Command> autoCommand = new SendableChooser<>();
 
 
     public RobotContainer() {
-        this.swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-                this.swerveSubsystem,
+        this.m_swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
+                this.m_swerveSubsystem,
                 () -> +this.swerveJoystick.get_LStickY(),
                 () -> -this.swerveJoystick.get_LStickX(),
                 () -> -this.swerveJoystick.get_RStickX(),
                 () -> !this.swerveJoystick.btn_topL.getAsBoolean(),
                 this.swerveJoystick.btn_topR::getAsBoolean
         ));
-        m_elevatorSubsystem.setDefaultCommand(new ElevatorJoystickCmd(
-                m_elevatorSubsystem,
-                this.elevatorJoystick::get_LStickY,
-                this.elevatorJoystick::get_RStickY,
-                this.elevatorJoystick::get_RStickX,
-                this.elevatorJoystick::get_LStickX,
-                () -> !this.elevatorJoystick.btn_triggerR.getAsBoolean())
-        );
+        m_armSubsystem.setDefaultCommand(new ArmJoystickCmd(
+                m_armSubsystem,
+                () -> m_elevatorJoystick.get_LStickY(),
+                () -> m_elevatorJoystick.get_RStickY()
+        ));
         configureButtonBindings();
         putToDashboard();
     }
 
     private void configureButtonBindings() {
-        swerveJoystick.btn_triggerR.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
+        swerveJoystick.btn_triggerR.onTrue(new InstantCommand(m_swerveSubsystem::zeroHeading));
         // m_swerveJoystick.btn_A.whileTrue(new CorrectPositionReflectiveTape(m_swerveSubsystem, m_visionManager));
         swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, Units.inchesToMeters(18)));
         swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, Units.inchesToMeters(18)));
         swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, Units.inchesToMeters(18)));
         swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked());
 
-        elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
-        elevatorJoystick.btn_topR.onTrue(new InstantCommand(m_elevatorSubsystem::reset));
-        elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
-        elevatorJoystick.btn_X.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kMidElevatorPose));
-        elevatorJoystick.btn_A.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLowElevatorPose));
-        elevatorJoystick.btn_B.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kLoadingZoneElevatorPose));
-        elevatorJoystick.btn_Start.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kInitElevatorPose));
+//        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
+        m_elevatorJoystick.btn_topL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
+        m_elevatorJoystick.btn_triggerL.onTrue(new IdentifyAndGrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
+        m_elevatorJoystick.btn_topR.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
+        m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_gripperSubsystem, m_pneumatics));
+//        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
+        m_elevatorJoystick.btn_Y.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.HIGH_ARM_POSE, true, true));
+        m_elevatorJoystick.btn_X.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
+        m_elevatorJoystick.btn_A.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.LOW_ARM_POSE, true, true));
+        m_elevatorJoystick.btn_B.toggleOnTrue(new GrabPiecesFromDouble(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
+        m_elevatorJoystick.btn_Back.whileTrue(new AlignGripper(m_gripperSubsystem, m_visionManager));
     }
 
     private void putToDashboard() {
-        autoCommand.addOption("Nothing", new InstantCommand(swerveSubsystem::stopModules));
+        autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
         autoCommand.addOption("turn and docking", new SequentialCommandGroup(new CorrectPosition(1, 18), new TurnOpposite(), new DriveUntilDocked()));
-        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(swerveSubsystem));
-        autoCommand.addOption("[test]Red path", new TestMove(swerveSubsystem));
+        autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
+        autoCommand.addOption("[test]Red path", new TestMove(m_swerveSubsystem));
         SmartDashboard.putData(autoCommand);
     }
 
     public Command getAutonomousCommand() {
-        swerveSubsystem.setRobotPoseWithVision();
-        swerveSubsystem.zeroHeading();
+        m_swerveSubsystem.setRobotPoseWithVision();
+        m_swerveSubsystem.zeroHeading();
         return autoCommand.getSelected();
     }
 }

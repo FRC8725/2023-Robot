@@ -5,24 +5,46 @@ import com.revrobotics.RelativeEncoder;
 
 public class LazySparkMax extends CANSparkMax {
 
-    private final RelativeEncoder encoder;
+    private final double gearRatio;
 
     public LazySparkMax(int deviceNumber, double gearRatio) {
         super(deviceNumber, MotorType.kBrushless);
-        setSmartCurrentLimit(50, 30);
-        encoder = getEncoder();
-        encoder.setPositionConversionFactor(gearRatio);
+        setCurrent(false);
+        this.gearRatio = gearRatio;
+    }
+
+//    public void setGearRatioLeader(double gearRatioLeader) {
+//        this.gearRatioLeader = gearRatioLeader;
+//    }
+
+    public void setCurrent(boolean isHighCurrent) {
+        if (isHighCurrent){
+            setSmartCurrentLimit(60, 40);
+        } else {
+            setSmartCurrentLimit(50, 30);
+        }
     }
 
     public void setRadPosition(double rad) {
-        encoder.setPosition(rad / (2 * Math.PI));
+        getEncoder().setPosition(rad / (2 * Math.PI) / gearRatio);
     }
 
+    /**
+     * You need to setGearRatioFollow() with the leaderGearRatio before using this function.
+     */
+//    public void setSpeedFollowGearRatio(double speed) {
+//        set(speed / gearRatio * gearRatioLeader);
+//    }
+
     public double getPositionAsRad() {
-        return encoder.getPosition()  * 2 * Math.PI;
+        return getEncoder().getPosition()  * 2 * Math.PI * gearRatio;
+    }
+
+    public double getVelocityAsRad() {
+        return getEncoder().getVelocity() * gearRatio  * 2 * Math.PI;
     }
 
     public double getPositionAsMeters(double circumference) {
-        return encoder.getPosition() * circumference;
+        return getEncoder().getPosition() * gearRatio * circumference;
     }
 }

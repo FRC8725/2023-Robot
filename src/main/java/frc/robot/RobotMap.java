@@ -20,24 +20,24 @@ public final class RobotMap {
 
     }
 
-    public static final class ElevatorPort {
-        public static final int ELEVATOR_MOTOR = 13;
-        public static final int ARM_MOTOR = 14;
-        public static final int WRIST_MOTOR = 15;
-        public static final int LEFT_INTAKE_MOTOR = 16;
-        public static final int RIGHT_INTAKE_MOTOR = 17;
-        public static final int WINCH_MOTOR = 19;
+    public static class ArmPort {
+        public static final int RIGHT_WINCH_MOTOR = 13;
+        public static final int LEFT_WINCH_MOTOR = 14;
+        public static final int ELBOW_MOTOR = 15;
+        public static final int WRIST_MOTOR = 16;
+        public static final int ROLL_MOTOR = 17;
+        public static final int INTAKE_LEADER_MOTOR = 18;
+        public static final int INTAKE_FOLLOWER_MOTOR = 19;
 
         // DIO
-        public static final int ELEVATOR_LIMIT_SWITCH = 0;
-        public static final int ARM_LIMIT_SWITCH = 1;
-        public static final int WRIST_ABS_ENCODER = 2;
-        public static final int WINCH_ABS_ENCODER = 3;
+        public static final int WINCH_ABSOLUTE_ENCODER = 0;
+        public static final int ELBOW_ABSOLUTE_ENCODER = 1;
+        public static final int WRIST_ABSOLUTE_ENCODER = 2;
         public static final int[] GRIPPER_LIMIT_SWITCH = {4, 5};
 
         // Pneumatics
-        public static final int[] WINCH_RELEASE_DOUBLE_SOLENOID = {14, 15};
-        public static final int[] GRIPPER_RELEASE_DOUBLE_SOLENOID = {2, 3};
+        public static final int[] GRIPPER_RELEASE_DOUBLE_SOLENOID = {0, 1};
+        public static final int[] GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID = {2, 3};
     }
 
     public static final class PneumaticsPort {

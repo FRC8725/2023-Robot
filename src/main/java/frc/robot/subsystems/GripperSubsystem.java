@@ -1,13 +1,14 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.subsystems.Elevator.Gripper;
+import frc.robot.subsystems.Arm.Gripper;
 
 public class GripperSubsystem extends SubsystemBase {
 
     private final static GripperSubsystem INSTANCE = new GripperSubsystem();
+
 
     @SuppressWarnings("WeakerAccess")
     public static GripperSubsystem getInstance() {
@@ -17,17 +18,26 @@ public class GripperSubsystem extends SubsystemBase {
     Gripper gripper;
 
     private GripperSubsystem() {
+        Timer.delay(2);
         gripper = Gripper.getInstance();
+        reset();
     }
 
-    public void runIntake(boolean run, boolean isInverted) {
-        double speed = ElevatorConstants.kIntakeSpeed * (isInverted? -1: 1);
-        gripper.runIntake(run?speed: 0);
+    @Override
+    public void periodic() {
+        gripper.calculate();
     }
 
-    public boolean getIntakeSwitch() {
-        return gripper.getIntakeLimitSwitch();
+    public void reset() {
+        gripper.setRollSetpoint(0);
     }
 
+    public void setRollSetpoint(double setpoint) {
+        gripper.setRollSetpoint(setpoint);
+    }
+
+    public void addRollSetpoint(double variable) {
+        gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
+    }
 }
 

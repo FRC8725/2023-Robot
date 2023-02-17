@@ -32,7 +32,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 m_swerveSubsystem::getPose,
                 m_swerveSubsystem::resetOdometry,
                 DriveConstants.DRIVE_KINEMATICS,
-                new PIDConstants(AutoConstants.PX_CONTROLLER, 0, 0),
+                new PIDConstants(AutoConstants.KPX_CONTROLLER, 0, 0),
                 new PIDConstants(AutoConstants.PTHETA_CONTROLLER, 0, 0),
                 m_swerveSubsystem::setModuleStates,
                 eventMap,
