@@ -107,7 +107,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
-        if (DriverStation.isTeleop())updateRobotPoseWithVision();
+        updateRobotPoseWithVision();
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Pitch", getPitch());
         SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());

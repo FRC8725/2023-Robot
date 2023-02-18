@@ -42,7 +42,7 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumberArray("robot Pose from limelight", robotToTagSubscriber.get());
+    SmartDashboard.putNumberArray("robot Pose from limelight", robotPoseSubscriber.get());
   }
 
   public Optional<Pose2d> getAprilTagRelative() {

@@ -19,6 +19,7 @@ public class CorrectPosition extends CommandBase {
     private final Limelight limelight;
     private final int whereChase;
     private final double socialDistanceM;
+    private double ydistance;
 
     private Pose2d lastTarget;
 
@@ -49,8 +50,8 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void execute() {
-        // if (!limelight.hasTarget()) {swerveSubsystem.stopModules();return;}
-        if (limelight.getAprilTagRelative().isPresent())lastTarget = limelight.getAprilTagRelative().get();
+        if (!limelight.hasTarget() || limelight.getAprilTagRelative().isEmpty()) {swerveSubsystem.stopModules();return;}
+        lastTarget = limelight.getAprilTagRelative().get();
         xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH /2);
         yController.setGoal(0);
         thetaController.setGoal(0);
@@ -58,19 +59,19 @@ public class CorrectPosition extends CommandBase {
         double ySpeed;
         switch (whereChase) {
             case 0:
-                ySpeed = yController.calculate(lastTarget.getY()-VisionConstants.Y_OFFSET);
+                ydistance = lastTarget.getY()-VisionConstants.Y_OFFSET;
                 break;
             case 2:
-                ySpeed = yController.calculate(lastTarget.getY()+VisionConstants.Y_OFFSET);
+                ydistance = lastTarget.getY()+VisionConstants.Y_OFFSET;
                 break;
             default:
-                ySpeed = yController.calculate(lastTarget.getY());
+                ydistance = lastTarget.getY();
         }
-
+        ySpeed = yController.calculate(ydistance);
         var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+                xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());
 
 
         SwerveModuleState[] moduleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
@@ -81,7 +82,7 @@ public class CorrectPosition extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return Math.abs(xController.getGoal().position + lastTarget.getX()) < 0.3 && Math.abs(yController.getGoal().position - ydistance) < 0.3;
     }
 
     @Override

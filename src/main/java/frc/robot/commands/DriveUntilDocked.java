@@ -24,7 +24,7 @@ public class DriveUntilDocked extends CommandBase {
     public DriveUntilDocked() {
         // Use addRequirements() here to declare subsystem dependencies.
         swerveSubsystem = SwerveSubsystem.getInstance();
-        controller.setTolerance(6);
+        //controller.setTolerance(6);
         addRequirements(swerveSubsystem);
     }
 
@@ -39,11 +39,11 @@ public class DriveUntilDocked extends CommandBase {
     @Override
     public void execute() {
         if (Math.abs(swerveSubsystem.getPitch()) > BalanceConstants.pitchThreshold){
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax*.4, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
             on = true;
         }
         if (!on) {
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax*1.3, .0, .0)));
         }
     }
 

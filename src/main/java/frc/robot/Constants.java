@@ -90,10 +90,10 @@ public final class Constants {
         public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = Math.PI / 4;
         public static final double KPX_CONTROLLER = .6;
         public static final double KPY_CONTROLLER = 1.;
-        public static final double PTHETA_CONTROLLER = 1;
+        public static final double PTHETA_CONTROLLER = .06;
 
-        public static final double CORRECT_POSITION_X_CONTROLLER = .5;
-        public static final double CORRECT_POSITION_Y_CONTROLLER = 2;
+        public static final double CORRECT_POSITION_X_CONTROLLER = 1;
+        public static final double CORRECT_POSITION_Y_CONTROLLER = 3.3;
         public static final double CORRECT_POSITION_THETA_CONTROLLER = 3;
 
         public static final TrapezoidProfile.Constraints DRIVE_CONTROLLER_CONSTRAINTS = //
@@ -114,11 +114,11 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double KP_BALANCE = 0.05;
+        public static final double KP_BALANCE = 0.07;
         public static final double KI_BALANCE = .0;
         public static final double KD_BALANCE = .0;
         public static final double xSpeedMax = 2;
-        public static final double pitchThreshold = 3;
+        public static final double pitchThreshold = 12.;
     }
 
     public static final class FieldConstants {

@@ -21,7 +21,7 @@
           "putItem"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "after",
+        "waitBehavior": "none",
         "waitTime": 0
       }
     },
@@ -81,12 +81,12 @@
     },
     {
       "anchorPoint": {
-        "x": 5.027619165558617,
-        "y": 2.272698922622044
+        "x": 6.420351302241066,
+        "y": 2.203899450533944
       },
       "prevControl": {
-        "x": 4.912896360084384,
-        "y": 2.129295415779252
+        "x": 6.305628496766833,
+        "y": 2.060495943691152
       },
       "nextControl": null,
       "holonomicAngle": 180.0,

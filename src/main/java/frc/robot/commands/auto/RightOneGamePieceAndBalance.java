@@ -21,7 +21,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
     public RightOneGamePieceAndBalance(SwerveSubsystem m_swerveSubsystem) {
 
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
-                "Left2Middle", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+                "Right2Middle", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("balance", new DriveUntilDocked());
@@ -39,6 +39,6 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
         );
         Pose2d pathInitialPose = pathGroup.get(0).getInitialPose();
         Command fullAuto = autoBuilder.fullAuto(pathGroup);
-        addCommands(new BackToInitial(m_swerveSubsystem, pathInitialPose), fullAuto, new InstantCommand(m_swerveSubsystem::stopModules));
+        addCommands(fullAuto, new InstantCommand(m_swerveSubsystem::stopModules));
     }
 }
