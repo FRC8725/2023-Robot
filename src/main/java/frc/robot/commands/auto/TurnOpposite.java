@@ -9,28 +9,30 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class TurnOpposite extends CommandBase {
-    final SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
-    final ProfiledPIDController controller;
+    private final SwerveSubsystem swerveSubsystem = SwerveSubsystem.getInstance();
+    private final ProfiledPIDController controller;
+
     public TurnOpposite() {
-        addRequirements(swerveSubsystem);
-        controller = new ProfiledPIDController(Constants.AutoConstants.PTHETA_CONTROLLER, 0, 0, Constants.AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
+        this.addRequirements(this.swerveSubsystem);
+        this.controller = new ProfiledPIDController(Constants.AutoConstants.PTHETA_CONTROLLER, 0, 0, Constants.AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
     }
+
     @Override
     public void initialize() {
-        controller.setGoal(swerveSubsystem.getHeading()+Math.PI);
+        this.controller.setGoal(this.swerveSubsystem.getHeading()+Math.PI);
     }
 
     @Override
     public void execute() {
-        var turningSpeed = controller.calculate(swerveSubsystem.getHeading());
-        var chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, turningSpeed, swerveSubsystem.getRotation2d());
+        double turningSpeed = this.controller.calculate(this.swerveSubsystem.getHeading());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-.7, 0, turningSpeed, swerveSubsystem.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        swerveSubsystem.setModuleStates(moduleStates);
+        this.swerveSubsystem.setModuleStates(moduleStates);
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(controller.getGoal().position - swerveSubsystem.getRotation2d().getRadians()) < Units.degreesToRadians(3);
+        return Math.abs(this.controller.getGoal().position - this.swerveSubsystem.getRotation2d().getRadians()) < Units.degreesToRadians(3);
     }
 
     @Override

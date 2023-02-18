@@ -13,69 +13,84 @@ import frc.robot.subsystems.Arm.Winch;
 import frc.robot.subsystems.Arm.Wrist;
 
 public class ArmSubsystem extends SubsystemBase {
+    private static final ArmSubsystem INSTANCE = new ArmSubsystem();
+    private final Elbow elbow;
+    private final Winch winch;
+    private final Wrist wrist;
+    private double lastX;
+    private double lastY;
+    private boolean isResetting = true;
+    private boolean isHorizontal = true;
+    private boolean isTransporting = true;
+    private boolean isPlacing = false;
 
-    private final static ArmSubsystem INSTANCE = new ArmSubsystem();
+    private ArmSubsystem() {
+        Timer.delay(1.5);
+        this.elbow = Elbow.getInstance();
+        this.winch = Winch.getInstance();
+        this.wrist = Wrist.getInstance();
+        this.reset();
+    }
 
     @SuppressWarnings("WeakerAccess")
     public static ArmSubsystem getInstance() {
         return INSTANCE;
     }
 
-    private final Elbow elbow;
-    private final Winch winch;
-    private final Wrist wrist;
-
-    double lastX, lastY;
-
-    boolean isResetting = true;
-    boolean isHorizontal = true;
-    boolean isTransporting = true;
-    boolean isPlacing = false;
-
-    private ArmSubsystem() {
-        Timer.delay(1.5);
-        elbow = Elbow.getInstance();
-        winch = Winch.getInstance();
-        wrist = Wrist.getInstance();
-        reset();
-    }
-
     @Override
     public void periodic() {
-        if (isResetting) {
-            if (atSetpoint()) isResetting = false;
-            else if (winch.atSetpoint()) elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+        if (this.isResetting) {
+            if (this.atSetpoint()) {
+                this.isResetting = false;
+            } else if (winch.atSetpoint()) {
+                elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+            }
         }
 //        isTransporting = false;
-        wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI/2 + winch.getAbsoluteEncoderRad() + (isHorizontal? 0: -Math.PI/2) + (isPlacing? Units.degreesToRadians(10) : 0) + (isTransporting? Units.degreesToRadians(70): 0));
+        this.wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + this.getWristSetpointIncrement());
 //        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
-        elbow.calculate();
-        winch.calculate();
-        wrist.calculate();
+        this.elbow.calculate();
+        this.winch.calculate();
+        this.wrist.calculate();
+    }
+
+    private double getWristSetpointIncrement() {
+        return this.getHorizontalIncrement() + this.getPlacingIncrement() + this.getTransportingIncrement();
+    }
+
+    private double getHorizontalIncrement() {
+        return this.isHorizontal ? 0 : -Math.PI / 2;
+    }
+
+    private double getPlacingIncrement() {
+        return this.isPlacing ? Units.degreesToRadians(10) : 0;
+    }
+
+    private double getTransportingIncrement() {
+        return this.isTransporting ? Units.degreesToRadians(70) : 0;
     }
 
     public void reset() {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
-        winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-        elbow.setSetpoint((3 * ArmConstants.MAX_ELBOW_ANGLE + 1 * ArmConstants.MIN_ELBOW_ANGLE) / 4);
+        this.winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+        this.elbow.setSetpoint((3 * ArmConstants.MAX_ELBOW_ANGLE + 1 * ArmConstants.MIN_ELBOW_ANGLE) / 4);
 //        elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE); // Move to periodic()
         Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + ArmConstants.MAX_ELBOW_ANGLE + Math.PI/2));
         Translation2d point = vectorUpperArm.plus(vectorForearm);
-        lastX = -point.getX();
-        lastY = point.getY();
-        isResetting = true;
-        isTransporting = true;
-        isHorizontal = true;
-        isPlacing = false;
+        this.lastX = -point.getX();
+        this.lastY = point.getY();
+        this.isResetting = true;
+        this.isTransporting = true;
+        this.isHorizontal = true;
+        this.isPlacing = false;
     }
 
-    private double LawOfCosinesTheta(double a, double b, double c) {
+    private double lawOfCosTheta(double a, double b, double c) {
         double result = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2 * a * b);
-        if (Math.abs(result) > 1) return -1;
-        return Math.acos(result);
+        return Math.abs(result) > 1 ? -1 : Math.acos(result);
     }
 
     public void setSetpoint(double xAxis, double yAxis) {
@@ -95,12 +110,11 @@ public class ArmSubsystem extends SubsystemBase {
         double thetaElbow, thetaWinch;
         double l1 = ArmConstants.UPPER_ARM_LENGTH;
         double l2 = ArmConstants.FOREARM_LENGTH;
-        double l3 = distance;
-        double theta1 = LawOfCosinesTheta(l1, l2, l3);
+        double theta1 = lawOfCosTheta(l1, l2, distance);
         thetaElbow = Math.PI - theta1;
-        double theta2 = LawOfCosinesTheta(l1, l3, l2);
-        if (Math.abs(yAxis / l3) > 1) return;
-        thetaWinch = Math.acos(yAxis / l3) * (xAxis>0? 1: -1) - theta2;
+        double theta2 = lawOfCosTheta(l1, distance, l2);
+        if (Math.abs(yAxis / distance) > 1) return;
+        thetaWinch = Math.acos(yAxis / distance) * (xAxis>0? 1: -1) - theta2;
 
         // Some insurance for the massive arm
         if (theta1 == -1 || theta2 == -1) return;
@@ -151,8 +165,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        elbow.stop();
-        winch.stop();
+        this.elbow.stop();
+        this.winch.stop();
     }
 }
 

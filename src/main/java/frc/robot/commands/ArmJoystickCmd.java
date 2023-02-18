@@ -27,11 +27,11 @@ public class ArmJoystickCmd extends CommandBase {
 
     @Override
     public void execute() {
-        var xSpeed = xSpdFunction.get();
+        var xSpeed = this.xSpdFunction.get();
         xSpeed = Math.abs(xSpeed) > Constants.Joystick.DEADBAND ? xSpeed: 0;
-        var ySpeed = ySpdFunction.get();
+        var ySpeed = this.ySpdFunction.get();
         ySpeed = Math.abs(ySpeed) > Constants.Joystick.DEADBAND ? ySpeed: 0;
-        armSubsystem.setSpeed(xSpeed, ySpeed);
+        this.armSubsystem.setSpeed(xSpeed, ySpeed);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class ArmJoystickCmd extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        armSubsystem.stop();
+        this.armSubsystem.stop();
     }
 }

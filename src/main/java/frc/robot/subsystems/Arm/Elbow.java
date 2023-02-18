@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Arm;
 
-
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -11,37 +10,29 @@ import frc.robot.RobotMap.ArmPort;
 import frc.lib.LazySparkMax;
 
 public class Elbow {
+    private static final Elbow INSTANCE = new Elbow();
+    private final LazySparkMax elbowMotor;
+    private final ProfiledPIDController elbowProfiledPIDController;
+    private final DutyCycleEncoder absoluteEncoder;
+    private double setpoint;
 
-    private final static Elbow INSTANCE = new Elbow();
+    private Elbow() {
+        this.elbowMotor = new LazySparkMax(ArmPort.ELBOW_MOTOR, ArmConstants.ELBOW_GEAR_RATIO);
+        this.elbowMotor.setCurrent(true);
+        this.elbowMotor.setInverted(ArmConstants.ELBOW_MOTOR_INVERTED);
+        this.elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        this.elbowProfiledPIDController = new ProfiledPIDController(ArmConstants.kPElbow, ArmConstants.kIElbow, ArmConstants.kDElbow, ArmConstants.ELBOW_CONTROLLER_CONSTRAINTS);
+        this.elbowProfiledPIDController.setTolerance(ArmConstants.PID_ELBOW_ANGULAR_TOLERANCE_RADS);
+        this.elbowProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+//        elbowProfiledPIDController.disableContinuousInput();
+        this.absoluteEncoder = new DutyCycleEncoder(ArmPort.ELBOW_ABSOLUTE_ENCODER);
+        this.absoluteEncoder.setPositionOffset(ArmConstants.ELBOW_ABSOLUTE_ENCODER_OFFSET);
+        this.resetEncoder();
+    }
 
     @SuppressWarnings("WeakerAccess")
     public static Elbow getInstance() {
         return INSTANCE;
-    }
-
-    LazySparkMax elbowMotor;
-
-
-    ProfiledPIDController elbowProfiledPIDController;
-    DutyCycleEncoder absoluteEncoder;
-
-    double setpoint;
-
-    private Elbow() {
-        elbowMotor = new LazySparkMax(ArmPort.ELBOW_MOTOR, ArmConstants.ELBOW_GEAR_RATIO);
-        elbowMotor.setCurrent(true);
-        elbowMotor.setInverted(ArmConstants.ELBOW_MOTOR_INVERTED);
-        elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
-        elbowProfiledPIDController = new ProfiledPIDController(ArmConstants.kPElbow, ArmConstants.kIElbow, ArmConstants.kDElbow, ArmConstants.ELBOW_CONTROLLER_CONSTRAINTS);
-        elbowProfiledPIDController.setTolerance(ArmConstants.PID_ELBOW_ANGULAR_TOLERANCE_RADS);
-        elbowProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
-//        elbowProfiledPIDController.disableContinuousInput();
-
-        absoluteEncoder = new DutyCycleEncoder(ArmPort.ELBOW_ABSOLUTE_ENCODER);
-        absoluteEncoder.setPositionOffset(ArmConstants.ELBOW_ABSOLUTE_ENCODER_OFFSET);
-
-        resetEncoder();
     }
 
     public void calculate() {

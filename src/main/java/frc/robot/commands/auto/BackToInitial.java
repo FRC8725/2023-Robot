@@ -10,13 +10,10 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
-
 public class BackToInitial extends CommandBase {
-
-    final SwerveSubsystem swerveSubsystem;
-
-    final ProfiledPIDController xController, yController, thetaController;
-    final Pose2d pathInitialPose;
+    private final SwerveSubsystem swerveSubsystem;
+    private final ProfiledPIDController xController, yController, thetaController;
+    private final Pose2d pathInitialPose;
 
     public BackToInitial(SwerveSubsystem swerveSubsystem, Pose2d pathInitialPose) {
         this.swerveSubsystem = swerveSubsystem;
