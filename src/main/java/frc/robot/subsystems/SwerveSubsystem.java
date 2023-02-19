@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -98,8 +97,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return field;
     }
 
-    public double getXAcc() {return gyro.getRawAccelX();}
-
     public void resetOdometry(Pose2d pose) {
         SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
     }
@@ -110,9 +107,6 @@ public class SwerveSubsystem extends SubsystemBase {
         updateRobotPoseWithVision();
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Pitch", getPitch());
-        SmartDashboard.putString("Robot Rotation2d", getRotation2d().toString());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-        SmartDashboard.putNumber("Acc", getXAcc());
         SmartDashboard.putData(field);
         field.setRobotPose(getPose());
         backLeft.putDashboard();
