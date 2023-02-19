@@ -5,11 +5,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.DriveBackPreventGrid;
 import frc.robot.commands.auto.RightOneGamePieceAndBalance;
 import frc.robot.commands.auto.TestMove;
 import frc.robot.commands.auto.TurnOpposite;
@@ -48,8 +48,8 @@ public class RobotContainer {
         ));
         m_armSubsystem.setDefaultCommand(new ArmJoystickCmd(
                 m_armSubsystem,
-                () -> m_elevatorJoystick.get_LStickY(),
-                () -> m_elevatorJoystick.get_RStickY()
+                () -> +m_elevatorJoystick.get_LStickY(),
+                () -> +m_elevatorJoystick.get_RStickY()
         ));
         configureButtonBindings();
         putToDashboard();
@@ -78,8 +78,7 @@ public class RobotContainer {
 
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
-        autoCommand.addOption("turn and docking", new SequentialCommandGroup(new CorrectPosition(1, 0.2), new TurnOpposite(), new DriveUntilDocked()));
-        autoCommand.addOption("[test]turn", new SequentialCommandGroup(new TurnOpposite()));
+        autoCommand.addOption("turn and docking", new SequentialCommandGroup(new CorrectPosition(1, 0.2),new DriveBackPreventGrid(), new TurnOpposite(), new DriveUntilDocked()));
         autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
         autoCommand.addOption("[test]Red path", new TestMove(m_swerveSubsystem));
         SmartDashboard.putData(autoCommand);

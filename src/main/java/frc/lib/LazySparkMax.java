@@ -1,7 +1,6 @@
 package frc.lib;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 
 public class LazySparkMax extends CANSparkMax {
 
