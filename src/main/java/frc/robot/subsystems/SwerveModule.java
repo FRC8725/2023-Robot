@@ -50,7 +50,7 @@ public class SwerveModule {
 
 //         turning Motor configuration
 
-        turningPIDController = new PIDController(SwerveModuleConstants.KP_TURNING, SwerveModuleConstants.KI_TURNING, SwerveModuleConstants.KD_TURNING);
+        turningPIDController = new PIDController(SwerveModuleConstants.P_TURNING, SwerveModuleConstants.I_TURNING, SwerveModuleConstants.D_TURNING);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
         resetEncoders();
         putDashboard();

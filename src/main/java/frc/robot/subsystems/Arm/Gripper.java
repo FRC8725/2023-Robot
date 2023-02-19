@@ -33,7 +33,7 @@ public class Gripper {
         intakeFollower.setIdleMode(CANSparkMax.IdleMode.kCoast);
         intakeFollower.follow(intakeLeader, true);
 
-        rollProfiledPIDController = new ProfiledPIDController(ArmConstants.kPRoll, ArmConstants.kIRoll, ArmConstants.kDRoll, ArmConstants.ROLL_CONTROLLER_CONSTRAINTS);
+        rollProfiledPIDController = new ProfiledPIDController(ArmConstants.P_ROLL, ArmConstants.I_ROLL, ArmConstants.D_ROLL, ArmConstants.ROLL_CONTROLLER_CONSTRAINTS);
         rollProfiledPIDController.setTolerance(ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS);
         rollProfiledPIDController.disableContinuousInput();
     }

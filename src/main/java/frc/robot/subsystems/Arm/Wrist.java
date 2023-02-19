@@ -35,7 +35,7 @@ public class Wrist {
         absoluteEncoder = new DutyCycleEncoder(ArmPort.WRIST_ABSOLUTE_ENCODER);
         absoluteEncoder.setPositionOffset(ArmConstants.WRIST_ABSOLUTE_ENCODER_OFFSET);
 
-        wristProfiledPIDController = new ProfiledPIDController(ArmConstants.kPWrist, ArmConstants.kIWrist, ArmConstants.kDWrist, ArmConstants.WRIST_CONTROLLER_CONSTRAINTS);
+        wristProfiledPIDController = new ProfiledPIDController(ArmConstants.P_WRIST, ArmConstants.I_WRIST, ArmConstants.D_WRIST, ArmConstants.WRIST_CONTROLLER_CONSTRAINTS);
         wristProfiledPIDController.setTolerance(ArmConstants.PID_GRIPPER_ANGULAR_TOLERANCE_RADS);
         wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
         resetEncoder();

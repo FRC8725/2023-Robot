@@ -22,10 +22,10 @@ public class BackToInitial extends CommandBase {
         this.pathInitialPose = pathInitialPose;
 
         // Controller Settings
-        xController = new ProfiledPIDController(AutoConstants.KPX_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
-        yController = new ProfiledPIDController(AutoConstants.KPY_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
+        xController = new ProfiledPIDController(AutoConstants.P_X_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
+        yController = new ProfiledPIDController(AutoConstants.P_Y_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
         thetaController = new ProfiledPIDController(
-                AutoConstants.PTHETA_CONTROLLER *.6, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
+                AutoConstants.P_THETA_CONTROLLER *.6, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
         xController.setTolerance(.2);
         yController.setTolerance(.2);
         thetaController.setTolerance(Units.degreesToRadians(3));

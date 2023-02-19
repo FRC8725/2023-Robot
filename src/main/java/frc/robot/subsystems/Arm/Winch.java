@@ -35,7 +35,7 @@ public class Winch {
         leftWinchMotor.setCurrent(true);
         leftWinchMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        winchProfiledPIDController = new ProfiledPIDController(ArmConstants.kPWinch, ArmConstants.kIWinch, ArmConstants.kDWinch, ArmConstants.WINCH_CONTROLLER_CONSTRAINTS);
+        winchProfiledPIDController = new ProfiledPIDController(ArmConstants.P_WINCH, ArmConstants.I_WINCH, ArmConstants.D_WINCH, ArmConstants.WINCH_CONTROLLER_CONSTRAINTS);
         winchProfiledPIDController.setTolerance(ArmConstants.PID_WINCH_ANGULAR_TOLERANCE_RADS);
         winchProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
 //        winchProfiledPIDController.disableContinuousInput();
@@ -71,7 +71,7 @@ public class Winch {
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_WINCH_ANGLE, ArmConstants.MAX_WINCH_ANGLE);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
-        winchProfiledPIDController.setP(ArmConstants.kPWinch);
+        winchProfiledPIDController.setP(ArmConstants.P_WINCH);
         winchProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }

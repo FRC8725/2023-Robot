@@ -38,8 +38,8 @@ public class TestMove extends SequentialCommandGroup {
              m_swerveSubsystem::getPose,
              m_swerveSubsystem::resetOdometry,
              Constants.DriveConstants.DRIVE_KINEMATICS,
-             new PIDConstants(Constants.AutoConstants.KPX_CONTROLLER, 0, 0),
-             new PIDConstants(Constants.AutoConstants.PTHETA_CONTROLLER, 0, 0),
+             new PIDConstants(Constants.AutoConstants.P_X_CONTROLLER, 0, 0),
+             new PIDConstants(Constants.AutoConstants.P_THETA_CONTROLLER, 0, 0),
              m_swerveSubsystem::setModuleStates,
              eventMap,
              m_swerveSubsystem

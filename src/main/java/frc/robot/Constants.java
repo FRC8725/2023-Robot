@@ -30,9 +30,9 @@ public final class Constants {
         public static final double TURNING_ENCODER_ROT_2_RAD = TURNING_MOTOR_GEAR_RATIO * 2 * Math.PI;
         public static final double TURNING_ENCODER_RPM_2_RAD_PER_SEC = TURNING_ENCODER_ROT_2_RAD / 60;
         public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_METERS * 2 * Math.PI;
-        public static final double KP_TURNING = .4;
-        public static final double KI_TURNING = 0;
-        public static final double KD_TURNING = 0;
+        public static final double P_TURNING = .4;
+        public static final double I_TURNING = 0;
+        public static final double D_TURNING = 0;
     }
 
     public static final class DriveConstants {
@@ -88,9 +88,9 @@ public final class Constants {
                 DriveConstants.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 2;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
         public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = Math.PI / 4;
-        public static final double KPX_CONTROLLER = .6;
-        public static final double KPY_CONTROLLER = 1.;
-        public static final double PTHETA_CONTROLLER = .06;
+        public static final double P_X_CONTROLLER = .6;
+        public static final double P_Y_CONTROLLER = 1.;
+        public static final double P_THETA_CONTROLLER = .06;
 
         public static final double CORRECT_POSITION_X_CONTROLLER = 1;
         public static final double CORRECT_POSITION_Y_CONTROLLER = 3.3;
@@ -114,9 +114,9 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double KP_BALANCE = 0.07;
-        public static final double KI_BALANCE = .0;
-        public static final double KD_BALANCE = .0;
+        public static final double P_BALANCE = 0.07;
+        public static final double I_BALANCE = .0;
+        public static final double D_BALANCE = .0;
         public static final double xSpeedMax = 2;
         public static final double pitchThreshold = 12.;
     }
@@ -169,21 +169,21 @@ public final class Constants {
         public static final double MAX_ROLL_SPEED = .2;
         public static final double INTAKE_SPEED = .5;
 
-        public static final double kPWrist = .5;
-        public static final double kIWrist = 0;
-        public static final double kDWrist = 0;
+        public static final double P_WRIST = .5;
+        public static final double I_WRIST = 0;
+        public static final double D_WRIST = 0;
 
-        public static final double kPElbow = 1;
-        public static final double kIElbow = 0;
-        public static final double kDElbow = 0;
+        public static final double P_ELBOW = 1;
+        public static final double I_ELBOW = 0;
+        public static final double D_ELBOW = 0;
 
-        public static final double kPWinch = 1.2;
-        public static final double kIWinch = 0;
-        public static final double kDWinch = 0;
+        public static final double P_WINCH = 1.2;
+        public static final double I_WINCH = 0;
+        public static final double D_WINCH = 0;
 
-        public static final double kPRoll = .7;
-        public static final double kIRoll = 0;
-        public static final double kDRoll = 0;
+        public static final double P_ROLL = .7;
+        public static final double I_ROLL = 0;
+        public static final double D_ROLL = 0;
 
         public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.8734;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.166;

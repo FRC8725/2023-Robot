@@ -26,10 +26,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     private ArmSubsystem() {
         Timer.delay(1.5);
-        this.elbow = Elbow.getInstance();
-        this.winch = Winch.getInstance();
-        this.wrist = Wrist.getInstance();
-        this.reset();
+        elbow = Elbow.getInstance();
+        winch = Winch.getInstance();
+        wrist = Wrist.getInstance();
+        reset();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -47,45 +47,33 @@ public class ArmSubsystem extends SubsystemBase {
             }
         }
 //        isTransporting = false;
-        this.wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + this.getWristSetpointIncrement());
+        var HorizontalFunction = isHorizontal? 0: -Math.PI / 2;
+        var placingFunction = isPlacing? Units.degreesToRadians(10): 0;
+        var transportingFunction = isTransporting? Units.degreesToRadians(70): 0;
+        var offset = HorizontalFunction + placingFunction + transportingFunction;
+        wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + offset);
 //        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
-        this.elbow.calculate();
-        this.winch.calculate();
-        this.wrist.calculate();
-    }
-
-    private double getWristSetpointIncrement() {
-        return this.getHorizontalIncrement() + this.getPlacingIncrement() + this.getTransportingIncrement();
-    }
-
-    private double getHorizontalIncrement() {
-        return this.isHorizontal ? 0 : -Math.PI / 2;
-    }
-
-    private double getPlacingIncrement() {
-        return this.isPlacing ? Units.degreesToRadians(10) : 0;
-    }
-
-    private double getTransportingIncrement() {
-        return this.isTransporting ? Units.degreesToRadians(70) : 0;
+        elbow.calculate();
+        winch.calculate();
+        wrist.calculate();
     }
 
     public void reset() {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
-        this.winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-        this.elbow.setSetpoint((3 * ArmConstants.MAX_ELBOW_ANGLE + 1 * ArmConstants.MIN_ELBOW_ANGLE) / 4);
+        winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+        elbow.setSetpoint((3 * ArmConstants.MAX_ELBOW_ANGLE + 1 * ArmConstants.MIN_ELBOW_ANGLE) / 4);
 //        elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE); // Move to periodic()
         Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + ArmConstants.MAX_ELBOW_ANGLE + Math.PI/2));
         Translation2d point = vectorUpperArm.plus(vectorForearm);
-        this.lastX = -point.getX();
-        this.lastY = point.getY();
-        this.isResetting = true;
-        this.isTransporting = true;
-        this.isHorizontal = true;
-        this.isPlacing = false;
+        lastX = -point.getX();
+        lastY = point.getY();
+        isResetting = true;
+        isTransporting = true;
+        isHorizontal = true;
+        isPlacing = false;
     }
 
     private double lawOfCosTheta(double a, double b, double c) {
@@ -149,7 +137,7 @@ public class ArmSubsystem extends SubsystemBase {
 //
 //    public void setArmSpeed(double speed) {
 //        if(speed == 0) return;
-//        elbow.setSetpoint(elbow.getEncoder() + speed/ElevatorConstants.kPElbow);
+//        elbow.setSetpoint(elbow.getEncoder() + speed/ElevatorConstants.P_ELBOW);
 //    }
 //
     public void setHorizontal(boolean isHorizontal) {
