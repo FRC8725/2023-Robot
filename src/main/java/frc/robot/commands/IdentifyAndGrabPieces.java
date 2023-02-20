@@ -21,12 +21,13 @@ public class IdentifyAndGrabPieces extends SequentialCommandGroup {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
+        addRequirements(armSubsystem, gripperSubsystem, pneumatics, visionManager);
         addCommands(
                 new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.VISION_ARM_POSE, false, false),
-                new InstantCommand(() -> pneumatics.setGripper(true, true)),
+                new InstantCommand(() -> pneumatics.setGripper(true)),
                 new AlignGripper(gripperSubsystem, visionManager),
                 new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.VERTICAL_GRAB_ARM_POSE, false, false),
-                new InstantCommand(() -> pneumatics.setGripper(false, true)),
+                new InstantCommand(() -> pneumatics.setGripper(false)),
                 new ResetArm(armSubsystem, gripperSubsystem, pneumatics),
                 new InstantCommand(() -> gripperSubsystem.setRollSetpoint(Math.PI))
         );

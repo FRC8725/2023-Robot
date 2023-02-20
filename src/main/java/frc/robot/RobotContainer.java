@@ -61,24 +61,24 @@ public class RobotContainer {
         swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, 0.2));
         swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, 0.2));
         swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, 0.2));
-        swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked());
+        swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(m_swerveSubsystem));
 
 //        m_elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(m_gripperSubsystem, m_visionManager, m_pneumatics));
-        m_elevatorJoystick.btn_topL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
-        m_elevatorJoystick.btn_triggerL.onTrue(new IdentifyAndGrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
+        m_elevatorJoystick.btn_topL.onTrue(new GrabPiecesFromDouble(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
+        m_elevatorJoystick.btn_triggerL.onTrue(new GrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
         m_elevatorJoystick.btn_topR.onTrue(new ResetArm(m_armSubsystem, m_gripperSubsystem, m_pneumatics));
         m_elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(m_gripperSubsystem, m_pneumatics));
 //        m_elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
         m_elevatorJoystick.btn_Y.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.HIGH_ARM_POSE, true, true));
-        m_elevatorJoystick.btn_X.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
+        m_elevatorJoystick.btn_B.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
         m_elevatorJoystick.btn_A.onTrue(new RunArmToPosition(m_armSubsystem, m_gripperSubsystem, PoseConstants.LOW_ARM_POSE, true, true));
-        m_elevatorJoystick.btn_B.toggleOnTrue(new GrabPiecesFromDouble(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
+        m_elevatorJoystick.btn_X.onTrue(new IdentifyAndGrabPieces(m_armSubsystem, m_gripperSubsystem, m_pneumatics, m_visionManager));
         m_elevatorJoystick.btn_Back.whileTrue(new AlignGripper(m_gripperSubsystem, m_visionManager));
     }
 
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(m_swerveSubsystem::stopModules));
-        autoCommand.addOption("turn and docking", new SequentialCommandGroup(new CorrectPosition(1, 0.2),new DriveBackPreventGrid(), new TurnOpposite(), new DriveUntilDocked()));
+        autoCommand.addOption("turn and docking", new SequentialCommandGroup(new CorrectPosition(1, 0.2),new DriveBackPreventGrid(), new TurnOpposite(), new DriveUntilDocked(m_swerveSubsystem)));
         autoCommand.addOption("RightOneGamePieceAndBalance", new RightOneGamePieceAndBalance(m_swerveSubsystem));
         autoCommand.addOption("[test]Red path", new TestMove(m_swerveSubsystem));
         SmartDashboard.putData(autoCommand);

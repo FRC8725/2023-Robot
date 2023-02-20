@@ -1,10 +1,12 @@
 package frc.robot.subsystems.Arm;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import frc.lib.LazySparkMax;
+import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap.ArmPort;
 import frc.robot.Constants.ArmConstants;
 
@@ -18,14 +20,14 @@ public class Gripper {
     }
 
     LazySparkMax intakeLeader, intakeFollower;
-    LazySparkMax rollMotor;
+    LazyTalonFX rollMotor;
 
     ProfiledPIDController rollProfiledPIDController;
 
     private Gripper() {
-        rollMotor = new LazySparkMax(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
+        rollMotor = new LazyTalonFX(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
 //        rollMotor = new LazySparkMax(ElevatorPort.ROLL_MOTOR, ElevatorConstants.ROLL_MOTOR_GEAR_RATIO);
-        rollMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rollMotor.setNeutralMode(NeutralMode.Brake);
 
         intakeLeader = new LazySparkMax(ArmPort.INTAKE_LEADER_MOTOR, ArmConstants.INTAKE_GEAR_RATIO);
         intakeLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);

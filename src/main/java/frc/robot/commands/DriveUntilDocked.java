@@ -21,9 +21,9 @@ public class DriveUntilDocked extends CommandBase {
     private boolean on = false;
     final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
-    public DriveUntilDocked() {
+    public DriveUntilDocked(SwerveSubsystem swerveSubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
-        swerveSubsystem = SwerveSubsystem.getInstance();
+        this.swerveSubsystem = swerveSubsystem;
         //controller.setTolerance(6);
         addRequirements(swerveSubsystem);
     }

@@ -23,9 +23,9 @@ public class ResetArm extends CommandBase {
 
     @Override
     public void initialize() {
+        pneumatics.setGripper(false);
         armSubsystem.reset();
         gripperSubsystem.reset();
-        pneumatics.setGripper(false, pneumatics.isHighPressure());
     }
 
     @Override

@@ -9,17 +9,15 @@ import frc.robot.subsystems.VisionManager;
 
 public class ReleaseGripper extends CommandBase {
     Pneumatics pneumatics;
-    GripperSubsystem gripperSubsystem;
 
     public ReleaseGripper(GripperSubsystem gripperSubsystem,Pneumatics pneumatics) {
         this.pneumatics = pneumatics;
-        this.gripperSubsystem = gripperSubsystem;
-        addRequirements();
+        addRequirements(pneumatics);
     }
 
     @Override
     public void initialize() {
-        pneumatics.setGripper(true, false);
+        pneumatics.setGripper(true);
     }
 
     @Override

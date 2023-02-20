@@ -13,13 +13,11 @@ public class GrabPiecesFromDouble extends CommandBase {
     ArmSubsystem armSubsystem;
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
-    VisionManager visionManager;
 
-    public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics, VisionManager visionManager) {
+    public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
-        this.visionManager = visionManager;
         addRequirements(armSubsystem, gripperSubsystem, pneumatics);
     }
 
@@ -29,24 +27,14 @@ public class GrabPiecesFromDouble extends CommandBase {
         armSubsystem.setTransporting(false);
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(true);
-        pneumatics.setGripper(true, false);
-    }
-
-    @Override
-    public void execute() {
+        pneumatics.setGripper(true);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override
-    public void end(boolean interrupted) {
-        pneumatics.setGripper(false, visionManager.isCone());
-
-        // reset Arm
-        armSubsystem.reset();
-        gripperSubsystem.reset();
-    }
+    public void end(boolean interrupted) {}
 }

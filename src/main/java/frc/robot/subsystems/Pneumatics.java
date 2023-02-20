@@ -11,7 +11,7 @@ public class Pneumatics extends SubsystemBase {
     private final static Pneumatics INSTANCE = new Pneumatics();
     Compressor compressor;
 
-    DoubleSolenoid gripperPressureSwitcher;
+//    DoubleSolenoid gripperPressureSwitcher;
     DoubleSolenoid gripperReleaser;
 
     PneumaticHub pneumaticHub;
@@ -20,10 +20,10 @@ public class Pneumatics extends SubsystemBase {
         PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
         pneumaticHub = new PneumaticHub(RobotMap.PneumaticsPort.REV_PH_PORT);
         compressor = new Compressor(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType);
-        gripperPressureSwitcher = new DoubleSolenoid(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType,
-        RobotMap.ArmPort.GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID[0],
-        RobotMap.ArmPort.GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID[1]);
-        gripperPressureSwitcher.set(DoubleSolenoid.Value.kForward);
+//        gripperPressureSwitcher = new DoubleSolenoid(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType,
+//        RobotMap.ArmPort.GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID[0],
+//        RobotMap.ArmPort.GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID[1]);
+//        gripperPressureSwitcher.set(DoubleSolenoid.Value.kForward);
         gripperReleaser = new DoubleSolenoid(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType,
         RobotMap.ArmPort.GRIPPER_RELEASE_DOUBLE_SOLENOID[0],
         RobotMap.ArmPort.GRIPPER_RELEASE_DOUBLE_SOLENOID[1]);
@@ -40,9 +40,9 @@ public class Pneumatics extends SubsystemBase {
         compressor.enableDigital();
     }
 
-    public void setGripper(boolean isOpen, boolean isHighPressure) {
+    public void setGripper(boolean isOpen) {
         SmartDashboard.putBoolean("isGripperOpen", isOpen);
-        gripperPressureSwitcher.set(isHighPressure? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+//        gripperPressureSwitcher.set(isHighPressure? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
         gripperReleaser.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
     }
 
@@ -53,9 +53,9 @@ public class Pneumatics extends SubsystemBase {
         return gripperReleaser.get() != DoubleSolenoid.Value.kForward;
     }
 
-    public boolean isHighPressure() {
-        return gripperPressureSwitcher.get() == DoubleSolenoid.Value.kForward;
-    }
+//    public boolean isHighPressure() {
+//        return gripperPressureSwitcher.get() == DoubleSolenoid.Value.kForward;
+//    }
 
 }
 
