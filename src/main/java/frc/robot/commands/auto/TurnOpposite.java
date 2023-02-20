@@ -22,7 +22,7 @@ public class TurnOpposite extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(swerveSubsystem.getHeading() - 180) < 3;
+        return Math.abs(swerveSubsystem.getRotation2d().getDegrees() - 180) < 3;
     }
 
     @Override

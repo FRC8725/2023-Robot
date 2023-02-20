@@ -39,9 +39,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (this.isResetting) {
-            if (this.atSetpoint()) {
-                this.isResetting = false;
+        if (isResetting) {
+            if (atSetpoint()) {
+                isResetting = false;
             } else if (winch.atSetpoint()) {
                 elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
             }
@@ -153,8 +153,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        this.elbow.stop();
-        this.winch.stop();
+        elbow.stop();
+        winch.stop();
     }
 }
 

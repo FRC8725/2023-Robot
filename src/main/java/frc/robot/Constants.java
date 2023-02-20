@@ -88,9 +88,9 @@ public final class Constants {
                 DriveConstants.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 2;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
         public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = Math.PI / 4;
-        public static final double P_X_CONTROLLER = .6;
+        public static final double P_X_CONTROLLER = 1.;
         public static final double P_Y_CONTROLLER = 1.;
-        public static final double P_THETA_CONTROLLER = .06;
+        public static final double P_THETA_CONTROLLER = 1.5;
 
         public static final double CORRECT_POSITION_X_CONTROLLER = 1;
         public static final double CORRECT_POSITION_Y_CONTROLLER = 3.3;

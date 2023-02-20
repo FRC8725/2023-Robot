@@ -37,7 +37,6 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 true,
                 m_swerveSubsystem
         );
-        Pose2d pathInitialPose = pathGroup.get(0).getInitialPose();
         Command fullAuto = autoBuilder.fullAuto(pathGroup);
         addCommands(fullAuto, new InstantCommand(m_swerveSubsystem::stopModules));
     }

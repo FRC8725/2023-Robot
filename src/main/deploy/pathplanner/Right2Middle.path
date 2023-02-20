@@ -16,10 +16,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "configEstimator",
-          "putItem"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -27,16 +24,16 @@
     },
     {
       "anchorPoint": {
-        "x": 3.9394706338607675,
-        "y": 0.6453157807925647
+        "x": 4.200318720922141,
+        "y": 0.5895704318099031
       },
       "prevControl": {
-        "x": 3.6813443215437425,
-        "y": 0.6453157807925647
+        "x": 3.942192408605116,
+        "y": 0.5895704318099031
       },
       "nextControl": {
-        "x": 4.197596946177793,
-        "y": 0.6453157807925647
+        "x": 4.458445033239165,
+        "y": 0.5895704318099031
       },
       "holonomicAngle": 90.0,
       "isReversal": false,
@@ -71,11 +68,9 @@
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
-        "names": [
-          "pickItem"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
-        "waitBehavior": "deadline",
+        "waitBehavior": "none",
         "waitTime": 0
       }
     },

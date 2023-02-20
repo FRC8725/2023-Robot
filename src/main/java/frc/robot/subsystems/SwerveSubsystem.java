@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -104,7 +105,7 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
-        updateRobotPoseWithVision();
+        if (DriverStation.isTeleop()) updateRobotPoseWithVision();
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Pitch", getPitch());
         SmartDashboard.putData(field);
