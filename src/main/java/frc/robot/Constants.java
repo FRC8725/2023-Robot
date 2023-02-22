@@ -136,7 +136,7 @@ public final class Constants {
         public static final double xSpdConvertFactor = 0.15;
         public static final double ySpdConvertFactor = 0.15;
 
-        public static final double KP_BRAKE = .4;
+        public static final double P_BRAKE = .4;
 //        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
 //        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);
@@ -146,7 +146,7 @@ public final class Constants {
         public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(2.5);
         public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(2.5);
         public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(3.5);
-        public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = 3./180* Math.PI;
+        public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(3);
 
 //        public static final double kElevatorGearRatio = 1./9;
         public static final double ROLL_MOTOR_GEAR_RATIO = 1./20;
@@ -163,8 +163,8 @@ public final class Constants {
         public static final boolean WINCH_MOTOR_INVERTED = false;
         public static final double INTAKE_GEAR_RATIO = 1.;
 
-        public static final double MAX_WINCH_SPEED = .1;
-        public static final double MAX_ELBOW_SPEED = .2;
+        public static final double MAX_WINCH_SPEED = .15;
+        public static final double MAX_ELBOW_SPEED = .3;
         public static final double MAX_WRIST_SPEED = .25;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;

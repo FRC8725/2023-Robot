@@ -40,11 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (isResetting) {
-            if (winch.atSetpoint()) {
-                elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
-            } else if (elbow.atSetpoint()) {
-                isResetting = false;
-            }
+            if (winch.atSetpoint()) elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+            if (atSetpoint()) isResetting = false;
         }
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: -Math.PI / 2;
