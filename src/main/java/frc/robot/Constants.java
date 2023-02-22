@@ -149,7 +149,7 @@ public final class Constants {
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = 3./180* Math.PI;
 
 //        public static final double kElevatorGearRatio = 1./9;
-        public static final double ROLL_MOTOR_GEAR_RATIO = 1./80;
+        public static final double ROLL_MOTOR_GEAR_RATIO = 1./20;
         // TODO: Change WRIST_GEAR_RATIO to the data we tested
         public static final double WRIST_GEAR_RATIO = 1./80;
         public static final double ELBOW_GEAR_RATIO = 1./100 * 18 / 42;
