@@ -40,17 +40,17 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (isResetting) {
-            if (atSetpoint()) {
-                isResetting = false;
-            } else if (winch.atSetpoint()) {
+            if (winch.atSetpoint()) {
                 elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+            } else if (elbow.atSetpoint()) {
+                isResetting = false;
             }
         }
 //        isTransporting = false;
-        var HorizontalFunction = isHorizontal? 0: -Math.PI / 2;
+        var horizontalFunction = isHorizontal? 0: -Math.PI / 2;
         var placingFunction = isPlacing? Units.degreesToRadians(10): 0;
-        var transportingFunction = isTransporting? Units.degreesToRadians(70): 0;
-        var offset = HorizontalFunction + placingFunction + transportingFunction;
+        var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
+        var offset = horizontalFunction + placingFunction + transportingFunction;
         wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + offset);
 //        wrist.setWristSetpoint(0);
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
@@ -140,6 +140,10 @@ public class ArmSubsystem extends SubsystemBase {
 //        elbow.setSetpoint(elbow.getEncoder() + speed/ElevatorConstants.P_ELBOW);
 //    }
 //
+    public boolean getIsTransporting() {
+        return isTransporting;
+    }
+
     public void setHorizontal(boolean isHorizontal) {
         this.isHorizontal = isHorizontal;
     }

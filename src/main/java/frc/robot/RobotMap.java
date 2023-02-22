@@ -36,7 +36,7 @@ public final class RobotMap {
         public static final int[] GRIPPER_LIMIT_SWITCH = {4, 5};
 
         // Pneumatics
-        public static final int[] GRIPPER_RELEASE_DOUBLE_SOLENOID = {0, 1};
+        public static final int[] GRIPPER_RELEASE_DOUBLE_SOLENOID = {8, 9};
         public static final int[] GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID = {2, 3};
     }
 

@@ -22,6 +22,7 @@ public class IdentifyAndGrabPieces extends SequentialCommandGroup {
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
         addRequirements(armSubsystem, gripperSubsystem, pneumatics, visionManager);
+        if (armSubsystem.getIsTransporting()) return;
         addCommands(
                 new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.VISION_ARM_POSE, false, false),
                 new InstantCommand(() -> pneumatics.setGripper(true)),
