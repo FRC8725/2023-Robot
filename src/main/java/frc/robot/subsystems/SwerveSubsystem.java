@@ -94,10 +94,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return gyro.getPitch();
     }
 
-    public Field2d getfield2d() {
-        return field;
-    }
-
     public void resetOdometry(Pose2d pose) {
         SwerveEstimator.resetPosition(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()}, pose);
     }
@@ -138,7 +134,7 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(desiredStates[3]);
     }
     public void updateRobotPoseWithVision() {
-        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get().getFirst(), Timer.getFPGATimestamp() + vision.getEstimatedGlobalPose().get().getSecond());
+        if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get().getFirst(), Timer.getFPGATimestamp() + vision.getEstimatedGlobalPose().get().getSecond()/1000.);
     }
 
     public void setRobotPoseWithVision() {
