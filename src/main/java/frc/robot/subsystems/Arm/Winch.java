@@ -49,7 +49,7 @@ public class Winch {
         SmartDashboard.putNumber("Winch Absolute", absoluteEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
-        if (atSetpoint()) winchProfiledPIDController.setP(ArmConstants.P_BRAKE);
+        if (atSetpoint()) winchProfiledPIDController.setP(ArmConstants.P_WINCH_BRAKE);
         double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WINCH_SPEED, ArmConstants.MAX_WINCH_SPEED);
         SmartDashboard.putNumber("Winch Speed", speed);
 //        SmartDashboard.putNumber("Winch Speed", speed);

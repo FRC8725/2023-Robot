@@ -136,7 +136,8 @@ public final class Constants {
         public static final double xSpdConvertFactor = 0.4;
         public static final double ySpdConvertFactor = 0.4;
 
-        public static final double P_BRAKE = .4;
+        public static final double P_WINCH_BRAKE = .4;
+        public static final double P_WRIST_BRAKE = .2;
 //        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
 //        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);

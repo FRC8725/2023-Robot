@@ -25,6 +25,7 @@ public class Wrist {
     ProfiledPIDController wristProfiledPIDController;
 
     DutyCycleEncoder absoluteEncoder;
+    double setpoint = 0;
 
     private Wrist() {
 
@@ -43,9 +44,10 @@ public class Wrist {
 
     public void calculate() {
 //        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.MAX_WRIST_SPEED, ElevatorConstants.MAX_WRIST_SPEED));
+        if (atSetpoint()) wristProfiledPIDController.setP(ArmConstants.P_WRIST_BRAKE);
         double speed;
         if (getAbsoluteEncoderRad() < ArmConstants.MIN_WRIST_ANGLE || getAbsoluteEncoderRad() > ArmConstants.MAX_WRIST_ANGLE) speed = 0;
-        speed = MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WRIST_SPEED, ArmConstants.MAX_WRIST_SPEED);
+        else speed = MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WRIST_SPEED, ArmConstants.MAX_WRIST_SPEED);
         wristMotor.set(speed);
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
 //        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
@@ -66,6 +68,12 @@ public class Wrist {
     public void setWristSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_WRIST_ANGLE, ArmConstants.MAX_WRIST_ANGLE);
         wristProfiledPIDController.setGoal(setpoint);
+        wristProfiledPIDController.setP(ArmConstants.P_WRIST);
+        this.setpoint = setpoint;
+    }
+
+    public boolean atSetpoint() {
+        return Math.abs(getAbsoluteEncoderRad() - setpoint) < ArmConstants.PID_GRIPPER_ANGULAR_TOLERANCE_RADS;
     }
 
 }
