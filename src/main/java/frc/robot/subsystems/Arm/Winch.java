@@ -57,6 +57,12 @@ public class Winch {
         leftWinchMotor.follow(rightWinchMotor, true);
     }
 
+    public void setWinchMotor(double speed) {
+        speed = MathUtil.clamp(speed, -ArmConstants.MAX_WINCH_SPEED, ArmConstants.MAX_WINCH_SPEED);
+        leftWinchMotor.set(speed);
+        leftWinchMotor.follow(rightWinchMotor, true);
+    }
+
     public void resetEncoder() {
         rightWinchMotor.setRadPosition(getAbsoluteEncoderRad());
     }

@@ -46,6 +46,10 @@ public class Pneumatics extends SubsystemBase {
         gripperReleaser.set(isOpen? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
     }
 
+    public void toggleGripper() {
+        gripperReleaser.toggle();
+    }
+
     /**
      * @return isOpen
      */

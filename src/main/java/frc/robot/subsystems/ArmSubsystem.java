@@ -39,28 +39,34 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (isResetting) {
-            if (winch.atSetpoint()) elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
-            if (atSetpoint()) isResetting = false;
-        }
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: -Math.PI / 2;
-        var placingFunction = isPlacing? Units.degreesToRadians(10): 0;
+        var placingFunction = isPlacing? Units.degreesToRadians(20): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var offset = horizontalFunction + placingFunction + transportingFunction;
         wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + offset);
 //        wrist.setWristSetpoint(0);
+        wrist.calculate();
+
+        if (isResetting) {
+            if (winch.atSetpoint()) elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+            if (atSetpoint()) isResetting = false;
+            winch.calculate();
+        } else {
+            if (elbow.atSetpoint()) winch.calculate();
+            else winch.setWinchMotor(0);
+        }
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
         elbow.calculate();
-        winch.calculate();
-        wrist.calculate();
+//        winch.calculate(); // Move to if-else
     }
 
     public void reset() {
 //        elevator.setSetpoint(ElevatorConstants.kMinElevatorHeight);
 //        arm.setSetpoint(ElevatorConstants.kMinArmHeight);
         winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-        elbow.setSetpoint((3 * ArmConstants.MAX_ELBOW_ANGLE + 1 * ArmConstants.MIN_ELBOW_ANGLE) / 4);
+        var maxAngle = (4 * ArmConstants.MAX_ELBOW_ANGLE + 1 * ArmConstants.MIN_ELBOW_ANGLE) / 5;
+        if (elbow.getSetpoint() > maxAngle) elbow.setSetpoint(maxAngle);
 //        elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE); // Move to periodic()
         Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + Math.PI/2));
         Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + ArmConstants.MAX_ELBOW_ANGLE + Math.PI/2));
