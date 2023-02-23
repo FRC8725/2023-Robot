@@ -80,6 +80,7 @@ public class RobotContainer {
         autoCommand.addOption("Wide Path", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("Narrow Dock Path", new NarrowPathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("Wide Dock Path", new WidePathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        autoCommand.addOption("Test Path", new TestAuto(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
     }
 
