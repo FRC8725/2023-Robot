@@ -143,9 +143,9 @@ public final class Constants {
 //        public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
-        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(2.5);
+        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
         public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(2.5);
-        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(3.5);
+        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(3);
 
 //        public static final double kElevatorGearRatio = 1./9;
@@ -163,17 +163,17 @@ public final class Constants {
         public static final boolean WINCH_MOTOR_INVERTED = false;
         public static final double INTAKE_GEAR_RATIO = 1.;
 
-        public static final double MAX_WINCH_SPEED = .2;
-        public static final double MAX_ELBOW_SPEED = .85;
-        public static final double MAX_WRIST_SPEED = .6;
+        public static final double MAX_WINCH_SPEED = .3;
+        public static final double MAX_ELBOW_SPEED = .4;
+        public static final double MAX_WRIST_SPEED = .3;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
-        public static final double P_WRIST = .75;
+        public static final double P_WRIST = .8;
         public static final double I_WRIST = 0;
         public static final double D_WRIST = 0;
 
-        public static final double P_ELBOW = 1.3;
+        public static final double P_ELBOW = 1.4;
         public static final double I_ELBOW = 0;
         public static final double D_ELBOW = 0;
 
@@ -246,8 +246,8 @@ public final class Constants {
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.306);
         public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.549);
         public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.279, 0.865);
-        public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.5, 0.5);
-        public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.5, 0.5);
+        public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(1.0, 0.6);
+        public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(1.0, 0.3);
         public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.765, 0.668);
     }
 }

@@ -35,7 +35,7 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-        this.swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
                 this.swerveSubsystem,
                 () -> +this.swerveJoystick.get_LStickY(),
                 () -> -this.swerveJoystick.get_LStickX(),
@@ -46,7 +46,14 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(new ArmJoystickCmd(
                 armSubsystem,
                 () -> +elevatorJoystick.get_LStickY(),
-                () -> +elevatorJoystick.get_RStickY()
+                () -> +elevatorJoystick.get_RStickY(),
+                () -> elevatorJoystick.POV_North.getAsBoolean(),
+                () -> elevatorJoystick.POV_South.getAsBoolean()
+        ));
+        gripperSubsystem.setDefaultCommand(new GripperJoystickCmd(
+                gripperSubsystem,
+                () -> elevatorJoystick.POV_East.getAsBoolean(),
+                () -> elevatorJoystick.POV_West.getAsBoolean()
         ));
         configureButtonBindings();
         putToDashboard();

@@ -11,14 +11,20 @@ public class ArmJoystickCmd extends CommandBase {
 
     ArmSubsystem armSubsystem;
     Supplier<Double> xSpdFunction, ySpdFunction;
-    Supplier<Boolean> freeFunction;
+    Supplier<Boolean> plusWrist, minusWrist;
+    boolean firstPressed = false;
 
     public ArmJoystickCmd(ArmSubsystem armSubsystem,
                           Supplier<Double> xSpdFunction,
-                          Supplier<Double> ySpdFunction) {
+                          Supplier<Double> ySpdFunction,
+                          Supplier<Boolean> plusWrist,
+                          Supplier<Boolean> minusWrist
+                          ) {
         this.armSubsystem = armSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
+        this.plusWrist = plusWrist;
+        this.minusWrist = minusWrist;
         addRequirements(armSubsystem);
     }
 
@@ -31,7 +37,20 @@ public class ArmJoystickCmd extends CommandBase {
         xSpeed = Math.abs(xSpeed) > Constants.Joystick.DEADBAND ? xSpeed: 0;
         var ySpeed = this.ySpdFunction.get();
         ySpeed = Math.abs(ySpeed) > Constants.Joystick.DEADBAND ? ySpeed: 0;
-        this.armSubsystem.setSpeed(xSpeed, ySpeed);
+        armSubsystem.setSpeed(xSpeed, ySpeed);
+
+        if (!firstPressed) {
+            if (plusWrist.get()) {
+                armSubsystem.addWristStage(1);
+                firstPressed = true;
+            }
+            else if (minusWrist.get()) {
+                armSubsystem.addWristStage(-1);
+                firstPressed = true;
+            }
+        } else if(!plusWrist.get() && !minusWrist.get()) {
+            firstPressed = false;
+        }
     }
 
     @Override

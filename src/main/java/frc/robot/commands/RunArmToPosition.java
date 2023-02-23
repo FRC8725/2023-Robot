@@ -15,6 +15,7 @@ public class RunArmToPosition extends CommandBase {
     double xAxis;
     double yAxis;
     boolean isHorizontal, isPlacing;
+    boolean isFirstLoop;
 
     public RunArmToPosition(ArmSubsystem armSubsystem,
                             GripperSubsystem gripperSubsystem,
@@ -28,6 +29,7 @@ public class RunArmToPosition extends CommandBase {
         this.yAxis = yAxis;
         this.isHorizontal = isHorizontal;
         this.isPlacing = isPlacing;
+        this.isFirstLoop = true;
         addRequirements(armSubsystem);
     }
     public RunArmToPosition(ArmSubsystem armSubsystem,
@@ -41,20 +43,28 @@ public class RunArmToPosition extends CommandBase {
         this.yAxis = armPose.getSecond();
         this.isHorizontal = isHorizontal;
         this.isPlacing = isPlacing;
+        this.isFirstLoop = true;
         addRequirements(armSubsystem, gripperSubsystem);
     }
 
     @Override
     public void initialize() {
-        armSubsystem.setSetpoint(xAxis, yAxis);
+        armSubsystem.setSetpoint(armSubsystem.getArmPosition().getFirst(), yAxis);
         armSubsystem.setTransporting(false);
         armSubsystem.setHorizontal(isHorizontal);
         armSubsystem.setPlacing(isPlacing);
+    }
 
+    @Override
+    public void execute() {
+        if (isFirstLoop && armSubsystem.atSetpoint()) {
+            armSubsystem.setSetpoint(xAxis, yAxis);
+            isFirstLoop = false;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return armSubsystem.atSetpoint();
+        return armSubsystem.atSetpoint() && !isFirstLoop;
     }
 }

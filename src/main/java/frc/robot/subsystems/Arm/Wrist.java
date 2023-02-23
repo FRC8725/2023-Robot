@@ -43,7 +43,10 @@ public class Wrist {
 
     public void calculate() {
 //        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.MAX_WRIST_SPEED, ElevatorConstants.MAX_WRIST_SPEED));
-        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WRIST_SPEED, ArmConstants.MAX_WRIST_SPEED));
+        double speed;
+        if (getAbsoluteEncoderRad() < ArmConstants.MIN_WRIST_ANGLE || getAbsoluteEncoderRad() > ArmConstants.MAX_WRIST_ANGLE) speed = 0;
+        speed = MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WRIST_SPEED, ArmConstants.MAX_WRIST_SPEED);
+        wristMotor.set(speed);
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
 //        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
         SmartDashboard.putNumber("Wrist Setpoint Degrees", Units.radiansToDegrees(wristProfiledPIDController.getGoal().position));
