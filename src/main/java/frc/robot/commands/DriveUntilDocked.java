@@ -19,11 +19,13 @@ public class DriveUntilDocked extends CommandBase {
      */
     final SwerveSubsystem swerveSubsystem;
     private boolean on = false;
+    private final boolean reverse;
     final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
-    public DriveUntilDocked() {
+    public DriveUntilDocked(boolean direction) {
         // Use addRequirements() here to declare subsystem dependencies.
         swerveSubsystem = SwerveSubsystem.getInstance();
+        this.reverse = direction;
         //controller.setTolerance(6);
         addRequirements(swerveSubsystem);
     }
@@ -38,14 +40,26 @@ public class DriveUntilDocked extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (Math.abs(swerveSubsystem.getPitch()) > BalanceConstants.pitchThreshold){
-            on = true;
-        }
-        if (!on) {
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax*1.3, .0, .0)));
+        if (reverse) {
+            if (Math.abs(swerveSubsystem.getPitch()) < -BalanceConstants.pitchThreshold){
+                on = true;
+            }
+            if (!on) {
+                swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-BalanceConstants.xSpeedMax*1.3, .0, .0)));
+            } else {
+                swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
+            }
         } else {
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
+            if (Math.abs(swerveSubsystem.getPitch()) > BalanceConstants.pitchThreshold){
+                on = true;
+            }
+            if (!on) {
+                swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(BalanceConstants.xSpeedMax*1.3, .0, .0)));
+            } else {
+                swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-Math.min(BalanceConstants.xSpeedMax, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
+            }
         }
+
     }
 
     // Called once the command ends or is interrupted.
@@ -57,6 +71,11 @@ public class DriveUntilDocked extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold && on;
+        if (reverse) {
+            return Math.abs(swerveSubsystem.getPitch()) > -BalanceConstants.pitchThreshold && on;
+        } else {
+            return Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold && on;
+        }
+
     }
 }

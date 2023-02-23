@@ -17,9 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "runArm2High",
-          "releaseGripper",
-          "resetArm"
+          "putItem"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
@@ -123,9 +121,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "runArm2High",
-          "releaseGripper",
-          "resetArm"
+          "putItem"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "after",
