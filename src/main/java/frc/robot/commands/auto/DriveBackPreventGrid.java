@@ -22,7 +22,7 @@ public class DriveBackPreventGrid extends CommandBase {
 
     @Override
     public void execute() {
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-1.5, 0, 1.5, swerveSubsystem.getRotation2d());
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-1.5, 0, 0, swerveSubsystem.getRotation2d());
         SwerveModuleState[] moduleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
         this.swerveSubsystem.setModuleStates(moduleStates);
     }
