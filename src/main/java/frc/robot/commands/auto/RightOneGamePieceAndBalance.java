@@ -5,7 +5,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -24,7 +23,7 @@ public class RightOneGamePieceAndBalance extends SequentialCommandGroup {
                 "Right2Middle", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("balance", new DriveUntilDocked(m_swerveSubsystem));
+        eventMap.put("balance", new DriveUntilDocked());
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 m_swerveSubsystem::getPose,
