@@ -49,7 +49,8 @@ public class RunArmToPosition extends CommandBase {
 
     @Override
     public void initialize() {
-        armSubsystem.setSetpoint(armSubsystem.getArmPosition().getFirst(), yAxis);
+        if (yAxis > armSubsystem.getArmPosition().getSecond()) armSubsystem.setSetpoint(armSubsystem.getArmPosition().getFirst(), yAxis);
+        else armSubsystem.setSetpoint(xAxis, armSubsystem.getArmPosition().getSecond());
         armSubsystem.setTransporting(false);
         armSubsystem.setHorizontal(isHorizontal);
         armSubsystem.setPlacing(isPlacing);

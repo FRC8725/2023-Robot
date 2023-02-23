@@ -215,7 +215,7 @@ public final class Constants {
 //        public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(90);
         public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(150);
 //        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(0);
-        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-10);
+        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-15);
         public static final double MAX_WINCH_ANGLE = Units.degreesToRadians(60);
         public static final double MIN_WRIST_ANGLE = Units.degreesToRadians(-90);
         public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(150);

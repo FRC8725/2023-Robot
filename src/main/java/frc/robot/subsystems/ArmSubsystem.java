@@ -31,8 +31,6 @@ public class ArmSubsystem extends SubsystemBase {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         wrist = Wrist.getInstance();
-        elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
-        winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
         reset();
     }
 
@@ -77,10 +75,15 @@ public class ArmSubsystem extends SubsystemBase {
 //        Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + Math.PI/2));
 //        Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + ArmConstants.MAX_ELBOW_ANGLE + Math.PI/2));
 //        Translation2d point = vectorUpperArm.plus(vectorForearm);
-        var armPosition = getArmPosition();
-        lastX = armPosition.getFirst();
-        lastY = armPosition.getSecond();
-        setSetpoint(lastX, 0);
+        elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+        winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+        if(!atSetpoint()) {
+            var armPosition = getArmPosition();
+            lastX = armPosition.getFirst();
+            lastY = armPosition.getSecond();
+            if (lastY < 0) setSetpoint(lastX, 0);
+            else setSetpoint(0.7, lastY);
+        }
         isResetting = true;
         isTransporting = true;
         isHorizontal = true;
