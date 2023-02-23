@@ -20,12 +20,14 @@ public class RunArmToPosition extends CommandBase {
                             GripperSubsystem gripperSubsystem,
                             double xAxis,
                             double yAxis,
-                            boolean isHorizontal) {
+                            boolean isHorizontal,
+                            boolean isPlacing) {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.isHorizontal = isHorizontal;
+        this.isPlacing = isPlacing;
         addRequirements(armSubsystem);
     }
     public RunArmToPosition(ArmSubsystem armSubsystem,
