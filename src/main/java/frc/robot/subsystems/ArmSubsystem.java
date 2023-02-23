@@ -41,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: -Math.PI / 2;
-        var placingFunction = isPlacing? Units.degreesToRadians(20): 0;
+        var placingFunction = isPlacing? Units.degreesToRadians(30): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var offset = horizontalFunction + placingFunction + transportingFunction;
         wrist.setWristSetpoint(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + offset);
