@@ -37,7 +37,8 @@ public class ArmSubsystem extends SubsystemBase {
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         wrist = Wrist.getInstance();
-        reset();
+        winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+        elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -58,8 +59,7 @@ public class ArmSubsystem extends SubsystemBase {
         wrist.calculate();
 
         if (isResetting) {
-            if (atSetpoint()) {
-                winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+            if (winch.atSetpoint()) {
                 elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
                 isElbowLocked = false;
             }
@@ -91,14 +91,8 @@ public class ArmSubsystem extends SubsystemBase {
         lastX = armPosition.getFirst();
         lastY = armPosition.getSecond();
         if(!atSetpoint()) {
-            if (lastY < 0) {
-                setSetpoint(lastX, 0);
-                isElbowLocked = false;
-            }
-            else {
-                isElbowLocked = true;
-                winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
-            }
+            winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+            isElbowLocked = (lastY > 0);
         }
         isResetting = true;
         isTransporting = true;
