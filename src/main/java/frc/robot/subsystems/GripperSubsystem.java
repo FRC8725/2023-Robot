@@ -16,6 +16,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
+    boolean isResetting = false;
 
     private GripperSubsystem() {
         Timer.delay(2);
@@ -26,10 +27,12 @@ public class GripperSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         gripper.calculate();
+        if (gripper.atRollSetpoint()) isResetting = false;
     }
 
     public void reset() {
         gripper.setRollSetpoint(0);
+        isResetting = true;
     }
 
     public void setRollSetpoint(double setpoint) {
@@ -37,6 +40,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     public void addRollSetpoint(double variable) {
+        if (isResetting) return;
         gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
     }
 }

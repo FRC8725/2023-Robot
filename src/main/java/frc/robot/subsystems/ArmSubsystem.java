@@ -1,12 +1,15 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Arm.Elbow;
@@ -24,7 +27,10 @@ public class ArmSubsystem extends SubsystemBase {
     private boolean isHorizontal = true;
     private boolean isTransporting = true;
     private boolean isPlacing = false;
+    private boolean isElbowLocked = false;
     private double wristStage = 0;
+    private double desiredElbowAngle = 0;
+    private double desiredWinchAngle = 0;
 
     private ArmSubsystem() {
         Timer.delay(1.5);
@@ -53,8 +59,9 @@ public class ArmSubsystem extends SubsystemBase {
 
         if (isResetting) {
             if (atSetpoint()) {
-                winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-                elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
+                winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+                elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
+                isElbowLocked = false;
             }
             if (atSetpoint()) {
                 var armPosition = getArmPosition();
@@ -62,6 +69,9 @@ public class ArmSubsystem extends SubsystemBase {
                 lastY = armPosition.getSecond();
                 isResetting = false;
             }
+        }
+        if (isElbowLocked) {
+            elbow.setSetpoint(desiredElbowAngle - (winch.getAbsoluteEncoderRad() - desiredWinchAngle));
         }
         SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
         elbow.calculate();
@@ -75,14 +85,20 @@ public class ArmSubsystem extends SubsystemBase {
 //        Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + Math.PI/2));
 //        Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(ArmConstants.MIN_WINCH_ANGLE + ArmConstants.MAX_ELBOW_ANGLE + Math.PI/2));
 //        Translation2d point = vectorUpperArm.plus(vectorForearm);
-        elbow.setSetpoint(ArmConstants.MAX_ELBOW_ANGLE);
-        winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+        elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
+        winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+        var armPosition = getArmPosition();
+        lastX = armPosition.getFirst();
+        lastY = armPosition.getSecond();
         if(!atSetpoint()) {
-            var armPosition = getArmPosition();
-            lastX = armPosition.getFirst();
-            lastY = armPosition.getSecond();
-            if (lastY < 0) setSetpoint(lastX, 0);
-            else setSetpoint(0.7, lastY);
+            if (lastY < 0) {
+                setSetpoint(lastX, 0);
+                isElbowLocked = false;
+            }
+            else {
+                isElbowLocked = true;
+                winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+            }
         }
         isResetting = true;
         isTransporting = true;
@@ -99,7 +115,7 @@ public class ArmSubsystem extends SubsystemBase {
         double y = point.getY();
         SmartDashboard.putNumber("xAxis", x);
         SmartDashboard.putNumber("yAxis", y);
-        return new Pair<Double, Double>(x, y);
+        return new Pair<>(x, y);
     }
 
     private double lawOfCosTheta(double a, double b, double c) {
@@ -137,6 +153,8 @@ public class ArmSubsystem extends SubsystemBase {
         lastX = xAxis;
         lastY = yAxis;
         isResetting = false;
+        desiredElbowAngle = thetaElbow;
+        desiredWinchAngle = thetaWinch;
         elbow.setSetpoint(thetaElbow);
         winch.setSetpoint(thetaWinch);
     }
@@ -148,12 +166,40 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
 
+    /**
+     * @param xAxis xAxis that the arm will finally move to
+     * @param yAxis yAxis that the arm will finally move to
+     * You should use this function TWICE.
+     * The second one should be called when the first one is got the setpoint
+     */
+    public void moveTwice(double xAxis, double yAxis) {
+        isElbowLocked = true;
+        double lastDesiredElbowAngle = desiredElbowAngle;
+        setSetpoint(xAxis, yAxis);
+        if (yAxis > getArmPosition().getSecond()) {
+            if (atSetpoint()) {
+                winch.setSetpoint(desiredWinchAngle);
+            } else {
+                winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+            }
+        } else {
+            if (!atSetpoint()) {
+                winch.setSetpoint(desiredWinchAngle);
+                desiredWinchAngle = lastDesiredElbowAngle;
+            }
+        }
+    }
+
+
     public void setSpeed(double spdX, double spdY) {
         if (isResetting) return;
+        isElbowLocked = false;
 //        Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
 //        Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + elbow.getAbsoluteEncoderRad() + Math.PI/2));
 //        Translation2d point = vectorUpperArm.plus(vectorForearm);
         var armPosition = getArmPosition();
+        spdX = MathUtil.clamp(spdX, -1, 1);
+        spdY = MathUtil.clamp(spdY, -1, 1);
         if (spdX == 0 && spdY == 0) return;
         if (spdX != 0) lastX = armPosition.getFirst();
         if (spdY != 0) lastY = armPosition.getSecond();
@@ -162,6 +208,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void addWristStage(int stage) {
         wristStage += stage;
+    }
+
+    public boolean getIsResetting()  {
+        return isResetting;
     }
 //
 //    public void setArmSpeed(double speed) {

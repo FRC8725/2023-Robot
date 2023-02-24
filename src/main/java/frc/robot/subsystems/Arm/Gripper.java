@@ -41,7 +41,6 @@ public class Gripper {
     }
 
     public void calculate() {
-        if (atRollSetpoint()) rollMotor.set(0);
 //        rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad() + Units.degreesToRadians(gyro.getRoll())), -ElevatorConstants.MAX_ROLL_SPEED, ElevatorConstants.MAX_ROLL_SPEED));
         rollMotor.set(MathUtil.clamp(rollProfiledPIDController.calculate(rollMotor.getPositionAsRad()), -ArmConstants.MAX_ROLL_SPEED, ArmConstants.MAX_ROLL_SPEED));
     }

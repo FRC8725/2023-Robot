@@ -133,18 +133,18 @@ public final class Constants {
         public static final double UPPER_ARM_LENGTH = Units.inchesToMeters(29.5);
         public static final double FOREARM_LENGTH = Units.inchesToMeters(32.5);
 
-        public static final double xSpdConvertFactor = 0.4;
-        public static final double ySpdConvertFactor = 0.4;
+        public static final double xSpdConvertFactor = 0.2;
+        public static final double ySpdConvertFactor = 0.2;
 
-        public static final double P_WINCH_BRAKE = .4;
-        public static final double P_WRIST_BRAKE = .2;
+        public static final double P_WINCH_BRAKE = .3;
+        public static final double P_WRIST_BRAKE = .1;
 //        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
 //        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
-        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
+        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(18);
         public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(2.5);
         public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(3);
@@ -212,11 +212,13 @@ public final class Constants {
         public static final double MIN_Y_AXIS = -0.4;
         public static final double MAX_Y_AXIS = 1.1;
 //        public static final double MIN_ELBOW_ANGLE = Units.degreesToRadians(90);
+        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(-15);
         public static final double MIN_ELBOW_ANGLE = Units.degreesToRadians(15);
 //        public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(90);
         public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(150);
 //        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(0);
-        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-15);
+        public static final double INITIAL_WINCH_ANGLE = Units.degreesToRadians(-15);
+        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-20);
         public static final double MAX_WINCH_ANGLE = Units.degreesToRadians(60);
         public static final double MIN_WRIST_ANGLE = Units.degreesToRadians(-90);
         public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(150);
@@ -244,11 +246,12 @@ public final class Constants {
 
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
-        public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.306);
+        public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.254);
         public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.549);
         public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.279, 0.865);
+        public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
         public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(1.0, 0.6);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(1.0, 0.3);
-        public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.765, 0.668);
+        public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.765, 0.78);
     }
 }
