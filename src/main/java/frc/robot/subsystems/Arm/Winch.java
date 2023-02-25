@@ -51,6 +51,7 @@ public class Winch {
         SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
         if (atSetpoint()) winchProfiledPIDController.setP(ArmConstants.P_WINCH_BRAKE);
+        else winchProfiledPIDController.setP(ArmConstants.P_WINCH);
         double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WINCH_SPEED, ArmConstants.MAX_WINCH_SPEED);
         SmartDashboard.putNumber("Winch Speed", speed);
 //        SmartDashboard.putNumber("Winch Speed", speed);
@@ -78,7 +79,6 @@ public class Winch {
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_WINCH_ANGLE, ArmConstants.MAX_WINCH_ANGLE);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
-        winchProfiledPIDController.setP(ArmConstants.P_WINCH);
         winchProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }
