@@ -43,4 +43,9 @@ public final class RobotMap {
     public static final class PneumaticsPort {
         public static final int REV_PH_PORT = 21;
     }
+
+    public static final class LEDPort {
+        // PWM
+        public static final int LED_PORT = 0;
+    }
 }

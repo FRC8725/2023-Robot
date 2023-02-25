@@ -48,6 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        LED.getInstance().rainbow();
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: -Math.PI / 2;
         var placingFunction = isPlacing? Units.degreesToRadians(30): 0;
