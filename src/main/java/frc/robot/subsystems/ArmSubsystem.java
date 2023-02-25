@@ -159,6 +159,8 @@ public class ArmSubsystem extends SubsystemBase {
         return elbow.atSetpoint() && winch.atSetpoint();
     }
 
+    public double xAxisMemory = Integer.MAX_VALUE;
+    public double yAxisMemory = Integer.MAX_VALUE;
 
     /**
      * @param xAxis xAxis that the arm will finally move to
@@ -169,19 +171,22 @@ public class ArmSubsystem extends SubsystemBase {
     public void moveTwice(double xAxis, double yAxis) {
         isElbowLocked = true;
         double lastDesiredElbowAngle = desiredElbowAngle;
+        double lastDesiredWinchAngle = desiredWinchAngle;
         setSetpoint(xAxis, yAxis);
-        if (yAxis > getArmPosition().getSecond()) {
-            if (atSetpoint()) {
-                winch.setSetpoint(desiredWinchAngle);
-            } else {
-                winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-            }
+        if (xAxis == xAxisMemory && yAxis == yAxisMemory) {
+            winch.setSetpoint(desiredWinchAngle);
         } else {
-            if (!atSetpoint()) {
+            if (yAxis > getArmPosition().getSecond()){
+                winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+            } else {
                 winch.setSetpoint(desiredWinchAngle);
-                desiredWinchAngle = lastDesiredElbowAngle;
+                desiredElbowAngle = lastDesiredElbowAngle;
+                desiredWinchAngle = lastDesiredWinchAngle;
             }
+
         }
+        xAxisMemory = xAxis;
+        yAxisMemory = yAxis;
     }
 
 
