@@ -15,7 +15,8 @@ import frc.robot.subsystems.Limelight;
 public class CorrectPosition extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
-    private final ProfiledPIDController xController, yController, thetaController;
+    private final ProfiledPIDController xController, yController;
+    // private final ProfiledPIDController thetaController;
     private final Limelight limelight;
     private final int whereChase;
     private final double socialDistanceM;
@@ -35,12 +36,12 @@ public class CorrectPosition extends CommandBase {
         // Controller Settings
         xController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_X_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
         yController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_Y_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
-        thetaController = new ProfiledPIDController(
-                AutoConstants.CORRECT_POSITION_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
+        //thetaController = new ProfiledPIDController(
+        //        AutoConstants.CORRECT_POSITION_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
         xController.setTolerance(.1);
         yController.setTolerance(.1);
-        thetaController.setTolerance(2);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        //thetaController.setTolerance(2);
+        //thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.limelight = Limelight.getInstance();
     }
 
@@ -50,11 +51,10 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void execute() {
-        if (!limelight.hasTarget() || limelight.getAprilTagRelative().isEmpty()) {swerveSubsystem.stopModules();return;}
-        lastTarget = limelight.getAprilTagRelative().get();
-        xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH /2);
+        if (limelight.getAprilTagRelative().isPresent()) lastTarget = limelight.getAprilTagRelative().get();
+        xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH / 2);
         yController.setGoal(0);
-        thetaController.setGoal(0);
+        //thetaController.setGoal(0);
         var xSpeed = xController.calculate(-lastTarget.getX());
         double ySpeed;
         switch (whereChase) {
@@ -68,7 +68,7 @@ public class CorrectPosition extends CommandBase {
                 ydistance = lastTarget.getY();
         }
         ySpeed = yController.calculate(ydistance);
-        var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
+        //var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
 
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());

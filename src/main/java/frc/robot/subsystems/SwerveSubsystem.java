@@ -61,8 +61,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem() {
         new Thread(() -> {
             try {
-                Thread.sleep(1000);
-                zeroHeading();  
+                gyro.calibrate();
+                Thread.sleep(2000);
+                zeroHeading();
                 resetEncoders();
                 setRobotPoseWithVision();
             } catch (Exception ignored) {

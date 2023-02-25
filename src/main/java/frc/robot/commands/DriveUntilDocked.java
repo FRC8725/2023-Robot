@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BalanceConstants;
 import frc.robot.Constants.DriveConstants;
@@ -19,6 +20,7 @@ public class DriveUntilDocked extends CommandBase {
      */
     final SwerveSubsystem swerveSubsystem;
     private boolean on = false;
+    Timer timer;
     private final boolean reverse;
     final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
@@ -34,6 +36,7 @@ public class DriveUntilDocked extends CommandBase {
     @Override
     public void initialize() {
         swerveSubsystem.stopModules();
+        timer.reset();
         on = false;
     }
 
@@ -71,6 +74,7 @@ public class DriveUntilDocked extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
+        if (timer.get() > 2.5) return true;
         if (reverse) {
             return Math.abs(swerveSubsystem.getPitch()) > -BalanceConstants.pitchThreshold && on;
         } else {

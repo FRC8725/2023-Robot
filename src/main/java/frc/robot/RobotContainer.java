@@ -82,11 +82,13 @@ public class RobotContainer {
 
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(swerveSubsystem::stopModules));
-        autoCommand.addOption("turn and docking", new SequentialCommandGroup(new CorrectPosition(1, 0.2),new DriveBackPreventGrid(), new TurnOpposite(), new DriveUntilDocked(false)));
-        autoCommand.addOption("Narrow Path", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Wide Path", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Narrow Dock Path", new NarrowPathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Wide Dock Path", new WidePathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        autoCommand.addOption("put one and docking", new SequentialCommandGroup(new CorrectPosition(1, 0.2), new DriveUntilDocked(true)));
+        autoCommand.addOption("Narrow Path", new SequentialCommandGroup(new CorrectPosition(2, 0.2), new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics)));
+        autoCommand.addOption("Narrow Only Path", new SequentialCommandGroup(new CorrectPosition(2, 0.2), new NarrowOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics)));
+        autoCommand.addOption("Wide Path", new SequentialCommandGroup(new CorrectPosition(2, 0.2), new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics)));
+        autoCommand.addOption("Wide Only Path", new SequentialCommandGroup(new CorrectPosition(2, 0.2), new WideOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics)));
+        autoCommand.addOption("Narrow Dock Path", new SequentialCommandGroup(new CorrectPosition(2, 0.2), new NarrowPathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics)));
+        autoCommand.addOption("Wide Dock Path", new SequentialCommandGroup(new CorrectPosition(2, 0.2), new WidePathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics)));
         autoCommand.addOption("Test Path", new TestAuto(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
     }
