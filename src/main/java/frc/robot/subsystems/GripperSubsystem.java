@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Arm.Gripper;
 
@@ -16,7 +17,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
-    boolean isResetting = false;
+    private boolean isResetting;
 
     private GripperSubsystem() {
         Timer.delay(2);
@@ -28,6 +29,8 @@ public class GripperSubsystem extends SubsystemBase {
     public void periodic() {
         gripper.calculate();
         if (gripper.atRollSetpoint()) isResetting = false;
+        SmartDashboard.putNumber("Distance Sensor", gripper.getDistanceSensor());
+        SmartDashboard.putBoolean("atRollSetpoint", atRollSetpoint());
     }
 
     public void reset() {
@@ -44,8 +47,16 @@ public class GripperSubsystem extends SubsystemBase {
         gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
     }
 
+    public boolean atRollSetpoint() {
+        return gripper.atRollSetpoint();
+    }
+
     public boolean isPiecesInRange() {
         return gripper.getDistanceSensor() < 150;
+    }
+
+    public void stop() {
+        gripper.setRollSetpoint(gripper.getRollEncoder());
     }
 }
 

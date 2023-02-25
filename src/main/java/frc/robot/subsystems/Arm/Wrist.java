@@ -38,7 +38,7 @@ public class Wrist {
 
         wristProfiledPIDController = new ProfiledPIDController(ArmConstants.P_WRIST, ArmConstants.I_WRIST, ArmConstants.D_WRIST, ArmConstants.WRIST_CONTROLLER_CONSTRAINTS);
         wristProfiledPIDController.setTolerance(ArmConstants.PID_GRIPPER_ANGULAR_TOLERANCE_RADS);
-        wristProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        wristProfiledPIDController.disableContinuousInput();
         resetEncoder();
     }
 

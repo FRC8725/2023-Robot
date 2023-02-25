@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         LED.getInstance().rainbow();
 //        isTransporting = false;
-        var horizontalFunction = isHorizontal? 0: -Math.PI / 2;
+        var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(-90);
         var placingFunction = isPlacing? Units.degreesToRadians(30): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var teleopAdjFunction = Units.degreesToRadians(5) * wristStage;
@@ -160,8 +160,8 @@ public class ArmSubsystem extends SubsystemBase {
         return elbow.atSetpoint() && winch.atSetpoint();
     }
 
-    public double xAxisMemory = Integer.MAX_VALUE;
-    public double yAxisMemory = Integer.MAX_VALUE;
+    private double xAxisMemory = Integer.MAX_VALUE;
+    private double yAxisMemory = Integer.MAX_VALUE;
 
     /**
      * @param xAxis xAxis that the arm will finally move to
@@ -176,6 +176,8 @@ public class ArmSubsystem extends SubsystemBase {
         setSetpoint(xAxis, yAxis);
         if (xAxis == xAxisMemory && yAxis == yAxisMemory) {
             winch.setSetpoint(desiredWinchAngle);
+            xAxisMemory = Integer.MAX_VALUE;
+            yAxisMemory = Integer.MAX_VALUE;
         } else {
             if (yAxis > getArmPosition().getSecond()){
                 winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
@@ -184,10 +186,9 @@ public class ArmSubsystem extends SubsystemBase {
                 desiredElbowAngle = lastDesiredElbowAngle;
                 desiredWinchAngle = lastDesiredWinchAngle;
             }
-
+            xAxisMemory = xAxis;
+            yAxisMemory = yAxis;
         }
-        xAxisMemory = xAxis;
-        yAxisMemory = yAxis;
     }
 
 

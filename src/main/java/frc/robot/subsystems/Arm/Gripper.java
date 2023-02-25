@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.Timer;
 import frc.lib.LazySparkMax;
 import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap.ArmPort;
@@ -24,12 +25,15 @@ public class Gripper {
     LazyTalonFX rollMotor;
 
     ProfiledPIDController rollProfiledPIDController;
-    private Rev2mDistanceSensor distanceSensor;
+    private final Rev2mDistanceSensor distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
+    private double setpoint;
 
     private Gripper() {
+        Timer.delay(1.5);
         rollMotor = new LazyTalonFX(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
 //        rollMotor = new LazySparkMax(ElevatorPort.ROLL_MOTOR, ElevatorConstants.ROLL_MOTOR_GEAR_RATIO);
         rollMotor.setNeutralMode(NeutralMode.Brake);
+        rollMotor.setSelectedSensorPosition(0);
 
         intakeLeader = new LazySparkMax(ArmPort.INTAKE_LEADER_MOTOR, ArmConstants.INTAKE_GEAR_RATIO);
         intakeLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -41,13 +45,15 @@ public class Gripper {
         rollProfiledPIDController.setTolerance(ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS);
         rollProfiledPIDController.disableContinuousInput();
 
-        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kOnboard);
         distanceSensor.setDistanceUnits(Rev2mDistanceSensor.Unit.kMillimeters);
+        distanceSensor.setAutomaticMode(true);
+        distanceSensor.setEnabled(true);
     }
 
     public double getDistanceSensor() {
-        if (distanceSensor.isRangeValid()) return 2000;
-        else return distanceSensor.getRange();
+//        return distanceSensor.getRange();
+        if (distanceSensor.isRangeValid()) return distanceSensor.getRange();
+        else return 2000;
     }
 
     public void calculate() {
@@ -60,11 +66,12 @@ public class Gripper {
     }
 
     public boolean atRollSetpoint() {
-        return Math.abs(rollProfiledPIDController.getSetpoint().position - rollMotor.getPositionAsRad()) < ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS;
+        return Math.abs(setpoint - rollMotor.getPositionAsRad()) < ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS;
     }
 
     public void setRollSetpoint(double setpoint) {
         rollProfiledPIDController.setGoal(setpoint);
+        this.setpoint = setpoint;
     }
 
     public double getRollEncoder() {

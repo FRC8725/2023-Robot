@@ -19,7 +19,7 @@ public final class LED {
 
     private LED() {
         led = new AddressableLED(RobotMap.LEDPort.LED_PORT);
-        ledBuffer = new AddressableLEDBuffer(6);
+        ledBuffer = new AddressableLEDBuffer(3);
         led.setLength(ledBuffer.getLength());
 
         led.setData(ledBuffer);
@@ -41,11 +41,12 @@ public final class LED {
         for (var i = 0; i < ledBuffer.getLength(); i++) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            final var hue = (rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180;
+            var hue = (rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180;
             // Set the value
             ledBuffer.setHSV(i, hue, 255, 128);
         }
         // Increase by to make the rainbow "move"
+        led.setData(ledBuffer);
         rainbowFirstPixelHue += 3;
         // Check bounds
         rainbowFirstPixelHue %= 180;

@@ -23,7 +23,8 @@ public class Elbow {
         this.elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         this.elbowProfiledPIDController = new ProfiledPIDController(ArmConstants.P_ELBOW, ArmConstants.I_ELBOW, ArmConstants.D_ELBOW, ArmConstants.ELBOW_CONTROLLER_CONSTRAINTS);
         this.elbowProfiledPIDController.setTolerance(ArmConstants.PID_ELBOW_ANGULAR_TOLERANCE_RADS);
-        this.elbowProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
+        this.elbowProfiledPIDController.disableContinuousInput();
+//        this.elbowProfiledPIDController.enableContinuousInput(-Math.PI, Math.PI);
 //        elbowProfiledPIDController.disableContinuousInput();
         this.absoluteEncoder = new DutyCycleEncoder(ArmPort.ELBOW_ABSOLUTE_ENCODER);
         this.absoluteEncoder.setPositionOffset(ArmConstants.ELBOW_ABSOLUTE_ENCODER_OFFSET);

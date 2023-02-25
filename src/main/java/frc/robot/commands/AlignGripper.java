@@ -20,24 +20,19 @@ public class AlignGripper extends CommandBase {
         addRequirements(gripperSubsystem, visionManager);
     }
 
-    public AlignGripper(GripperSubsystem gripperSubsystem, double rollSetpoint) {
-        // each subsystem used by the command must be passed into the
-        // addRequirements() method (which takes a vararg of Subsystem)
-        this.gripperSubsystem = gripperSubsystem;
-        gripperSubsystem.setRollSetpoint(rollSetpoint);
-        isVision = false;
-        addRequirements(gripperSubsystem, visionManager);
+    @Override
+    public void initialize() {
+        gripperSubsystem.stop();
     }
 
     @Override
-    public void initialize() {
-        if(!isVision) return;
+    public void execute() {
         gripperSubsystem.addRollSetpoint(visionManager.getConeAngleRads());
     }
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return true;
+        return gripperSubsystem.atRollSetpoint();
     }
 
     @Override

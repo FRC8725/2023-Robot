@@ -136,18 +136,18 @@ public final class Constants {
         public static final double xSpdConvertFactor = 0.2;
         public static final double ySpdConvertFactor = 0.2;
 
-        public static final double P_WINCH_BRAKE = .3;
-        public static final double P_WRIST_BRAKE = .1;
+        public static final double P_WINCH_BRAKE = .4;
+        public static final double P_WRIST_BRAKE = .4;
 //        public static final double kElevatorReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kElevatorReelCircumferenceMeters = kElevatorReelDiameterMeters * Math.PI;
 //        public static final double kArmReelDiameterMeters = Units.inchesToMeters(0.75);
 //        public static final double kArmReelCircumferenceMeters = kArmReelDiameterMeters * Math.PI;
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
-        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(18);
-        public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(2.5);
+        public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(8);
+        public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(4);
         public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
-        public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(3);
+        public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
 
 //        public static final double kElevatorGearRatio = 1./9;
         public static final double ROLL_MOTOR_GEAR_RATIO = 1./20;
@@ -165,8 +165,8 @@ public final class Constants {
         public static final double INTAKE_GEAR_RATIO = 1.;
 
         public static final double MAX_WINCH_SPEED = .3;
-        public static final double MAX_ELBOW_SPEED = .4;
-        public static final double MAX_WRIST_SPEED = .3;
+        public static final double MAX_ELBOW_SPEED = .3;
+        public static final double MAX_WRIST_SPEED = .4;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
@@ -182,13 +182,13 @@ public final class Constants {
         public static final double I_WINCH = 0;
         public static final double D_WINCH = 0;
 
-        public static final double P_ROLL = .8;
+        public static final double P_ROLL = .7;
         public static final double I_ROLL = 0;
         public static final double D_ROLL = 0;
 
-        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.152;
-        public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.078;
-        public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.117;
+        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.131;
+        public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
+        public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.929;
 
         public static final boolean WRIST_ABOSOLUTE_ENCODER_INVERTED = false;
         public static final boolean ELBOW_ABOSOLUTE_ENCODER_INVERTED = true;
@@ -212,16 +212,18 @@ public final class Constants {
         public static final double MIN_Y_AXIS = -0.4;
         public static final double MAX_Y_AXIS = 1.1;
 //        public static final double MIN_ELBOW_ANGLE = Units.degreesToRadians(90);
-        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(-15);
+        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(155);
+//        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(90);
         public static final double MIN_ELBOW_ANGLE = Units.degreesToRadians(15);
 //        public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(90);
-        public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(150);
+        public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(155);
 //        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(0);
         public static final double INITIAL_WINCH_ANGLE = Units.degreesToRadians(-15);
-        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-20);
+//        public static final double INITIAL_WINCH_ANGLE = Units.degreesToRadians(0);
+        public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-25);
         public static final double MAX_WINCH_ANGLE = Units.degreesToRadians(60);
         public static final double MIN_WRIST_ANGLE = Units.degreesToRadians(-90);
-        public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(150);
+        public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(145);
 
         public static final TrapezoidProfile.Constraints WRIST_CONTROLLER_CONSTRAINTS = //
                 new TrapezoidProfile.Constraints(
@@ -250,8 +252,8 @@ public final class Constants {
         public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.549);
         public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.279, 0.865);
         public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
-        public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(1.0, 0.6);
-        public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(1.0, 0.3);
+        public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.74, 0.8);
+        public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
         public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.765, 0.78);
     }
 }
