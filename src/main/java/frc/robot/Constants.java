@@ -165,7 +165,7 @@ public final class Constants {
         public static final double INTAKE_GEAR_RATIO = 1.;
 
         public static final double MAX_WINCH_SPEED = .3;
-        public static final double MAX_ELBOW_SPEED = .45;
+        public static final double MAX_ELBOW_SPEED = .4;
         public static final double MAX_WRIST_SPEED = .12;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
@@ -174,7 +174,7 @@ public final class Constants {
         public static final double I_WRIST = 0;
         public static final double D_WRIST = 0;
 
-        public static final double P_ELBOW = 1.4;
+        public static final double P_ELBOW = 1.5;
         public static final double I_ELBOW = 0;
         public static final double D_ELBOW = 0;
 
