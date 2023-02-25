@@ -19,7 +19,7 @@ public final class LED {
 
     private LED() {
         led = new AddressableLED(RobotMap.LEDPort.LED_PORT);
-        ledBuffer = new AddressableLEDBuffer(3);
+        ledBuffer = new AddressableLEDBuffer(6);
         led.setLength(ledBuffer.getLength());
 
         led.setData(ledBuffer);
@@ -45,8 +45,8 @@ public final class LED {
             // Set the value
             ledBuffer.setHSV(i, hue, 255, 128);
         }
-        // Increase by to make the rainbow "move"
         led.setData(ledBuffer);
+        // Increase by to make the rainbow "move"
         rainbowFirstPixelHue += 3;
         // Check bounds
         rainbowFirstPixelHue %= 180;

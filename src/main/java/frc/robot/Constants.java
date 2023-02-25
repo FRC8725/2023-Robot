@@ -165,12 +165,12 @@ public final class Constants {
         public static final double INTAKE_GEAR_RATIO = 1.;
 
         public static final double MAX_WINCH_SPEED = .3;
-        public static final double MAX_ELBOW_SPEED = .3;
-        public static final double MAX_WRIST_SPEED = .4;
+        public static final double MAX_ELBOW_SPEED = .45;
+        public static final double MAX_WRIST_SPEED = .12;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
-        public static final double P_WRIST = .9;
+        public static final double P_WRIST = 1.1;
         public static final double I_WRIST = 0;
         public static final double D_WRIST = 0;
 
@@ -190,12 +190,12 @@ public final class Constants {
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
         public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.929;
 
-        public static final boolean WRIST_ABOSOLUTE_ENCODER_INVERTED = false;
-        public static final boolean ELBOW_ABOSOLUTE_ENCODER_INVERTED = true;
-        public static final boolean WINCH_ABOSOLUTE_ENCODER_INVERTED = true;
+        public static final boolean WRIST_ABSOLUTE_ENCODER_INVERTED = false;
+        public static final boolean ELBOW_ABSOLUTE_ENCODER_INVERTED = true;
+        public static final boolean WINCH_ABSOLUTE_ENCODER_INVERTED = true;
 
-        public static final double MAX_WRIST_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
-        public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI*2;
+        public static final double MAX_WRIST_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 3 / 2;
+        public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI * 5 / 2;
         public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;

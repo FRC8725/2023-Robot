@@ -60,7 +60,7 @@ public class Winch {
 
     public void setWinchMotor(double speed) {
         speed = MathUtil.clamp(speed, -ArmConstants.MAX_WINCH_SPEED, ArmConstants.MAX_WINCH_SPEED);
-        leftWinchMotor.set(speed);
+        rightWinchMotor.set(speed);
         leftWinchMotor.follow(rightWinchMotor, true);
     }
 
@@ -70,7 +70,7 @@ public class Winch {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= (ArmConstants.WINCH_ABOSOLUTE_ENCODER_INVERTED ? -1: 1);
+        measurement *= (ArmConstants.WINCH_ABSOLUTE_ENCODER_INVERTED ? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
