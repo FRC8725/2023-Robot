@@ -32,9 +32,11 @@ public class GrabPiecesFromDouble extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return gripperSubsystem.isPiecesInRange();
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        pneumatics.setGripper(false);
+    }
 }

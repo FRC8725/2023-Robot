@@ -43,5 +43,9 @@ public class GripperSubsystem extends SubsystemBase {
         if (isResetting) return;
         gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
     }
+
+    public boolean isPiecesInRange() {
+        return gripper.getDistanceSensor() < 150;
+    }
 }
 

@@ -7,6 +7,7 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.GrabPieces;
 import frc.robot.commands.ResetArm;
 import frc.robot.commands.RunArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
@@ -19,8 +20,7 @@ public class pickItem extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
 
       addCommands(
-          new InstantCommand(() -> pneumatics.setGripper(true)),
-          new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.LOW_ARM_POSE, true, false),
+          new GrabPieces(armSubsystem, gripperSubsystem, pneumatics),
           new ResetArm(armSubsystem, gripperSubsystem, pneumatics)
       );
   }

@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
@@ -27,7 +29,10 @@ public class IdentifyAndGrabPieces extends SequentialCommandGroup {
                 new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.VISION_ARM_POSE, false, false),
                 new InstantCommand(() -> pneumatics.setGripper(true)),
                 new AlignGripper(gripperSubsystem, visionManager),
-                new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.VERTICAL_GRAB_ARM_POSE, false, false),
+                new ParallelRaceGroup(
+                        new WaitUntilCommand(gripperSubsystem::isPiecesInRange),
+                        new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.VERTICAL_GRAB_ARM_POSE, false, false)
+                ),
                 new InstantCommand(() -> pneumatics.setGripper(false)),
                 new ResetArm(armSubsystem, gripperSubsystem, pneumatics),
                 new InstantCommand(() -> gripperSubsystem.setRollSetpoint(Math.PI))
