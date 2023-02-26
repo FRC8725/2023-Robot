@@ -18,7 +18,7 @@
       "stopEvent": {
         "names": [],
         "executionBehavior": "sequential",
-        "waitBehavior": "after",
+        "waitBehavior": "none",
         "waitTime": 0.3
       }
     },
@@ -70,7 +70,7 @@
           "pickItem"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "after",
+        "waitBehavior": "none",
         "waitTime": 0.2
       }
     },

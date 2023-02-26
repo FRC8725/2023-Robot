@@ -22,7 +22,7 @@ public class DriveUntilDocked extends CommandBase {
     private boolean on = false;
     Timer timer = new Timer();
     private final boolean reverse;
-    final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
+    final PIDController controller = new PIDController(BalanceConstants.P_BALANCE*.8, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
     public DriveUntilDocked(boolean direction) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -48,7 +48,7 @@ public class DriveUntilDocked extends CommandBase {
                 on = true;
             }
             if (!on) {
-                swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-BalanceConstants.xSpeedMax*1.3, .0, .0)));
+                swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(-BalanceConstants.xSpeedMax, .0, .0)));
             } else {
                 swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(Math.min(BalanceConstants.xSpeedMax, controller.calculate(swerveSubsystem.getPitch(), 0)), 0, 0)));
             }

@@ -83,21 +83,21 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double MAX_SPEED_METERS_PER_SECOND = DriveConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 2;
+        public static final double MAX_SPEED_METERS_PER_SECOND = DriveConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND / 3;
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
-                DriveConstants.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 2;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+                DriveConstants.PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 4;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
         public static final double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = Math.PI / 4;
         public static final double P_X_CONTROLLER = 1.;
         public static final double P_Y_CONTROLLER = 1.;
-        public static final double P_THETA_CONTROLLER = 1.5;
+        public static final double P_THETA_CONTROLLER = .8;
 
         public static final double CORRECT_POSITION_X_CONTROLLER = 1;
         public static final double CORRECT_POSITION_Y_CONTROLLER = 3.3;
         public static final double CORRECT_POSITION_THETA_CONTROLLER = 3;
 
         public static final TrapezoidProfile.Constraints DRIVE_CONTROLLER_CONSTRAINTS = //
-                new TrapezoidProfile.Constraints(
+                new     TrapezoidProfile.Constraints(
                         MAX_SPEED_METERS_PER_SECOND,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
         public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONSTRAINTS = //
@@ -114,7 +114,7 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double P_BALANCE = 0.07;
+        public static final double P_BALANCE = 0.065;
         public static final double I_BALANCE = .0;
         public static final double D_BALANCE = .0;
         public static final double xSpeedMax = 2;
@@ -251,11 +251,11 @@ public final class Constants {
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.254);
-        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.549);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.179, 0.865);
+        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.499);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.179, 0.805);
         public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
         public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.74, 0.8);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
-        public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.765, 0.78);
+        public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.765, 0.72);
     }
 }

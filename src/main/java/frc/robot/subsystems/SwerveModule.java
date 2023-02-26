@@ -110,7 +110,7 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        if (Math.abs(state.speedMetersPerSecond) < 0.02) {
             stop();
             return;
         }
@@ -128,16 +128,17 @@ public class SwerveModule {
         switch (turningMotor.getDeviceID()) {
             case (RobotMap.DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT):
             case (RobotMap.DriverPort.BACK_RIGHT_TURNING_MOTOR_PORT):
-                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), -Math.PI / 4));
+                turningMotor.set(ControlMode.Position, Math.PI / 4);
                 break;
             case (RobotMap.DriverPort.FRONT_RIGHT_TURNING_MOTOR_PORT):
             case (RobotMap.DriverPort.BACK_LEFT_TURNING_MOTOR_PORT):
-                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), Math.PI / 4));
+                turningMotor.set(ControlMode.Position, Math.PI / 4);
                 break;
         }
 
 //        turningMotor.set(0);
     }
+
 
     public void putDashboard() {
         SmartDashboard.putNumber("ABS angle " + absoluteEncoder.getDeviceID(), getAbsoluteEncoderRad());

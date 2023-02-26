@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.DriveUntilDocked;
+import frc.robot.commands.GrabPieces;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Pneumatics;
@@ -26,8 +27,8 @@ public class WidePathDock extends SequentialCommandGroup {
                 "WidePath", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("putItem", new putItem(armSubsystem, gripperSubsystem, pneumatics));
-        eventMap.put("pickItem", new pickItem(armSubsystem, gripperSubsystem, pneumatics));
+        eventMap.put("putItem", new putItem(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        eventMap.put("pickItem", new GrabPieces(armSubsystem, gripperSubsystem, pneumatics));
         eventMap.put("dock", new DriveUntilDocked(true));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

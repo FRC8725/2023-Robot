@@ -35,15 +35,17 @@ public class ArmSubsystem extends SubsystemBase {
     private double desiredElbowAngle = 0;
     private double desiredWinchAngle = 0;
 
-    LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
+    LinearFilter filter = LinearFilter.singlePoleIIR(0.2, 0.02);
 
     private ArmSubsystem() {
-        Timer.delay(1.5);
+        Timer.delay(2);
         elbow = Elbow.getInstance();
         winch = Winch.getInstance();
         wrist = Wrist.getInstance();
         winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
         elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
+        desiredElbowAngle = ArmConstants.INITIAL_ELBOW_ANGLE;
+        desiredWinchAngle = ArmConstants.INITIAL_WINCH_ANGLE;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -56,7 +58,7 @@ public class ArmSubsystem extends SubsystemBase {
         LED.getInstance().rainbow();
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(-90);
-        var placingFunction = isPlacing? Units.degreesToRadians(30): 0;
+        var placingFunction = isPlacing? Units.degreesToRadians(40): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var teleopAdjFunction = Units.degreesToRadians(5) * wristStage;
         var offset = horizontalFunction + placingFunction + transportingFunction + teleopAdjFunction;
@@ -66,7 +68,7 @@ public class ArmSubsystem extends SubsystemBase {
         wrist.calculate();
 
         if (isResetting) {
-            if (atSetpoint()) {
+            if (winch.atSetpoint()) {
                 winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
                 elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
                 isElbowLocked = false;
@@ -75,6 +77,8 @@ public class ArmSubsystem extends SubsystemBase {
                 var armPosition = getArmPosition();
                 lastX = armPosition.getFirst();
                 lastY = armPosition.getSecond();
+                winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+                elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
                 isResetting = false;
             }
         }
@@ -100,7 +104,7 @@ public class ArmSubsystem extends SubsystemBase {
         lastY = armPosition.getSecond();
         if(!atSetpoint()) {
             winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
-            isElbowLocked = (lastY > 0);
+            isElbowLocked = true;
             if (elbow.getAbsoluteEncoderRad() < Math.PI / 2) {
                 desiredElbowAngle = Units.degreesToRadians(120);
                 desiredWinchAngle = 0;
@@ -181,6 +185,7 @@ public class ArmSubsystem extends SubsystemBase {
      * The second one should be called when the first one is got the setpoint
      */
     public void moveTwice(double xAxis, double yAxis) {
+        isResetting = false;
         isElbowLocked = true;
         double lastDesiredElbowAngle = desiredElbowAngle;
         double lastDesiredWinchAngle = desiredWinchAngle;

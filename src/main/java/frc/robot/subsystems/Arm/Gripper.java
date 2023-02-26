@@ -4,6 +4,8 @@ package frc.robot.subsystems.Arm;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Unit;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,11 +27,11 @@ public class Gripper {
     LazyTalonFX rollMotor;
 
     ProfiledPIDController rollProfiledPIDController;
-    private final Rev2mDistanceSensor distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
+    private final Rev2mDistanceSensor distanceSensor;
     private double setpoint;
 
     private Gripper() {
-        Timer.delay(1.5);
+        Timer.delay(2);
         rollMotor = new LazyTalonFX(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
 //        rollMotor = new LazySparkMax(ElevatorPort.ROLL_MOTOR, ElevatorConstants.ROLL_MOTOR_GEAR_RATIO);
         rollMotor.setNeutralMode(NeutralMode.Brake);
@@ -45,9 +47,10 @@ public class Gripper {
         rollProfiledPIDController.setTolerance(ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS);
         rollProfiledPIDController.disableContinuousInput();
 
-        distanceSensor.setDistanceUnits(Rev2mDistanceSensor.Unit.kMillimeters);
-        distanceSensor.setAutomaticMode(true);
+        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kOnboard);
         distanceSensor.setEnabled(true);
+        distanceSensor.setAutomaticMode(true);
+        distanceSensor.setDistanceUnits(Unit.kMillimeters);
     }
 
     public double getDistanceSensor() {
