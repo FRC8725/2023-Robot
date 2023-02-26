@@ -36,7 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
     private double desiredElbowAngle = 0;
     private double desiredWinchAngle = 0;
 
-    LinearFilter filter = LinearFilter.singlePoleIIR(0.2, 0.02);
+//    LinearFilter filter = LinearFilter.singlePoleIIR(0.2, 0.02);
 
     private ArmSubsystem() {
         Timer.delay(2);
@@ -62,7 +62,7 @@ public class ArmSubsystem extends SubsystemBase {
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var teleopAdjFunction = Units.degreesToRadians(5) * wristStage;
         var offset = horizontalFunction + placingFunction + transportingFunction + teleopAdjFunction;
-        var wristSetpoint = filter.calculate(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + offset);
+        var wristSetpoint = elbow.getSetpoint() - Math.PI / 2 + winch.getSetpoint() + offset;
         wrist.setWristSetpoint(wristSetpoint);
 //        wrist.setWristSetpoint(0);
         wrist.calculate();

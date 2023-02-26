@@ -81,6 +81,10 @@ public class Winch {
         return measurement*2*Math.PI;
     }
 
+    public double getSetpoint() {
+        return setpoint;
+    }
+
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_WINCH_ANGLE, ArmConstants.MAX_WINCH_ANGLE);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
