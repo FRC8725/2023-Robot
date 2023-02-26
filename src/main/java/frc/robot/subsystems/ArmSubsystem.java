@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -55,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        LED.getInstance().rainbow();
+        LED.getInstance().setColor(Color.kAliceBlue);
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(-90);
         var placingFunction = isPlacing? Units.degreesToRadians(40): 0;
@@ -105,7 +106,7 @@ public class ArmSubsystem extends SubsystemBase {
         if(!atSetpoint()) {
             winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
             isElbowLocked = true;
-            if (elbow.getAbsoluteEncoderRad() < Math.PI / 2) {
+            if (elbow.getAbsoluteEncoderRad() < Units.degreesToRadians(120)) {
                 desiredElbowAngle = Units.degreesToRadians(120);
                 desiredWinchAngle = 0;
             }
@@ -197,8 +198,8 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             if (yAxis > getArmPosition().getSecond()){
                 winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-                if (desiredElbowAngle < Units.degreesToRadians(90)) {
-                    desiredElbowAngle = Units.degreesToRadians(120);
+                if (desiredElbowAngle < Units.degreesToRadians(100)) {
+                    desiredElbowAngle = Units.degreesToRadians(100);
                     desiredWinchAngle = Units.degreesToRadians(0);
                     winch.setSetpoint(desiredWinchAngle);
                 }

@@ -251,8 +251,8 @@ public final class Constants {
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.254);
-        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.499);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.179, 0.805);
+        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.475);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.179, 0.755);
         public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
         public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.74, 0.8);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);

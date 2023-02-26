@@ -20,7 +20,7 @@ public final class LED {
     private LED() {
         led = new AddressableLED(RobotMap.LEDPort.LED_PORT);
         ledBuffer = new AddressableLEDBuffer(6);
-        led.setLength(ledBuffer.getLength());
+        led.setLength(6);
 
         led.setData(ledBuffer);
         led.start();

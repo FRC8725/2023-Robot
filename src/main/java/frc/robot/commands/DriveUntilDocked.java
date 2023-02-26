@@ -22,7 +22,7 @@ public class DriveUntilDocked extends CommandBase {
     private boolean on = false;
     Timer timer = new Timer();
     private final boolean reverse;
-    final PIDController controller = new PIDController(BalanceConstants.P_BALANCE*.8, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
+    final PIDController controller = new PIDController(BalanceConstants.P_BALANCE*.4, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
     public DriveUntilDocked(boolean direction) {
         // Use addRequirements() here to declare subsystem dependencies.
