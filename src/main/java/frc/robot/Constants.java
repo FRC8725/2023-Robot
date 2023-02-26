@@ -168,7 +168,7 @@ public final class Constants {
 
         public static final double MAX_WINCH_SPEED = .35;
         public static final double MAX_ELBOW_SPEED = .5;
-        public static final double MAX_WRIST_SPEED = .2;
+        public static final double MAX_WRIST_SPEED = .25;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
@@ -198,7 +198,7 @@ public final class Constants {
 
         public static final double MAX_WRIST_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 2;
-        public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 1.5;
+        public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
         public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 2;
         public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 5;
