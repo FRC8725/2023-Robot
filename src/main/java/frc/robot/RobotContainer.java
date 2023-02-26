@@ -62,9 +62,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         swerveJoystick.btn_triggerR.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
         // m_swerveJoystick.btn_A.whileTrue(new CorrectPositionReflectiveTape(swerveSubsystem, visionManager));
-        swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, 0.2));
-        swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, 0.2));
-        swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, 0.2));
+        swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, 0.4));
+        swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, 0.4));
+        swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, 0.4));
         swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(false));
 
 //        elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(gripperSubsystem, visionManager, pneumatics));

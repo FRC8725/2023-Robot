@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 
+import com.revrobotics.Rev2mDistanceSensor.Unit;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
@@ -65,6 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         if (isResetting) {
             if (winch.atSetpoint()) {
+                winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
                 elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
                 isElbowLocked = false;
             }
@@ -98,6 +101,10 @@ public class ArmSubsystem extends SubsystemBase {
         if(!atSetpoint()) {
             winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
             isElbowLocked = (lastY > 0);
+            if (elbow.getAbsoluteEncoderRad() < Math.PI / 2) {
+                desiredElbowAngle = Units.degreesToRadians(120);
+                desiredWinchAngle = 0;
+            }
         }
         isResetting = true;
         isTransporting = true;
@@ -185,6 +192,11 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             if (yAxis > getArmPosition().getSecond()){
                 winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
+                if (desiredElbowAngle < Units.degreesToRadians(90)) {
+                    lastDesiredElbowAngle = Units.degreesToRadians(120);
+                    lastDesiredWinchAngle = Units.degreesToRadians(0);
+                    winch.setSetpoint(lastDesiredWinchAngle);
+                }
             } else {
                 winch.setSetpoint(desiredWinchAngle);
                 desiredElbowAngle = lastDesiredElbowAngle;

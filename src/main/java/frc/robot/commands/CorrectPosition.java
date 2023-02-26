@@ -47,11 +47,11 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void initialize() {
+        if (limelight.getAprilTagRelative().isPresent()) lastTarget = limelight.getAprilTagRelative().get();
     }
 
     @Override
     public void execute() {
-        if (limelight.getAprilTagRelative().isPresent()) lastTarget = limelight.getAprilTagRelative().get();
         xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH / 2);
         yController.setGoal(0);
         //thetaController.setGoal(0);
@@ -82,7 +82,7 @@ public class CorrectPosition extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return Math.abs(xController.getGoal().position + lastTarget.getX()) < 0.3 && Math.abs(yController.getGoal().position - ydistance) < 0.3;
+        return Math.abs(xController.getGoal().position + lastTarget.getX()) < 0.3 && Math.abs(yController.getGoal().position - ydistance) < 0.3 || lastTarget == null;
     }
 
     @Override

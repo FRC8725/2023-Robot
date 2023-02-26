@@ -4,6 +4,7 @@ package frc.robot.subsystems.Arm;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +26,9 @@ public class Winch {
     ProfiledPIDController winchProfiledPIDController;
     DutyCycleEncoder absoluteEncoder;
 
-    double setpoint = Integer.MAX_VALUE;
+    double setpoint = Integer.MAX_VALUE;    
+    
+    LinearFilter filter = LinearFilter.singlePoleIIR(0.5, 0.02);
 
     private Winch() {
         rightWinchMotor = new LazySparkMax(ArmPort.RIGHT_WINCH_MOTOR, ArmConstants.RIGHT_WINCH_GEAR_RATIO);
@@ -74,6 +77,7 @@ public class Winch {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= (ArmConstants.WINCH_ABSOLUTE_ENCODER_INVERTED ? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
+        measurement = filter.calculate(measurement);
         return measurement*2*Math.PI;
     }
 

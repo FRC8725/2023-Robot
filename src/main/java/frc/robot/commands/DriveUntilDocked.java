@@ -20,7 +20,7 @@ public class DriveUntilDocked extends CommandBase {
      */
     final SwerveSubsystem swerveSubsystem;
     private boolean on = false;
-    Timer timer;
+    Timer timer = new Timer();
     private final boolean reverse;
     final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 

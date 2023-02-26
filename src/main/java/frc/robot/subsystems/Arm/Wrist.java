@@ -4,6 +4,7 @@ package frc.robot.subsystems.Arm;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +28,8 @@ public class Wrist {
     DutyCycleEncoder absoluteEncoder;
     double setpoint = 0;
 
+    LinearFilter filter = LinearFilter.singlePoleIIR(0.5, 0.02);
+
     private Wrist() {
 
         wristMotor = new LazySparkMax(ArmPort.WRIST_MOTOR, ArmConstants.WRIST_GEAR_RATIO);
@@ -40,7 +43,7 @@ public class Wrist {
         wristProfiledPIDController.setTolerance(ArmConstants.PID_GRIPPER_ANGULAR_TOLERANCE_RADS);
         wristProfiledPIDController.disableContinuousInput();
         resetEncoder();
-    }
+    } 
 
     public void calculate() {
 //        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.MAX_WRIST_SPEED, ElevatorConstants.MAX_WRIST_SPEED));
@@ -61,6 +64,7 @@ public class Wrist {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
         measurement *= (ArmConstants.WRIST_ABSOLUTE_ENCODER_INVERTED ? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
+        measurement = filter.calculate(measurement);
         return measurement*2*Math.PI;
     }
 

@@ -76,7 +76,7 @@ public final class Constants {
         public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.75;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
                 PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 4;
-        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 3;
+        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 2.5;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double DECREASE_DRIVING_SPEED_FACTOR = .4;
         public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
@@ -145,7 +145,7 @@ public final class Constants {
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(12);
-        public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(4);
+        public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(8);
         public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
 
@@ -164,8 +164,8 @@ public final class Constants {
         public static final boolean WINCH_MOTOR_INVERTED = false;
         public static final double INTAKE_GEAR_RATIO = 1.;
 
-        public static final double MAX_WINCH_SPEED = .6;
-        public static final double MAX_ELBOW_SPEED = .8;
+        public static final double MAX_WINCH_SPEED = .35;
+        public static final double MAX_ELBOW_SPEED = .5;
         public static final double MAX_WRIST_SPEED = .2;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
@@ -195,11 +195,11 @@ public final class Constants {
         public static final boolean WINCH_ABSOLUTE_ENCODER_INVERTED = true;
 
         public static final double MAX_WRIST_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
-        public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
-        public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 2;
-        public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 4;
-        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 4;
-        public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 8;
+        public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 2;
+        public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 1.5;
+        public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
+        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 2;
+        public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 5;
         public static final double MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;
         public static final double MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
 
@@ -250,7 +250,7 @@ public final class Constants {
         // Position Order: XAxis YAxis
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.254);
         public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.744, 0.549);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.279, 0.865);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.179, 0.865);
         public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
         public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.74, 0.8);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
