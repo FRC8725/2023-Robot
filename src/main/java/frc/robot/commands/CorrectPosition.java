@@ -52,27 +52,30 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void execute() {
-        xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH / 2);
-        yController.setGoal(0);
-        thetaController.setGoal(0);
-        var xSpeed = xController.calculate(-lastTarget.getX());
+        xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH / 2 + swerveSubsystem.getPose().getX());
+        yController.setGoal(swerveSubsystem.getPose().getY());
+        thetaController.setGoal(swerveSubsystem.getRotation2d().getRadians());
+        var xSpeed = xController.calculate(-lastTarget.getX() + swerveSubsystem.getPose().getX());
         var turningSpeed = .0;
         double ySpeed;
         switch (whereChase) {
             case 0:
-                ydistance = lastTarget.getY()-VisionConstants.Y_OFFSET;
+                ydistance = lastTarget.getY()-VisionConstants.Y_OFFSET + swerveSubsystem.getPose().getY();
+                ySpeed = yController.calculate(ydistance);
                 break;
             case 2:
-                ydistance = lastTarget.getY()+VisionConstants.Y_OFFSET;
+                ydistance = lastTarget.getY()+VisionConstants.Y_OFFSET + swerveSubsystem.getPose().getY();
+                ySpeed = yController.calculate(ydistance);
                 break;
             case 3 :
                 xSpeed = 0;
-                ydistance = 0;
-                turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
+                ySpeed = 0;
+                turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians() + swerveSubsystem.getRotation2d().getRadians());
             default:
-                ydistance = lastTarget.getY();
+                ydistance = lastTarget.getY() + swerveSubsystem.getPose().getY();
+                ySpeed = yController.calculate(ydistance);
         }
-        ySpeed = yController.calculate(ydistance);
+
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
@@ -85,7 +88,7 @@ public class CorrectPosition extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return Math.abs(xController.getGoal().position + lastTarget.getX()) < 0.3 && Math.abs(yController.getGoal().position - ydistance) < 0.3 || lastTarget == null;
+        return Math.abs(xController.getGoal().position + lastTarget.getX()) < 0.2 && Math.abs(yController.getGoal().position - ydistance) < 0.2;
     }
 
     @Override

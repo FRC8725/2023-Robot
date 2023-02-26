@@ -126,6 +126,8 @@ public final class Constants {
         // Blue is on the left of the field
         public static final double length = Units.feetToMeters(54.27083);
         public static final double width = Units.feetToMeters(26.2916);
+        public static final double gridHighDistance = 0.45;
+        public static final double gridLowDistance = 0.25;
     }
 
     public static final class ArmConstants {
