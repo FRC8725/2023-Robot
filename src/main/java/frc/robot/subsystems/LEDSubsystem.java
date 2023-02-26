@@ -4,33 +4,36 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.RobotMap;
 
-public final class LED {
+public final class LEDSubsystem extends SubsystemBase {
 
-    private static final LED INSTANCE = new LED();
+    private static final LEDSubsystem INSTANCE = new LEDSubsystem();
 
-    public static LED getInstance() {
+    public static LEDSubsystem getInstance() {
         return INSTANCE;
     }
     AddressableLED led;
     AddressableLEDBuffer ledBuffer;
 
-    private LED() {
+    private LEDSubsystem() {
         led = new AddressableLED(RobotMap.LEDPort.LED_PORT);
-        ledBuffer = new AddressableLEDBuffer(6);
-        led.setLength(6);
-
-        led.setData(ledBuffer);
+        ledBuffer = new AddressableLEDBuffer(LEDConstants.BUFFER_SIZE);
+        led.setLength(LEDConstants.BUFFER_SIZE);
         led.start();
+    }
+
+    @Override
+    public void periodic() {
+        led.setData(ledBuffer);
     }
 
     public void setColor(Color color) {
         for (var i = 0; i < ledBuffer.getLength(); i++) {
             ledBuffer.setLED(i, color);
         }
-        led.setData(ledBuffer);
     }
 
     private int rainbowFirstPixelHue = 0;
@@ -45,7 +48,6 @@ public final class LED {
             // Set the value
             ledBuffer.setHSV(i, hue, 255, 128);
         }
-        led.setData(ledBuffer);
         // Increase by to make the rainbow "move"
         rainbowFirstPixelHue += 3;
         // Check bounds

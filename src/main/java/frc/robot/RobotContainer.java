@@ -28,6 +28,7 @@ public class RobotContainer {
     private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private final GripperSubsystem gripperSubsystem = GripperSubsystem.getInstance();
     private final Pneumatics pneumatics = Pneumatics.getInstance();
+    private final LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     private final GamepadJoystick swerveJoystick = new GamepadJoystick(0);
     private final GamepadJoystick elevatorJoystick = new GamepadJoystick(1);
     private final VisionManager visionManager = new VisionManager();
@@ -55,6 +56,7 @@ public class RobotContainer {
                 () -> elevatorJoystick.POV_East.getAsBoolean(),
                 () -> elevatorJoystick.POV_West.getAsBoolean()
         ));
+        ledSubsystem.setDefaultCommand(new AutoLEDs(ledSubsystem));
         configureButtonBindings();
         putToDashboard();
     }

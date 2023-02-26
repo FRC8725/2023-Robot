@@ -56,14 +56,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        LED.getInstance().setColor(Color.kAliceBlue);
 //        isTransporting = false;
         var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(-90);
         var placingFunction = isPlacing? Units.degreesToRadians(40): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var teleopAdjFunction = Units.degreesToRadians(5) * wristStage;
         var offset = horizontalFunction + placingFunction + transportingFunction + teleopAdjFunction;
-        var wristSetpoint = filter.calculate(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() +offset);
+        var wristSetpoint = filter.calculate(elbow.getAbsoluteEncoderRad() - Math.PI / 2 + winch.getAbsoluteEncoderRad() + offset);
         wrist.setWristSetpoint(wristSetpoint);
 //        wrist.setWristSetpoint(0);
         wrist.calculate();
@@ -198,8 +197,8 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             if (yAxis > getArmPosition().getSecond()){
                 winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-                if (desiredElbowAngle < Units.degreesToRadians(100)) {
-                    desiredElbowAngle = Units.degreesToRadians(100);
+                if (desiredElbowAngle < Units.degreesToRadians(110)) {
+                    desiredElbowAngle = Units.degreesToRadians(110);
                     desiredWinchAngle = Units.degreesToRadians(0);
                     winch.setSetpoint(desiredWinchAngle);
                 }
