@@ -66,7 +66,7 @@ public class ArmSubsystem extends SubsystemBase {
         wrist.calculate();
 
         if (isResetting) {
-            if (winch.atSetpoint()) {
+            if (atSetpoint()) {
                 winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
                 elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
                 isElbowLocked = false;
@@ -193,9 +193,9 @@ public class ArmSubsystem extends SubsystemBase {
             if (yAxis > getArmPosition().getSecond()){
                 winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
                 if (desiredElbowAngle < Units.degreesToRadians(90)) {
-                    lastDesiredElbowAngle = Units.degreesToRadians(120);
-                    lastDesiredWinchAngle = Units.degreesToRadians(0);
-                    winch.setSetpoint(lastDesiredWinchAngle);
+                    desiredElbowAngle = Units.degreesToRadians(120);
+                    desiredWinchAngle = Units.degreesToRadians(0);
+                    winch.setSetpoint(desiredWinchAngle);
                 }
             } else {
                 winch.setSetpoint(desiredWinchAngle);
