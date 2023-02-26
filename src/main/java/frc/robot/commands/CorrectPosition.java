@@ -16,7 +16,7 @@ public class CorrectPosition extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final ProfiledPIDController xController, yController;
-    // private final ProfiledPIDController thetaController;
+    private final ProfiledPIDController thetaController;
     private final Limelight limelight;
     private final int whereChase;
     private final double socialDistanceM;
@@ -36,12 +36,12 @@ public class CorrectPosition extends CommandBase {
         // Controller Settings
         xController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_X_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
         yController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_Y_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
-        //thetaController = new ProfiledPIDController(
-        //        AutoConstants.CORRECT_POSITION_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
+        thetaController = new ProfiledPIDController(
+                AutoConstants.CORRECT_POSITION_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
         xController.setTolerance(.1);
         yController.setTolerance(.1);
-        //thetaController.setTolerance(2);
-        //thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.setTolerance(2);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.limelight = Limelight.getInstance();
     }
 
@@ -54,8 +54,9 @@ public class CorrectPosition extends CommandBase {
         if (limelight.getAprilTagRelative().isPresent()) lastTarget = limelight.getAprilTagRelative().get();
         xController.setGoal(-socialDistanceM-DriveConstants.TRACK_WIDTH / 2);
         yController.setGoal(0);
-        //thetaController.setGoal(0);
+        thetaController.setGoal(0);
         var xSpeed = xController.calculate(-lastTarget.getX());
+        var turningSpeed = .0;
         double ySpeed;
         switch (whereChase) {
             case 0:
@@ -64,14 +65,16 @@ public class CorrectPosition extends CommandBase {
             case 2:
                 ydistance = lastTarget.getY()+VisionConstants.Y_OFFSET;
                 break;
+            case 3 :
+                xSpeed = 0;
+                ydistance = 0;
+                turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
             default:
                 ydistance = lastTarget.getY();
         }
         ySpeed = yController.calculate(ydistance);
-        //var turningSpeed = thetaController.calculate(lastTarget.getRotation().getRadians());
-
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, 0, swerveSubsystem.getRotation2d());
+                xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
 
         SwerveModuleState[] moduleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
