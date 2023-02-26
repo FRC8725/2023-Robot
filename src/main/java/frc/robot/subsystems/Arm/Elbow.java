@@ -52,7 +52,7 @@ public class Elbow {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= ArmConstants.ELBOW_ABOSOLUTE_ENCODER_INVERTED ? -1: 1;
+        measurement *= ArmConstants.ELBOW_ABSOLUTE_ENCODER_INVERTED ? -1: 1;
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }

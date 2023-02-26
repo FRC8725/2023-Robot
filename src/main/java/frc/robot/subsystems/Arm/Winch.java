@@ -4,6 +4,7 @@ package frc.robot.subsystems.Arm;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.LazySparkMax;
@@ -51,6 +52,7 @@ public class Winch {
         SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Winch Encoder", getAbsoluteEncoderRad());
         if (atSetpoint()) winchProfiledPIDController.setP(ArmConstants.P_WINCH_BRAKE);
+        else winchProfiledPIDController.setP(ArmConstants.P_WINCH);
         double speed = MathUtil.clamp(winchProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WINCH_SPEED, ArmConstants.MAX_WINCH_SPEED);
         SmartDashboard.putNumber("Winch Speed", speed);
 //        SmartDashboard.putNumber("Winch Speed", speed);
@@ -60,7 +62,7 @@ public class Winch {
 
     public void setWinchMotor(double speed) {
         speed = MathUtil.clamp(speed, -ArmConstants.MAX_WINCH_SPEED, ArmConstants.MAX_WINCH_SPEED);
-        leftWinchMotor.set(speed);
+        rightWinchMotor.set(speed);
         leftWinchMotor.follow(rightWinchMotor, true);
     }
 
@@ -70,7 +72,7 @@ public class Winch {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= (ArmConstants.WINCH_ABOSOLUTE_ENCODER_INVERTED ? -1: 1);
+        measurement *= (ArmConstants.WINCH_ABSOLUTE_ENCODER_INVERTED ? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
@@ -78,7 +80,6 @@ public class Winch {
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_WINCH_ANGLE, ArmConstants.MAX_WINCH_ANGLE);
         SmartDashboard.putNumber("Winch Setpoint", setpoint);
-        winchProfiledPIDController.setP(ArmConstants.P_WINCH);
         winchProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }

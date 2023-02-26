@@ -44,10 +44,9 @@ public class Wrist {
 
     public void calculate() {
 //        wristMotor.set(MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad() + Units.degreesToRadians(gyro.getPitch())), -ElevatorConstants.MAX_WRIST_SPEED, ElevatorConstants.MAX_WRIST_SPEED));
-        if (atSetpoint()) wristProfiledPIDController.setP(ArmConstants.P_WRIST_BRAKE);
+//        if (atSetpoint()) wristProfiledPIDController.setP(ArmConstants.P_WRIST_BRAKE);
         double speed;
-        if (getAbsoluteEncoderRad() < ArmConstants.MIN_WRIST_ANGLE || getAbsoluteEncoderRad() > ArmConstants.MAX_WRIST_ANGLE) speed = 0;
-        else speed = MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WRIST_SPEED, ArmConstants.MAX_WRIST_SPEED);
+        speed = MathUtil.clamp(wristProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_WRIST_SPEED, ArmConstants.MAX_WRIST_SPEED);
         wristMotor.set(speed);
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
 //        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
@@ -60,7 +59,7 @@ public class Wrist {
 
     public double getAbsoluteEncoderRad() {
         double measurement = absoluteEncoder.getAbsolutePosition()-absoluteEncoder.getPositionOffset();
-        measurement *= (ArmConstants.WRIST_ABOSOLUTE_ENCODER_INVERTED ? -1: 1);
+        measurement *= (ArmConstants.WRIST_ABSOLUTE_ENCODER_INVERTED ? -1: 1);
         if (Math.abs(measurement) > 0.5) measurement += measurement < 0? 1: -1;
         return measurement*2*Math.PI;
     }
@@ -68,7 +67,7 @@ public class Wrist {
     public void setWristSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_WRIST_ANGLE, ArmConstants.MAX_WRIST_ANGLE);
         wristProfiledPIDController.setGoal(setpoint);
-        wristProfiledPIDController.setP(ArmConstants.P_WRIST);
+//        wristProfiledPIDController.setP(ArmConstants.P_WRIST);
         this.setpoint = setpoint;
     }
 
