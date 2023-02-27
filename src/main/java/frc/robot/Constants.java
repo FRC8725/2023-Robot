@@ -1,10 +1,14 @@
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+
+import java.util.List;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -108,7 +112,16 @@ public final class Constants {
 
     public static final class VisionConstants {
         public static final double Y_OFFSET = Units.inchesToMeters(21.319);
-
+        public static final Transform3d Photon2Robot = new Transform3d(
+                new Translation3d(-DriveConstants.WHEEL_BASE / 2, 0, 0.5),
+                new Rotation3d());
+        public static final Transform3d Robot2Photon = Photon2Robot.inverse();
+        public static final Transform3d Tag2Goal =
+                new Transform3d(
+                        new Translation3d(Units.inchesToMeters(16.113), 0, 0),
+                        new Rotation3d(0, 0, Math.PI));
+        public static final Transform3d GoalMid2Left = new Transform3d(new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
+        public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
         // UsbCamera
         public static final int[] UsbCameraResolution = {320, 240};
     }
@@ -128,6 +141,17 @@ public final class Constants {
         public static final double width = Units.feetToMeters(26.2916);
         public static final double gridHighDistance = 0.45;
         public static final double gridLowDistance = 0.25;
+        public static final AprilTag aprilTag1 = new AprilTag(1, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag2 = new AprilTag(2, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag3 = new AprilTag(3, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(0))));
+        //        public static final AprilTag aprilTag4 = new AprilTag(4, new Pose3d(new Pose2d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Rotation2d.fromDegrees(180))));
+//        public static final AprilTag aprilTag5 = new AprilTag(5, new Pose3d(new Pose2d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag6 = new AprilTag(6, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag7 = new AprilTag(7, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTag aprilTag8 = new AprilTag(8, new Pose3d(new Pose2d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Rotation2d.fromDegrees(0))));
+        public static final AprilTagFieldLayout aprilTagField = new AprilTagFieldLayout(
+                List.of(aprilTag1, aprilTag2, aprilTag3, aprilTag6, aprilTag7, aprilTag8),
+                FieldConstants.length, FieldConstants.width);
     }
 
     public static final class ArmConstants {
