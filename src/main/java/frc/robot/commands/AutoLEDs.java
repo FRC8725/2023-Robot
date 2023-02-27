@@ -13,7 +13,7 @@ public class AutoLEDs extends CommandBase {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         this.ledSubsystem = ledSubsystem;
-        addRequirements();
+        addRequirements(ledSubsystem);
     }
 
     @Override

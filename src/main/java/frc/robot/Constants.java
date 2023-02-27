@@ -167,7 +167,7 @@ public final class Constants {
         public static final double INTAKE_GEAR_RATIO = 1.;
 
         public static final double MAX_WINCH_SPEED = .35;
-        public static final double MAX_ELBOW_SPEED = .5;
+        public static final double MAX_ELBOW_SPEED = .6;
         public static final double MAX_WRIST_SPEED = .25;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
@@ -188,7 +188,7 @@ public final class Constants {
         public static final double I_ROLL = 0;
         public static final double D_ROLL = 0;
 
-        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.131;
+        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.171;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
         public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.929;
 
@@ -225,7 +225,7 @@ public final class Constants {
         public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-25);
         public static final double MAX_WINCH_ANGLE = Units.degreesToRadians(60);
         public static final double MIN_WRIST_ANGLE = Units.degreesToRadians(-90);
-        public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(145);
+        public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(135 );
 
         public static final TrapezoidProfile.Constraints WRIST_CONTROLLER_CONSTRAINTS = //
                 new TrapezoidProfile.Constraints(
