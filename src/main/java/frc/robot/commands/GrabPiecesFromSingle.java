@@ -47,6 +47,5 @@ public class GrabPiecesFromSingle extends CommandBase {
     public void end(boolean interrupted) {
         pneumatics.setGripper(false);
         armSubsystem.reset();
-        gripperSubsystem.reset();
     }
 }

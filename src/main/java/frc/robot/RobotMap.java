@@ -25,9 +25,9 @@ public final class RobotMap {
         public static final int LEFT_WINCH_MOTOR = 14;
         public static final int ELBOW_MOTOR = 15;
         public static final int WRIST_MOTOR = 16;
-        public static final int ROLL_MOTOR = 17;
-        public static final int INTAKE_LEADER_MOTOR = 18;
-        public static final int INTAKE_FOLLOWER_MOTOR = 19;
+//        public static final int ROLL_MOTOR = 17;
+//        public static final int INTAKE_LEADER_MOTOR = 18;
+//        public static final int INTAKE_FOLLOWER_MOTOR = 19;
 
         // DIO
         public static final int WINCH_ABSOLUTE_ENCODER = 0;

@@ -17,46 +17,47 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
-    private boolean isResetting;
+//    private boolean isResetting;
 
     private GripperSubsystem() {
         Timer.delay(2);
         gripper = Gripper.getInstance();
-        reset();
+//        reset();
     }
 
     @Override
     public void periodic() {
-        gripper.calculate();
-        if (gripper.atRollSetpoint()) isResetting = false;
+//        gripper.calculate();
+//        if (gripper.atRollSetpoint()) isResetting = false;
         SmartDashboard.putNumber("Distance Sensor", gripper.getDistanceSensor());
-        SmartDashboard.putBoolean("atRollSetpoint", atRollSetpoint());
-    }
-
-    public void reset() {
-        gripper.setRollSetpoint(0);
-        isResetting = true;
-    }
-
-    public void setRollSetpoint(double setpoint) {
-        gripper.setRollSetpoint(setpoint);
-    }
-
-    public void addRollSetpoint(double variable) {
-        if (isResetting) return;
-        gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
-    }
-
-    public boolean atRollSetpoint() {
-        return gripper.atRollSetpoint();
+//        SmartDashboard.putBoolean("atRollSetpoint", atRollSetpoint());
     }
 
     public boolean isPiecesInRange() {
         return gripper.getDistanceSensor() < 180;
     }
 
-    public void stop() {
-        gripper.setRollSetpoint(gripper.getRollEncoder());
-    }
+//    public void reset() {
+//        gripper.setRollSetpoint(0);
+//        isResetting = true;
+//    }
+//
+//    public void setRollSetpoint(double setpoint) {
+//        gripper.setRollSetpoint(setpoint);
+//    }
+//
+//    public void addRollSetpoint(double variable) {
+//        if (isResetting) return;
+//        gripper.setRollSetpoint(gripper.getRollEncoder() + variable);
+//    }
+//
+//    public boolean atRollSetpoint() {
+//        return gripper.atRollSetpoint();
+//    }
+
+
+//    public void stop() {
+//        gripper.setRollSetpoint(gripper.getRollEncoder());
+//    }
 }
 

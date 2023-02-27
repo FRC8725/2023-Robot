@@ -51,11 +51,6 @@ public class RobotContainer {
                 () -> elevatorJoystick.POV_North.getAsBoolean(),
                 () -> elevatorJoystick.POV_South.getAsBoolean()
         ));
-        gripperSubsystem.setDefaultCommand(new GripperJoystickCmd(
-                gripperSubsystem,
-                () -> elevatorJoystick.POV_East.getAsBoolean(),
-                () -> elevatorJoystick.POV_West.getAsBoolean()
-        ));
         ledSubsystem.setDefaultCommand(new AutoLEDs(ledSubsystem));
         configureButtonBindings();
         putToDashboard();
@@ -78,7 +73,6 @@ public class RobotContainer {
         elevatorJoystick.btn_B.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
         elevatorJoystick.btn_A.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.LOW_ARM_POSE, true, true));
         elevatorJoystick.btn_X.onTrue(new GrabPiecesFromSingle(armSubsystem, gripperSubsystem, pneumatics));
-        elevatorJoystick.btn_Back.whileTrue(new AlignGripper(gripperSubsystem, visionManager));
     }
 
     private void putToDashboard() {
