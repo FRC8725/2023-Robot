@@ -197,7 +197,7 @@ public final class Constants {
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
-        public static final double P_WRIST = .8;
+        public static final double P_WRIST = .95;
         public static final double I_WRIST = 0;
         public static final double D_WRIST = 0;
 
@@ -281,7 +281,8 @@ public final class Constants {
         public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
         public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.74, 0.8);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
-        public static final Pair<Double, Double> LOADING_ZONE_ARM_POSE = new Pair<>(0.565, 0.65);
+        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.4);
+        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.65);
     }
 
     public static final class LEDConstants {

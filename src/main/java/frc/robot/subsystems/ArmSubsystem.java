@@ -57,8 +57,8 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 //        isTransporting = false;
-        var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(-90);
-        var placingFunction = isPlacing? Units.degreesToRadians(40): 0;
+        var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(50);
+        var placingFunction = isPlacing? Units.degreesToRadians(30): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var teleopAdjFunction = Units.degreesToRadians(5) * wristStage;
         var offset = horizontalFunction + placingFunction + transportingFunction + teleopAdjFunction;

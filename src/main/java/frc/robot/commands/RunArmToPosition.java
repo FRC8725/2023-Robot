@@ -50,16 +50,17 @@ public class RunArmToPosition extends CommandBase {
     @Override
     public void initialize() {
         armSubsystem.moveTwice(xAxis, yAxis);
-        armSubsystem.setTransporting(true);
-        armSubsystem.setHorizontal(isHorizontal);
-        armSubsystem.setPlacing(isPlacing);
+        armSubsystem.setTransporting(false);
+        armSubsystem.setHorizontal(false);
+        armSubsystem.setPlacing(false);
     }
 
     @Override
     public void execute() {
         if (isFirstLoop && armSubsystem.atSetpoint()) {
-            armSubsystem.setTransporting(false);
             armSubsystem.moveTwice(xAxis, yAxis);
+            armSubsystem.setHorizontal(isHorizontal);
+            armSubsystem.setPlacing(isPlacing);
             isFirstLoop = false;
         }
     }

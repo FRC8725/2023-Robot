@@ -8,13 +8,15 @@ import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.Pneumatics;
 
 
-public class GrabPiecesFromDouble extends CommandBase {
+public class GrabPiecesFromSingle extends CommandBase {
 
     ArmSubsystem armSubsystem;
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
 
-    public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
+    public GrabPiecesFromSingle(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
+        // each subsystem used by the command must be passed into the
+        // addRequirements() method (which takes a vararg of Subsystem)
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
         this.pneumatics = pneumatics;
@@ -23,12 +25,17 @@ public class GrabPiecesFromDouble extends CommandBase {
 
     @Override
     public void initialize() {
-        armSubsystem.setSetpoint(Constants.PoseConstants.LOADING_ZONE_DOUBLE_POSE.getFirst(), Constants.PoseConstants.LOADING_ZONE_DOUBLE_POSE.getSecond());
+        armSubsystem.setSetpoint(Constants.PoseConstants.LOADING_ZONE_SINGLE_POSE.getFirst(), Constants.PoseConstants.LOADING_ZONE_SINGLE_POSE.getSecond());
+        pneumatics.setGripper(true);
         armSubsystem.setTransporting(false);
         armSubsystem.setPlacing(false);
-        armSubsystem.setHorizontal(true);
-        pneumatics.setGripper(true);
+        armSubsystem.setHorizontal(false);
         Timer.delay(.2);
+    }
+
+    @Override
+    public void execute() {
+
     }
 
     @Override
@@ -39,5 +46,7 @@ public class GrabPiecesFromDouble extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         pneumatics.setGripper(false);
+        armSubsystem.reset();
+        gripperSubsystem.reset();
     }
 }
