@@ -47,7 +47,7 @@ public class Gripper {
         rollProfiledPIDController.setTolerance(ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS);
         rollProfiledPIDController.disableContinuousInput();
 
-        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kOnboard);
+        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
         distanceSensor.setEnabled(true);
         distanceSensor.setAutomaticMode(true);
         distanceSensor.setDistanceUnits(Unit.kMillimeters);

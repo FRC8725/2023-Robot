@@ -18,11 +18,11 @@ public class LazyTalonFX extends WPI_TalonFX {
 
     public void setCurrent(boolean isHighCurrent) {
          if (isHighCurrent){
-             configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 10, 0.5));
-             configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 48, 20, 1));
+             configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 40, 0.2));
+             configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 30, 40, 0.2));
          } else {
-             configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 10, 0.5));
-             configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 20, 1));
+             configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 40, 0.2));
+             configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 40, 0.2));
          }
     }
 

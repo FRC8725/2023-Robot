@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -33,6 +34,7 @@ public class GrabPieces extends CommandBase {
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(true);
         pneumatics.setGripper(true);
+        Timer.delay(.2);
     }
 
     @Override

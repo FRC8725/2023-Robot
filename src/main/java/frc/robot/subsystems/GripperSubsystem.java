@@ -52,7 +52,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     public boolean isPiecesInRange() {
-        return gripper.getDistanceSensor() < 150;
+        return gripper.getDistanceSensor() < 180;
     }
 
     public void stop() {

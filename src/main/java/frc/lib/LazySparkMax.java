@@ -18,9 +18,9 @@ public class LazySparkMax extends CANSparkMax {
 
     public void setCurrent(boolean isHighCurrent) {
         if (isHighCurrent){
-            setSmartCurrentLimit(60, 40);
+            setSmartCurrentLimit(40);
         } else {
-            setSmartCurrentLimit(50, 30);
+            setSmartCurrentLimit(30);
         }
     }
 

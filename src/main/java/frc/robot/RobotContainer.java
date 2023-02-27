@@ -83,7 +83,14 @@ public class RobotContainer {
 
     private void putToDashboard() {
         autoCommand.addOption("Nothing", new InstantCommand(swerveSubsystem::stopModules));
-        autoCommand.addOption("put one and docking", new SequentialCommandGroup(new CorrectPosition(1, visionManager), new DriveUntilDocked(true)));
+        autoCommand.addOption("put one and docking", new SequentialCommandGroup(
+            new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.HIGH_ARM_POSE, true, true), 
+            new ReleaseGripper(pneumatics), 
+            new WaitCommand(0.5),
+            new ResetArm(armSubsystem, gripperSubsystem, pneumatics), 
+            new WaitCommand(3),
+            new DriveUntilDocked(true)
+            ));
         autoCommand.addOption("Narrow Path", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("Narrow Only Path", new NarrowOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("Wide Path", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));

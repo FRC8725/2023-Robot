@@ -177,19 +177,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 1.6727272727273266,
-      "names": [
-        "event",
-        "toGround"
-      ]
-    },
-    {
-      "position": 3.127272727272935,
-      "names": [
-        "toHigh"
-      ]
-    }
-  ]
+  "markers": []
 }

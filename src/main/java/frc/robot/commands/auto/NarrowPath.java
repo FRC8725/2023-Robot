@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
@@ -31,12 +32,13 @@ public class NarrowPath extends SequentialCommandGroup {
                 "NarrowPath", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("putItem", new putItem(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        eventMap.put("putItem", new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.HIGH_ARM_POSE, true, true));
         eventMap.put("putMid", new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.MID_ARM_POSE, true, true));
+        eventMap.put("putLow", new SequentialCommandGroup(new InstantCommand(() -> armSubsystem.setTransporting(false)), new WaitCommand(1)));
         eventMap.put("pickItem", new GrabPieces(armSubsystem, gripperSubsystem, pneumatics));
         eventMap.put("stop", new InstantCommand(() -> swerveSubsystem.stopModules()));
         eventMap.put("resetArm", new ResetArm(armSubsystem, gripperSubsystem, pneumatics));
-        eventMap.put("release", new InstantCommand(() -> pneumatics.setGripper(true)));
+        eventMap.put("release", new SequentialCommandGroup(new InstantCommand(() -> pneumatics.setGripper(true)), new WaitCommand(0.5)));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 swerveSubsystem::getPose,

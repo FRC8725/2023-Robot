@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.875696765170331,
-        "y": 3.867667033914282
+        "x": 1.8394666045707884,
+        "y": 3.978411302495917
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0942336844902467,
-        "y": 4.844253892125157
+        "x": 2.058003523890703,
+        "y": 4.954998160706795
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -17,7 +17,9 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "stop"
+          "putLow",
+          "release",
+          "resetArm"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -51,16 +53,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.4528194761162005,
-        "y": 4.577224470764147
+        "x": 6.690738813309969,
+        "y": 4.5951371841427004
       },
       "prevControl": {
-        "x": 5.676750277653878,
-        "y": 4.577224470764147
+        "x": 5.9147144756354795,
+        "y": 4.58679283642577
       },
       "nextControl": {
-        "x": 7.242211332369392,
-        "y": 4.577224470764147
+        "x": 7.544383495072142,
+        "y": 4.604316159215412
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -69,7 +71,9 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "stop"
+          "stop",
+          "pickItem",
+          "resetArm"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -104,17 +108,17 @@
     {
       "anchorPoint": {
         "x": 1.8541529646877277,
-        "y": 4.41200291945534
+        "y": 4.4
       },
       "prevControl": {
         "x": 1.85774038881437,
-        "y": 4.442332959798769
+        "y": 4.43033004034343
       },
       "nextControl": {
         "x": 1.8505655405610855,
-        "y": 4.38167287911191
+        "y": 4.369669959656571
       },
-      "holonomicAngle": 180.0,
+      "holonomicAngle": -180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -123,7 +127,8 @@
         "names": [
           "stop",
           "putItem",
-          "release"
+          "release",
+          "resetArm"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -180,7 +185,7 @@
   ],
   "markers": [
     {
-      "position": 1.4836363636363903,
+      "position": 0.5,
       "names": [
         "pickItem"
       ]
@@ -189,24 +194,6 @@
       "position": 2.8,
       "names": [
         "putMid"
-      ]
-    },
-    {
-      "position": 2.3563636363636746,
-      "names": [
-        "resetArm"
-      ]
-    },
-    {
-      "position": 4.363636363636363,
-      "names": [
-        "resetArm"
-      ]
-    },
-    {
-      "position": 4.2,
-      "names": [
-        "resetArm"
       ]
     }
   ]

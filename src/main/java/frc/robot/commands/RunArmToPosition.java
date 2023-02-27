@@ -71,6 +71,7 @@ public class RunArmToPosition extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        if (isFirstLoop) armSubsystem.moveTwice(xAxis, yAxis);
         isFirstLoop = true;
     }
 }

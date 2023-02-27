@@ -197,8 +197,8 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             if (yAxis > getArmPosition().getSecond()){
                 winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
-                if (desiredElbowAngle < Units.degreesToRadians(110)) {
-                    desiredElbowAngle = Units.degreesToRadians(110);
+                if (desiredElbowAngle < Units.degreesToRadians(90)) {
+                    desiredElbowAngle = Units.degreesToRadians(90);
                     desiredWinchAngle = Units.degreesToRadians(0);
                     winch.setSetpoint(desiredWinchAngle);
                 }
