@@ -5,13 +5,12 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.GrabPieces;
+import frc.robot.commands.ResetArm;
 import frc.robot.commands.RunArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
@@ -25,11 +24,16 @@ public class WidePath extends SequentialCommandGroup {
     public WidePath(SwerveSubsystem swerveSubsystem, ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
 
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
-                "WidePath", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND*0.8, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED*0.8));
+                "WidePath", new PathConstraints(AutoConstants.MAX_SPEED_METERS_PER_SECOND*.5, AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED*.5));
 
         HashMap<String, Command> eventMap = new HashMap<>();
-        eventMap.put("putItem", new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.HIGH_ARM_POSE, true, true));
-        eventMap.put("pickItem", new GrabPieces(armSubsystem, gripperSubsystem, pneumatics));
+        eventMap.put("putHigh", new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.HIGH_ARM_POSE, true, true));
+        eventMap.put("resetArm", new ResetArm(armSubsystem, gripperSubsystem, pneumatics));
+        eventMap.put("release", new SequentialCommandGroup(new InstantCommand(() -> pneumatics.setGripper(true)), new WaitCommand(0.5)));
+        eventMap.put("slowMove",new ParallelDeadlineGroup(
+                new WaitCommand(3),
+                new InstantCommand(() -> swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(0.8, .0, .0), swerveSubsystem.getRotation2d()))))
+        ));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
                 swerveSubsystem::getPose,

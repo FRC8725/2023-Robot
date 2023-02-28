@@ -42,12 +42,13 @@ public class RobotContainer {
                 () -> -this.swerveJoystick.get_LStickX(),
                 () -> -this.swerveJoystick.get_RStickX(),
                 () -> !this.swerveJoystick.btn_topL.getAsBoolean(),
-                this.swerveJoystick.btn_topR::getAsBoolean
+                this.swerveJoystick.btn_topR::getAsBoolean,
+                this.swerveJoystick.btn_A::getAsBoolean
         ));
         armSubsystem.setDefaultCommand(new ArmJoystickCmd(
                 armSubsystem,
-                () -> +elevatorJoystick.get_LStickY(),
-                () -> +elevatorJoystick.get_RStickY(),
+                () -> elevatorJoystick.get_LStickY(),
+                () -> elevatorJoystick.get_RStickY(),
                 () -> elevatorJoystick.POV_North.getAsBoolean(),
                 () -> elevatorJoystick.POV_South.getAsBoolean()
         ));
@@ -58,9 +59,9 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         swerveJoystick.btn_triggerR.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
-        swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, visionManager));
-        swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
-        swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, visionManager));
+        // swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, visionManager));
+        // swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
+        // swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, visionManager));
         swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(false));
 
 //        elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(gripperSubsystem, visionManager, pneumatics));
@@ -76,8 +77,9 @@ public class RobotContainer {
     }
 
     private void putToDashboard() {
-        autoCommand.addOption("Nothing", new InstantCommand(swerveSubsystem::stopModules));
-        autoCommand.addOption("put one and docking", new SequentialCommandGroup(
+        autoCommand.addOption("(0)Nothing", new InstantCommand(swerveSubsystem::stopModules));
+        autoCommand.addOption("(1)Wide", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        autoCommand.addOption("(2)Middle", new SequentialCommandGroup(
             new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.HIGH_ARM_POSE, true, true), 
             new ReleaseGripper(pneumatics), 
             new WaitCommand(0.5),
@@ -85,13 +87,8 @@ public class RobotContainer {
             new WaitCommand(3),
             new DriveUntilDocked(true)
             ));
-        autoCommand.addOption("Narrow Path", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Narrow Only Path", new NarrowOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Wide Path", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Wide Only Path", new WideOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Narrow Dock Path", new NarrowPathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Wide Dock Path", new WidePathDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("Test Path", new TestAuto(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        autoCommand.addOption("(test)Narrow Only Path", new NarrowOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
     }
 

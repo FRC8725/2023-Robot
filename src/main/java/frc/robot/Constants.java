@@ -84,6 +84,7 @@ public final class Constants {
         public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double DECREASE_DRIVING_SPEED_FACTOR = .4;
         public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
+        public static final double P_JOYSTICK_TURNING = Math.PI / 4;
     }
 
     public static final class AutoConstants {

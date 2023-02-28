@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -15,18 +16,21 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction;
+    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction, turntoGridaFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+    private final PIDController thetaPIDController;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
                              Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-                             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction) {
+                             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction, Supplier<Boolean> turnToGrid) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.decreaseSpeedFunction = decreaseSpeedFunction;
+        this.turntoGridaFunction = turnToGrid;
+        this.thetaPIDController = new PIDController(DriveConstants.P_JOYSTICK_TURNING, 0, 0);
         this.xLimiter = new SlewRateLimiter(DriveConstants.TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND);
         this.yLimiter = new SlewRateLimiter(DriveConstants.TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND);
         this.turningLimiter = new SlewRateLimiter(DriveConstants.TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND);
@@ -36,6 +40,8 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void initialize() {
         swerveSubsystem.resetEncoders();
+        this.thetaPIDController.setTolerance(1);
+        this.thetaPIDController.setSetpoint(Math.PI);
     }
 
     @Override
@@ -56,10 +62,15 @@ public class SwerveJoystickCmd extends CommandBase {
             return;
         }
 
+        if (turntoGridaFunction.get()) {
+            turningSpeed = Math.max(-1, Math.min(1, thetaPIDController.calculate(swerveSubsystem.getRotation2d().getRadians())));
+        }
+
         // 3. Make the driving smoother
         xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND * (decreaseSpeed ? DriveConstants.DECREASE_DRIVING_SPEED_FACTOR : 1.);
         ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND * (decreaseSpeed ? DriveConstants.DECREASE_DRIVING_SPEED_FACTOR : 1.);
         turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND * (decreaseSpeed ? DriveConstants.DECREASE_TURNING_SPEED_FACTOR : 1.);
+
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
