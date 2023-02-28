@@ -68,6 +68,9 @@ public class SwerveModule {
         turningMotor.setCurrent(false);
         turningMotor.setNeutralMode(NeutralMode.Brake);
         turningMotor.setInverted(reversed);
+        turningMotor.config_kP(0, SwerveModuleConstants.P_TURNING);
+        turningMotor.config_kP(0, SwerveModuleConstants.I_TURNING);
+        turningMotor.config_kP(0, SwerveModuleConstants.D_TURNING);
     }
 
     public double getDrivePosition() {
@@ -128,7 +131,7 @@ public class SwerveModule {
         switch (turningMotor.getDeviceID()) {
             case (RobotMap.DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT):
             case (RobotMap.DriverPort.BACK_RIGHT_TURNING_MOTOR_PORT):
-                turningMotor.set(ControlMode.Position, Math.PI / 4);
+                turningMotor.set(ControlMode.Position, -Math.PI / 4);
                 break;
             case (RobotMap.DriverPort.FRONT_RIGHT_TURNING_MOTOR_PORT):
             case (RobotMap.DriverPort.BACK_LEFT_TURNING_MOTOR_PORT):

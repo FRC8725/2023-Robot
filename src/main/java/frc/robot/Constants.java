@@ -77,10 +77,10 @@ public final class Constants {
         // Neo: 12; Falcon: 13.5
         public static final double PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
 
-        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.6;
+        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.65;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
                 PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 3;
-        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 2;
+        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 1.5;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double DECREASE_DRIVING_SPEED_FACTOR = .4;
         public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
@@ -178,7 +178,7 @@ public final class Constants {
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
 
 //        public static final double kElevatorGearRatio = 1./9;
-        public static final double ROLL_MOTOR_GEAR_RATIO = 1./20;
+//        public static final double ROLL_MOTOR_GEAR_RATIO = 1./20;
         // TODO: Change WRIST_GEAR_RATIO to the data we tested
         public static final double WRIST_GEAR_RATIO = 1./80;
         public static final double ELBOW_GEAR_RATIO = 1./100 * 18 / 42;
@@ -209,10 +209,10 @@ public final class Constants {
         public static final double P_WINCH = 1.2;
         public static final double I_WINCH = 0;
         public static final double D_WINCH = 0;
-
-        public static final double P_ROLL = .7;
-        public static final double I_ROLL = 0;
-        public static final double D_ROLL = 0;
+//
+//        public static final double P_ROLL = .7;
+//        public static final double I_ROLL = 0;
+//        public static final double D_ROLL = 0;
 
         public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.141;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
@@ -228,12 +228,8 @@ public final class Constants {
         public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
         public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 2;
         public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 5;
-        public static final double MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;
-        public static final double MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
-
-//        public static final double kMinElevatorHeight = 0;
-//        public static final double kMinElevatorHeight = Units.inchesToMeters(1);
-//        public static final double kMaxElevatorHeight = Units.inchesToMeters(6);
+//        public static final double MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;
+//        public static final double MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
 
         public static final double MIN_X_AXIS = 0;
         public static final double MAX_X_AXIS = 1.32;
@@ -268,10 +264,10 @@ public final class Constants {
                         MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND,
                         MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND);
 
-        public static final TrapezoidProfile.Constraints ROLL_CONTROLLER_CONSTRAINTS = //
-                new TrapezoidProfile.Constraints(
-                        MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND,
-                        MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND);
+//        public static final TrapezoidProfile.Constraints ROLL_CONTROLLER_CONSTRAINTS = //
+//                new TrapezoidProfile.Constraints(
+//                        MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND,
+//                        MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND);
     }
 
     public static final class PoseConstants {
@@ -279,8 +275,6 @@ public final class Constants {
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.354);
         public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.594, 0.375);
         public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.029, 0.755);
-        public static final Pair<Double, Double> INITIAL_POSE = new Pair<>(0.33, 0.5);
-        public static final Pair<Double, Double> VISION_ARM_POSE = new Pair<>(0.74, 0.8);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
         public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.4);
         public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.65);
