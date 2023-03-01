@@ -39,5 +39,6 @@ public class GrabPiecesFromDouble extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         pneumatics.setGripper(false);
+        armSubsystem.reset();
     }
 }

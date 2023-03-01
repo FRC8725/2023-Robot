@@ -103,10 +103,10 @@ public class ArmSubsystem extends SubsystemBase {
         lastX = armPosition.getFirst();
         lastY = armPosition.getSecond();
         if(!atSetpoint()) {
-            winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
+            winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
             isElbowLocked = true;
-            if (elbow.getAbsoluteEncoderRad() < Units.degreesToRadians(120)) {
-                desiredElbowAngle = Units.degreesToRadians(120);
+            if (elbow.getAbsoluteEncoderRad() < Units.degreesToRadians(90)) {
+                desiredElbowAngle = Units.degreesToRadians(90);
                 desiredWinchAngle = 0;
             }
         }

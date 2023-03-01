@@ -236,7 +236,7 @@ public final class Constants {
         public static final double MIN_Y_AXIS = -0.4;
         public static final double MAX_Y_AXIS = 1.1;
 //        public static final double MIN_ELBOW_ANGLE = Units.degreesToRadians(90);
-        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(155 );
+        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(155);
 //        public static final double INITIAL_ELBOW_ANGLE = Units.degreesToRadians(90);
         public static final double MIN_ELBOW_ANGLE = Units.degreesToRadians(15);
 //        public static final double MAX_ELBOW_ANGLE = Units.degreesToRadians(90);
@@ -247,7 +247,7 @@ public final class Constants {
         public static final double MIN_WINCH_ANGLE = Units.degreesToRadians(-25);
         public static final double MAX_WINCH_ANGLE = Units.degreesToRadians(60);
         public static final double MIN_WRIST_ANGLE = Units.degreesToRadians(-90);
-        public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(135 );
+        public static final double MAX_WRIST_ANGLE = Units.degreesToRadians(135);
 
         public static final TrapezoidProfile.Constraints WRIST_CONTROLLER_CONSTRAINTS = //
                 new TrapezoidProfile.Constraints(
