@@ -40,7 +40,7 @@ public class GrabPiecesFromSingle extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return gripperSubsystem.isPiecesInRange();
+        return gripperSubsystem.isPiecesInRange(true);
     }
 
     @Override

@@ -33,8 +33,8 @@ public class GripperSubsystem extends SubsystemBase {
 //        SmartDashboard.putBoolean("atRollSetpoint", atRollSetpoint());
     }
 
-    public boolean isPiecesInRange() {
-        return gripper.getDistanceSensor() < 180;
+    public boolean isPiecesInRange(boolean isFar) {
+        return gripper.getDistanceSensor() < 220 + (isFar? 50: 0) ;
     }
 
 //    public void reset() {

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -19,6 +20,7 @@ public class SwerveJoystickCmd extends CommandBase {
     private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction, turntoGridaFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
     private final PIDController thetaPIDController;
+    private final Debouncer debouncer = new Debouncer(0.1);
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
                              Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
@@ -50,7 +52,7 @@ public class SwerveJoystickCmd extends CommandBase {
         var xSpeed = xSpdFunction.get();
         var ySpeed = ySpdFunction.get();
         var turningSpeed = turningSpdFunction.get();
-        var decreaseSpeed = decreaseSpeedFunction.get();
+        var decreaseSpeed = debouncer.calculate(decreaseSpeedFunction.get());
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > Constants.Joystick.DEADBAND ? xSpeed : 0.0;

@@ -28,7 +28,7 @@ public class Wrist {
     DutyCycleEncoder absoluteEncoder;
     double setpoint = 0;
 
-    LinearFilter filter = LinearFilter.singlePoleIIR(0.3, 0.02);
+    LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
     private Wrist() {
 

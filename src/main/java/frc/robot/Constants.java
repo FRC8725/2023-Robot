@@ -214,7 +214,7 @@ public final class Constants {
 //        public static final double I_ROLL = 0;
 //        public static final double D_ROLL = 0;
 
-        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.141;
+        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.348;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
         public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.929;
 
