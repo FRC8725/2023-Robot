@@ -61,7 +61,7 @@ public class RobotContainer {
         swerveJoystick.btn_triggerR.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
         // swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, visionManager));
         // swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
-        // swerveJoystick.btn_B.whileTrue(new CorrectPosition(2, visionManager));
+         swerveJoystick.btn_B.onTrue(new LockChassis(swerveSubsystem));
         swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(false));
 
 //        elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(gripperSubsystem, visionManager, pneumatics));

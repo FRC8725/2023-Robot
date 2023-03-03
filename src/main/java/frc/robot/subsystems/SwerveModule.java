@@ -62,18 +62,15 @@ public class SwerveModule {
     private void configDriveMotor(boolean reversed) {
         driveMotor.configFactoryDefault();
         driveMotor.setCurrent(true);
-        driveMotor.setNeutralMode(NeutralMode.Brake);
+        driveMotor.setNeutralMode(NeutralMode.Coast);
         driveMotor.setInverted(reversed);
     }
 
     private void configTurningMotor(boolean reversed) {
         turningMotor.configFactoryDefault();
         turningMotor.setCurrent(false);
-        turningMotor.setNeutralMode(NeutralMode.Brake);
+        turningMotor.setNeutralMode(NeutralMode.Coast);
         turningMotor.setInverted(reversed);
-        turningMotor.config_kP(0, 0);
-        turningMotor.config_kI(0, SwerveModuleConstants.I_TURNING);
-        turningMotor.config_kD(0, SwerveModuleConstants.D_TURNING);
     }
 
     public double getDrivePosition() {
@@ -126,19 +123,20 @@ public class SwerveModule {
 
     public void stop() {
         driveMotor.set(ControlMode.PercentOutput, 0);
+        turningMotor.set(ControlMode.PercentOutput, 0);
+    }
 
+    public void lockModule() {
         switch (turningMotor.getDeviceID()) {
             case (RobotMap.DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT):
             case (RobotMap.DriverPort.BACK_RIGHT_TURNING_MOTOR_PORT):
-                turningMotor.set(ControlMode.Position, -Math.PI / 4);
+                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), -Math.PI / 4));
                 break;
             case (RobotMap.DriverPort.FRONT_RIGHT_TURNING_MOTOR_PORT):
             case (RobotMap.DriverPort.BACK_LEFT_TURNING_MOTOR_PORT):
-                turningMotor.set(ControlMode.Position, Math.PI / 4);
+                turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), Math.PI / 4));
                 break;
         }
-
-    //    turningMotor.set(0);
     }
 
 

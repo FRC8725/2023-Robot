@@ -207,12 +207,13 @@ public class ArmSubsystem extends SubsystemBase {
                 if (desiredElbowAngle < Units.degreesToRadians(90)) {
                     desiredElbowAngle = Units.degreesToRadians(90);
                     desiredWinchAngle = Units.degreesToRadians(0);
-                    winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
                 }
             } else {
                 winch.setSetpoint(desiredWinchAngle);
-                desiredElbowAngle = lastDesiredElbowAngle;
-                desiredWinchAngle = lastDesiredWinchAngle;
+                if (desiredElbowAngle > lastDesiredElbowAngle) {
+                    desiredElbowAngle = lastDesiredElbowAngle;
+                    desiredWinchAngle = lastDesiredWinchAngle;
+                }
             }
             xAxisMemory = xAxis;
             yAxisMemory = yAxis;

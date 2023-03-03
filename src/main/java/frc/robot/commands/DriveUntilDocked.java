@@ -57,6 +57,7 @@ public class DriveUntilDocked extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
+        super.andThen(new LockChassis(swerveSubsystem));
     }
 
     // Returns true when the command should end.
