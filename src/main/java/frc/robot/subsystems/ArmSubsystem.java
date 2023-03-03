@@ -79,6 +79,7 @@ public class ArmSubsystem extends SubsystemBase {
                 lastY = armPosition.getSecond();
                 winch.setSetpoint(ArmConstants.INITIAL_WINCH_ANGLE);
                 elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
+                isElbowLocked = false;
                 isResetting = false;
             }
         }

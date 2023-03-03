@@ -26,10 +26,10 @@ public class GrabPiecesFromSingle extends CommandBase {
     @Override
     public void initialize() {
         armSubsystem.setSetpoint(Constants.PoseConstants.LOADING_ZONE_SINGLE_POSE.getFirst(), Constants.PoseConstants.LOADING_ZONE_SINGLE_POSE.getSecond());
-        pneumatics.setGripper(true);
         armSubsystem.setTransporting(false);
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(false);
+        pneumatics.setGripper(true);
         Timer.delay(.2);
     }
 

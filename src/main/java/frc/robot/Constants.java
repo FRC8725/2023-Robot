@@ -214,7 +214,7 @@ public final class Constants {
 //        public static final double I_ROLL = 0;
 //        public static final double D_ROLL = 0;
 
-        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.348;
+        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.328;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
         public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.929;
 
@@ -226,7 +226,7 @@ public final class Constants {
         public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 2;
         public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
-        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI / 2;
+        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 0.6;
         public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 5;
 //        public static final double MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;
 //        public static final double MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
@@ -272,9 +272,10 @@ public final class Constants {
 
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
-        public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.683, -0.354);
-        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.594, 0.375);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.029, 0.755);
+        public static final Pair<Double, Double> GROUND_ARM_POSE = new Pair<>(0.683, -0.354);
+        public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.5, -0.1);
+        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.375);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.129, 0.755);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
         public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.4);
         public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.65);

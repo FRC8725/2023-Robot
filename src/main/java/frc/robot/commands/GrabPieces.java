@@ -29,7 +29,7 @@ public class GrabPieces extends CommandBase {
 
     @Override
     public void initialize() {
-        armSubsystem.setSetpoint(Constants.PoseConstants.LOW_ARM_POSE.getFirst(), Constants.PoseConstants.LOW_ARM_POSE.getSecond());
+        armSubsystem.setSetpoint(Constants.PoseConstants.GROUND_ARM_POSE.getFirst(), Constants.PoseConstants.GROUND_ARM_POSE.getSecond());
         armSubsystem.setTransporting(false);
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(true);
