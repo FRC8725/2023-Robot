@@ -81,6 +81,8 @@ public class ArmSubsystem extends SubsystemBase {
                 elbow.setSetpoint(ArmConstants.INITIAL_ELBOW_ANGLE);
                 isElbowLocked = false;
                 isResetting = false;
+                desiredElbowAngle = ArmConstants.INITIAL_ELBOW_ANGLE;
+                desiredWinchAngle = ArmConstants.INITIAL_WINCH_ANGLE;
             }
         }
         if (isElbowLocked) {

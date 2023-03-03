@@ -68,10 +68,10 @@ public final class Constants {
         public static final boolean BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_REVERSED = false;
         public static final boolean BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_REVERSED = false;
 
-        public static final double FRONT_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 223.066;
-        public static final double FRONT_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 300.5;
-        public static final double BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 88.85;
-        public static final double BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 213.66;
+        public static final double FRONT_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 221.66;
+        public static final double FRONT_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 301.904;
+        public static final double BACK_LEFT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 89.12;
+        public static final double BACK_RIGHT_DRIVE_ABSOLUTE_ENCODER_OFFSET_ANGLE = 211.904;
 
         public static final double PHYSICAL_MAX_SPEED_METERS_PER_SECOND = Units.feetToMeters(13.5);
         // Neo: 12; Falcon: 13.5
@@ -192,8 +192,8 @@ public final class Constants {
         public static final boolean WINCH_MOTOR_INVERTED = false;
         public static final double INTAKE_GEAR_RATIO = 1.;
 
-        public static final double MAX_WINCH_SPEED = .35;
-        public static final double MAX_ELBOW_SPEED = .6;
+        public static final double MAX_WINCH_SPEED = .2;
+        public static final double MAX_ELBOW_SPEED = .38;
         public static final double MAX_WRIST_SPEED = .25;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
@@ -226,8 +226,8 @@ public final class Constants {
         public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 2;
         public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
-        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 0.4;
-        public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI * 0.3;
+        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 0.2;
+        public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI * 0.2;
 //        public static final double MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;
 //        public static final double MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
 

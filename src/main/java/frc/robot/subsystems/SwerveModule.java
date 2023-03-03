@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -68,9 +71,9 @@ public class SwerveModule {
         turningMotor.setCurrent(false);
         turningMotor.setNeutralMode(NeutralMode.Brake);
         turningMotor.setInverted(reversed);
-        turningMotor.config_kP(0, SwerveModuleConstants.P_TURNING);
-        turningMotor.config_kP(0, SwerveModuleConstants.I_TURNING);
-        turningMotor.config_kP(0, SwerveModuleConstants.D_TURNING);
+        turningMotor.config_kP(0, 0);
+        turningMotor.config_kI(0, SwerveModuleConstants.I_TURNING);
+        turningMotor.config_kD(0, SwerveModuleConstants.D_TURNING);
     }
 
     public double getDrivePosition() {
@@ -113,10 +116,6 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.02) {
-            stop();
-            return;
-        }
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.PHYSICAL_MAX_SPEED_METERS_PER_SECOND);
         turningMotor.set(ControlMode.PercentOutput, turningPIDController.calculate(getTurningPosition(), state.angle.getRadians()));

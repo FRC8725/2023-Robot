@@ -49,7 +49,6 @@ public class Gripper {
 
         distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
         distanceSensor.setEnabled(true);
-        distanceSensor.setMeasurementPeriod(.01);
         distanceSensor.setAutomaticMode(true);
         distanceSensor.setDistanceUnits(Unit.kMillimeters);
     }
