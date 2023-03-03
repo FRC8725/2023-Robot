@@ -176,6 +176,10 @@ public class ArmSubsystem extends SubsystemBase {
         return elbow.atSetpoint() && winch.atSetpoint();
     }
 
+    public boolean atWinchSetpoint() {
+        return winch.atSetpoint();
+    }
+
     private double xAxisMemory = Integer.MAX_VALUE;
     private double yAxisMemory = Integer.MAX_VALUE;
 
@@ -201,7 +205,7 @@ public class ArmSubsystem extends SubsystemBase {
                 if (desiredElbowAngle < Units.degreesToRadians(90)) {
                     desiredElbowAngle = Units.degreesToRadians(90);
                     desiredWinchAngle = Units.degreesToRadians(0);
-                    winch.setSetpoint(desiredWinchAngle);
+                    winch.setSetpoint(ArmConstants.MIN_WINCH_ANGLE);
                 }
             } else {
                 winch.setSetpoint(desiredWinchAngle);
