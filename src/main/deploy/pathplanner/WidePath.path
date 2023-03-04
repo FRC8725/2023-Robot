@@ -73,7 +73,7 @@
         "names": [
           "slowMove"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }

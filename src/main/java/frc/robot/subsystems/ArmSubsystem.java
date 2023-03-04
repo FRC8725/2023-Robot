@@ -57,7 +57,7 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 //        isTransporting = false;
-        var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(60);
+        var horizontalFunction = isHorizontal? 0: Units.degreesToRadians(50);
         var placingFunction = isPlacing? Units.degreesToRadians(30): 0;
         var transportingFunction = isTransporting? Units.degreesToRadians(90): 0;
         var teleopAdjFunction = Units.degreesToRadians(5) * wristStage;
@@ -224,7 +224,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setSpeed(double spdX, double spdY) {
         if (isResetting) return;
         isElbowLocked = false;
-//        Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
+//          q   Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
 //        Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + elbow.getAbsoluteEncoderRad() + Math.PI/2));
 //        Translation2d point = vectorUpperArm.plus(vectorForearm);
         var armPosition = getArmPosition();

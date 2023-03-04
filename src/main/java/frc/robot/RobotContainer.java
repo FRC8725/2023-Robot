@@ -88,7 +88,6 @@ public class RobotContainer {
             new DriveUntilDocked(true)
             ));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("(test)Narrow Only Path", new NarrowOnlyPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
     }
 

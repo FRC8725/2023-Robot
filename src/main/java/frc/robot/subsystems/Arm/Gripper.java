@@ -48,14 +48,13 @@ public class Gripper {
 //        rollProfiledPIDController.disableContinuousInput();
 
         distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
-        distanceSensor.setEnabled(true);
         distanceSensor.setAutomaticMode(true);
-        distanceSensor.setDistanceUnits(Unit.kMillimeters);
     }
 
     public double getDistanceSensor() {
 //        return distanceSensor.getRange();
-        if (distanceSensor.isRangeValid()) return distanceSensor.getRange();
+        double range = distanceSensor.getRange(Unit.kMillimeters);
+        if (distanceSensor.isRangeValid()) return range;
         else return 2000;
     }
 

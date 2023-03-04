@@ -31,8 +31,8 @@ public class WidePath extends SequentialCommandGroup {
         eventMap.put("resetArm", new ResetArm(armSubsystem, gripperSubsystem, pneumatics));
         eventMap.put("release", new SequentialCommandGroup(new InstantCommand(() -> pneumatics.setGripper(true)), new WaitCommand(0.5)));
         eventMap.put("slowMove",new ParallelDeadlineGroup(
-                new WaitCommand(3),
-                new InstantCommand(() -> swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(0.8, .0, .0), swerveSubsystem.getRotation2d()))))
+                new WaitCommand(6),
+                new RepeatCommand(new InstantCommand(() -> swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-1, .0, .0), swerveSubsystem.getRotation2d())))))
         ));
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

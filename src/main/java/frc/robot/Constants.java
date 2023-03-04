@@ -22,7 +22,7 @@ public final class Constants {
 
     public static final class Joystick {
 
-        public static final double DEADBAND = 0.2;
+        public static final double DEADBAND = 0.1;
     }
 
     public static final class SwerveModuleConstants {
@@ -80,7 +80,7 @@ public final class Constants {
         public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.65;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
                 PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 3;
-        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 1.5;
+        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double DECREASE_DRIVING_SPEED_FACTOR = .4;
         public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
@@ -128,7 +128,7 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double P_BALANCE = 0.05;
+        public static final double P_BALANCE = 0.075;
         public static final double I_BALANCE = .0;
         public static final double D_BALANCE = .0;
         public static final double xSpeedMax = 1;
@@ -274,10 +274,10 @@ public final class Constants {
         // Position Order: XAxis YAxis
         public static final Pair<Double, Double> GROUND_ARM_POSE = new Pair<>(0.683, -0.354);
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.5, -0.1);
-        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.375);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.129, 0.755);
+        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.415);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.069, 0.815);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
-        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.4);
+        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.32);
         public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.65);
     }
 

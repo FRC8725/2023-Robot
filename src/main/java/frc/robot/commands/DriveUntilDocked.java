@@ -19,6 +19,7 @@ public class DriveUntilDocked extends CommandBase {
      */
     final SwerveSubsystem swerveSubsystem;
     private boolean on = false;
+    private boolean isClimbing = false;
     private final boolean reverse;
     final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
@@ -35,6 +36,7 @@ public class DriveUntilDocked extends CommandBase {
     public void initialize() {
         swerveSubsystem.stopModules();
         on = false;
+        isClimbing = true;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -44,10 +46,15 @@ public class DriveUntilDocked extends CommandBase {
             on = true;
         }
         if (reverse && !on) {
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax, .0, .0)), swerveSubsystem.getRotation2d())));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax * 1.2, .0, .0)), swerveSubsystem.getRotation2d())));
         }else if (!reverse && !on){
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)), swerveSubsystem.getRotation2d())));
-        } else {
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(BalanceConstants.xSpeedMax * 1.2, .0, .0)), swerveSubsystem.getRotation2d())));
+        } else if (Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold) {
+            isClimbing = false;
+            controller.setP(BalanceConstants.P_BALANCE * 0.6);
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(controller.calculate(-swerveSubsystem.getPitch(), 0), .0, .0)), swerveSubsystem.getRotation2d())));
+        } else if (isClimbing){
+            controller.setP(BalanceConstants.P_BALANCE);
             swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(controller.calculate(-swerveSubsystem.getPitch(), 0), .0, .0)), swerveSubsystem.getRotation2d())));
         }
 
@@ -57,7 +64,6 @@ public class DriveUntilDocked extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerveSubsystem.stopModules();
-        super.andThen(new LockChassis(swerveSubsystem));
     }
 
     // Returns true when the command should end.

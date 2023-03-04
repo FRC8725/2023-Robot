@@ -35,7 +35,7 @@ public class SwerveModule {
         absoluteEncoder = new CANCoder(absoluteEncoderId);
         CANCoderConfiguration absoluteEncoderConfiguration = new CANCoderConfiguration();
 
-        absoluteEncoderConfiguration.sensorTimeBase = SensorTimeBase.Per100Ms_Legacy;
+        absoluteEncoderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
         absoluteEncoderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         absoluteEncoderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         absoluteEncoder.configFactoryDefault();
@@ -69,7 +69,7 @@ public class SwerveModule {
     private void configTurningMotor(boolean reversed) {
         turningMotor.configFactoryDefault();
         turningMotor.setCurrent(false);
-        turningMotor.setNeutralMode(NeutralMode.Coast);
+        turningMotor.setNeutralMode(NeutralMode.Brake);
         turningMotor.setInverted(reversed);
     }
 
