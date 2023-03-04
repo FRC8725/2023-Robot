@@ -35,8 +35,6 @@ public class VisionManager extends SubsystemBase {
         return instance;
     }
 
-    UsbCamera usbCamera;
-    CvSource outputStream;
     CvSink cvSink;
     PhotonPipelineResult result;
     PhotonPoseEstimator estimator;
@@ -44,12 +42,8 @@ public class VisionManager extends SubsystemBase {
     PhotonCamera camera;
 
     public VisionManager() {
-        usbCamera = CameraServer.startAutomaticCapture(0);
-        usbCamera.setResolution(VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
-        cvSink = CameraServer.getVideo(usbCamera);
-        outputStream = CameraServer.putVideo("ElevatorCAM", VisionConstants.UsbCameraResolution[0], VisionConstants.UsbCameraResolution[1]);
-        result = new PhotonPipelineResult();
         camera = new PhotonCamera("OV5647");
+        result = new PhotonPipelineResult();
         estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
     }
 
@@ -62,20 +56,20 @@ public class VisionManager extends SubsystemBase {
         }
         return bestCameraToTarget;
     }
-
-    public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        camera.setPipelineIndex(1);
-        estimator.setReferencePose(prevEstimatedRobotPose);
-
-        double currentTime = Timer.getFPGATimestamp();
-        Optional<EstimatedRobotPose> estimatorResult = estimator.update();
-        if (estimatorResult.isPresent()) {
-            return new Pair<Pose2d, Double>(
-                    estimatorResult.get().estimatedPose.toPose2d(), currentTime - estimatorResult.get().timestampSeconds);
-        } else {
-            return new Pair<Pose2d, Double>(null, 0.0);
-        }
-    }
+//
+//    public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+//        camera.setPipelineIndex(1);
+//        estimator.setReferencePose(prevEstimatedRobotPose);
+//
+//        double currentTime = Timer.getFPGATimestamp();
+//        Optional<EstimatedRobotPose> estimatorResult = estimator.update();
+//        if (estimatorResult.isPresent()) {
+//            return new Pair<Pose2d, Double>(
+//                    estimatorResult.get().estimatedPose.toPose2d(), currentTime - estimatorResult.get().timestampSeconds);
+//        } else {
+//            return new Pair<Pose2d, Double>(null, 0.0);
+//        }
+//    }
 
     public boolean hasTarget() {
         return result.hasTargets();

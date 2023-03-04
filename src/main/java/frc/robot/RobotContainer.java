@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -61,8 +62,11 @@ public class RobotContainer {
         swerveJoystick.btn_triggerR.onTrue(new InstantCommand(swerveSubsystem::zeroHeading));
         // swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, visionManager));
         // swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
-         swerveJoystick.btn_B.onTrue(new LockChassis(swerveSubsystem));
-        swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(false));
+        swerveJoystick.btn_B.onTrue(new LockChassis(swerveSubsystem));
+        swerveJoystick.POV_West.whileTrue(new CorrectPosition("left", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
+        swerveJoystick.POV_North.whileTrue(new CorrectPosition("middle", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
+        swerveJoystick.POV_South.whileTrue(new CorrectPosition("right", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
+        swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(false, swerveSubsystem));
 
 //        elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(gripperSubsystem, visionManager, pneumatics));
         elevatorJoystick.btn_topL.onTrue(new GrabPiecesFromDouble(armSubsystem, gripperSubsystem, pneumatics));
@@ -79,14 +83,7 @@ public class RobotContainer {
     private void putToDashboard() {
         autoCommand.addOption("(0)Nothing", new InstantCommand(swerveSubsystem::stopModules));
         autoCommand.addOption("(1)Wide", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        autoCommand.addOption("(2)Middle", new SequentialCommandGroup(
-            new RunArmToPosition(armSubsystem, gripperSubsystem, Constants.PoseConstants.HIGH_ARM_POSE, true, true), 
-            new ReleaseGripper(pneumatics), 
-            new WaitCommand(0.5),
-            new ResetArm(armSubsystem, gripperSubsystem, pneumatics), 
-            new WaitCommand(3),
-            new DriveUntilDocked(true)
-            ));
+        autoCommand.addOption("(2)Middle", new MiddlePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
     }

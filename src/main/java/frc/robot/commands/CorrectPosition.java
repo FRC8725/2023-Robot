@@ -23,29 +23,26 @@ public class CorrectPosition extends CommandBase {
     final private ProfiledPIDController xController, yController, thetaController;
 
     final private VisionManager visionManager;
-    private final int whereChase;
+    private final String whereChase;
 
     private Transform3d lastTarget;
-    // 0 stand for left side
-    // 1 stand for middle
-    // 2 stand for right side
+    // "left" stand for left side
+    // "middle" stand for middle
+    // "right" stand for right side
 
-    public CorrectPosition(int whereChase, VisionManager visionManager) {
-        // 0 stand for left side
-        // 1 stand for middle
-        // 2 stand for right side
+    public CorrectPosition(String whereChase, VisionManager visionManager) {
         this.swerveSubsystem = SwerveSubsystem.getInstance();
         this.whereChase = whereChase;
         addRequirements(swerveSubsystem);
 
         // Controller Settings
-        xController = new ProfiledPIDController(AutoConstants.P_X_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
-        yController = new ProfiledPIDController(AutoConstants.P_Y_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
+        xController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_X_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
+        yController = new ProfiledPIDController(AutoConstants.CORRECT_POSITION_Y_CONTROLLER, 0, 0, AutoConstants.DRIVE_CONTROLLER_CONSTRAINTS);
         thetaController = new ProfiledPIDController(
-                AutoConstants.P_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
-        xController.setTolerance(.2);
-        yController.setTolerance(.2);
-        thetaController.setTolerance(Units.degreesToRadians(3));
+                AutoConstants.CORRECT_POSITION_THETA_CONTROLLER, 0, 0, AutoConstants.THETA_CONTROLLER_CONSTRAINTS);
+//        xController.setTolerance(.2);
+//        yController.setTolerance(.2);
+//        thetaController.setTolerance(Units.degreesToRadians(3));
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         this.visionManager = visionManager;
     }
@@ -55,7 +52,6 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        visionManager.getAprilTagRelative();
         lastTarget = new Transform3d();
         Timer.delay(.8);
     }
@@ -76,14 +72,14 @@ public class CorrectPosition extends CommandBase {
         );
         var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
         var targetPose = camPose.transformBy(relativePos);
-        Transform3d tag2goal = new Transform3d();
+        Transform3d tag2goal;
 
         // Change the place we want to go.
-        switch (whereChase) {
-            case 0:
+        switch (whereChase.toLowerCase()) {
+            case "left":
                 tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Left);
                 break;
-            case 2:
+            case "right":
                 tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Right);
                 break;
             default:

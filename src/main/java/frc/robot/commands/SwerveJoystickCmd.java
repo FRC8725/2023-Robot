@@ -20,7 +20,7 @@ public class SwerveJoystickCmd extends CommandBase {
     private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction, turntoGridaFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
     private final PIDController thetaPIDController;
-    private final Debouncer debouncer = new Debouncer(0.1);
+    private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kFalling);
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
                              Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,

@@ -23,9 +23,9 @@ public class DriveUntilDocked extends CommandBase {
     private final boolean reverse;
     final PIDController controller = new PIDController(BalanceConstants.P_BALANCE, BalanceConstants.I_BALANCE, BalanceConstants.D_BALANCE);
 
-    public DriveUntilDocked(boolean direction) {
+    public DriveUntilDocked(boolean direction, SwerveSubsystem swerveSubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
-        swerveSubsystem = SwerveSubsystem.getInstance();
+        this.swerveSubsystem = swerveSubsystem;
         this.reverse = direction;
         //controller.setTolerance(6);
         addRequirements(swerveSubsystem);
