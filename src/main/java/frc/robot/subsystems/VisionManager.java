@@ -155,6 +155,8 @@ public class VisionManager extends SubsystemBase {
 
     boolean isFirstConnected = true;
     @Override
-    public void periodic() {}
+    public void periodic() {
+        result = camera.getLatestResult();
+    }
 }
 
