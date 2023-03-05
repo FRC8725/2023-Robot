@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
@@ -70,8 +71,8 @@ public class CorrectPosition extends CommandBase {
                 0.0,
                 new Rotation3d(0, 0, swerveSubsystem.getPose().getRotation().getRadians())
         );
-        var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
-        var targetPose = camPose.transformBy(relativePos);
+//        var camPose = robotPose.transformBy(VisionConstants.Robot2Photon);
+        var targetPose = robotPose.transformBy(relativePos);
         Transform3d tag2goal;
 
         // Change the place we want to go.
@@ -81,6 +82,9 @@ public class CorrectPosition extends CommandBase {
                 break;
             case "right":
                 tag2goal = VisionConstants.Tag2Goal.plus(VisionConstants.GoalMid2Right);
+                break;
+            case "single":
+                tag2goal = DriverStation.getAlliance() == DriverStation.Alliance.Red? VisionConstants.Tag2Single_Red: VisionConstants.Tag2Single_Blue;
                 break;
             default:
                 tag2goal = VisionConstants.Tag2Goal;

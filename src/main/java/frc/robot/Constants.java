@@ -121,8 +121,18 @@ public final class Constants {
                 new Transform3d(
                         new Translation3d(Units.inchesToMeters(16.113), 0, 0),
                         new Rotation3d(0, 0, Math.PI));
-        public static final Transform3d GoalMid2Left = new Transform3d(new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
+        public static final Transform3d GoalMid2Left =
+                new Transform3d(
+                        new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
         public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
+        public static final Transform3d Tag2Single_Red =
+                new Transform3d(
+                        new Translation3d(-2.39, Units.feetToMeters(4), 0),
+                        new Rotation3d(0, 0, -Math.PI / 2));
+        public static final Transform3d Tag2Single_Blue =
+                new Transform3d(
+                        new Translation3d(-2.39, -Units.feetToMeters(4), 0),
+                        new Rotation3d(0, 0, Math.PI / 2));
         // UsbCamera
         public static final int[] UsbCameraResolution = {320, 240};
     }

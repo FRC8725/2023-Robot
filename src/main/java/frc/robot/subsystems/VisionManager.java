@@ -25,6 +25,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,22 +38,26 @@ public class VisionManager extends SubsystemBase {
 
     CvSink cvSink;
     PhotonPipelineResult result;
-    PhotonPoseEstimator estimator;
+//    PhotonPoseEstimator estimator;
 
     PhotonCamera camera;
 
     public VisionManager() {
         camera = new PhotonCamera("OV5647");
         result = new PhotonPipelineResult();
-        estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
+//        estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
     }
 
     public Transform3d getAprilTagRelative() {
-        PhotonTrackedTarget target;
+        var bestCameraToTargetArray = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        boolean hasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1) != -1;
+//        PhotonTrackedTarget target;
         Transform3d bestCameraToTarget = new Transform3d();
-        if (result.hasTargets()) {
-            target = result.getBestTarget();
-            bestCameraToTarget = target.getBestCameraToTarget();
+        if (hasTarget) {
+//            target = result.getBestTarget();
+            bestCameraToTarget = new Transform3d(
+                    new Translation3d (bestCameraToTargetArray[0], -bestCameraToTargetArray[1], bestCameraToTargetArray[2]),
+                    new Rotation3d(bestCameraToTargetArray[3], bestCameraToTargetArray[4], bestCameraToTargetArray[5]));
         }
         return bestCameraToTarget;
     }
