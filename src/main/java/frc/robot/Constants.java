@@ -41,6 +41,8 @@ public final class Constants {
 
     public static final class DriveConstants {
 
+        public static final double TRACK_WITH_BUMPER_WIDTH = 0.83;
+
         public static final double TRACK_WIDTH = Units.inchesToMeters(24);
         // Distance between right and left wheels
         public static final double WHEEL_BASE = Units.inchesToMeters(24);
@@ -119,7 +121,7 @@ public final class Constants {
         public static final Transform3d Robot2Photon = Photon2Robot.inverse();
         public static final Transform3d Tag2Goal =
                 new Transform3d(
-                        new Translation3d(Units.inchesToMeters(16.113), 0, 0),
+                        new Translation3d(Units.inchesToMeters(16.113) + DriveConstants.TRACK_WITH_BUMPER_WIDTH / 2, 0, 0),
                         new Rotation3d(0, 0, Math.PI));
         public static final Transform3d GoalMid2Left =
                 new Transform3d(
@@ -127,11 +129,11 @@ public final class Constants {
         public static final Transform3d GoalMid2Right = GoalMid2Left.inverse();
         public static final Transform3d Tag2Single_Red =
                 new Transform3d(
-                        new Translation3d(-2.39, Units.feetToMeters(4), 0),
+                        new Translation3d(-2.39, Units.feetToMeters(4) - DriveConstants.TRACK_WITH_BUMPER_WIDTH / 2, 0),
                         new Rotation3d(0, 0, -Math.PI / 2));
         public static final Transform3d Tag2Single_Blue =
                 new Transform3d(
-                        new Translation3d(-2.39, -Units.feetToMeters(4), 0),
+                        new Translation3d(-2.39, -Units.feetToMeters(4) + DriveConstants.TRACK_WITH_BUMPER_WIDTH / 2, 0),
                         new Rotation3d(0, 0, Math.PI / 2));
         // UsbCamera
         public static final int[] UsbCameraResolution = {320, 240};

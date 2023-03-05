@@ -50,10 +50,10 @@ public class VisionManager extends SubsystemBase {
 
     public Transform3d getAprilTagRelative() {
         var bestCameraToTargetArray = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-        boolean hasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1) != -1;
+//        boolean hasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1) != -1;
 //        PhotonTrackedTarget target;
         Transform3d bestCameraToTarget = new Transform3d();
-        if (hasTarget) {
+        if (hasTarget()) {
 //            target = result.getBestTarget();
             bestCameraToTarget = new Transform3d(
                     new Translation3d (bestCameraToTargetArray[0], -bestCameraToTargetArray[1], bestCameraToTargetArray[2]),
@@ -77,7 +77,8 @@ public class VisionManager extends SubsystemBase {
 //    }
 
     public boolean hasTarget() {
-        return result.hasTargets();
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1) != -1;
+//        return result.hasTargets();
     }
 
     public double getConeAngleRads() {
