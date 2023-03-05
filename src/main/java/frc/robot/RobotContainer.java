@@ -90,7 +90,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        swerveSubsystem.setRobotPoseWithVision();
+        // swerveSubsystem.setRobotPoseWithVision();
         swerveSubsystem.zeroHeading();
         return autoCommand.getSelected();
     }

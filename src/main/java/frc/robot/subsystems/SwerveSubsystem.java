@@ -17,7 +17,6 @@ import frc.robot.RobotMap.DriverPort;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final static SwerveSubsystem instance = new SwerveSubsystem();
-    private final Limelight vision = Limelight.getInstance();
     private final SwerveModule frontLeft = new SwerveModule(
             DriverPort.FRONT_LEFT_DRIVE_MOTOR_PORT,
             DriverPort.FRONT_LEFT_TURNING_MOTOR_PORT,
@@ -63,7 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 Thread.sleep(2000);
                 zeroHeading();
                 resetEncoders();
-                setRobotPoseWithVision();
+                // setRobotPoseWithVision();
             } catch (Exception ignored) {
             }
         }).start();
@@ -100,8 +99,8 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
-        var gloabalPose = vision.getEstimatedGlobalPose();
-        if (vision.hasTarget()) SwerveEstimator.addVisionMeasurement(gloabalPose.get().getFirst(), gloabalPose.get().getSecond());
+        // var gloabalPose = vision.getEstimatedGlobalPose();
+        // if (vision.hasTarget()) SwerveEstimator.addVisionMeasurement(gloabalPose.get().getFirst(), gloabalPose.get().getSecond());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Pitch", getPitch());
         SmartDashboard.putData(field);
@@ -140,11 +139,11 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.lockModule();
         backRight.lockModule();
     }
-    public void updateRobotPoseWithVision() {
-        //if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get().getFirst(), Timer.getFPGATimestamp() + vision.getEstimatedGlobalPose().get().getSecond()/1000.);
-    }
+    // public void updateRobotPoseWithVision() {
+    //     if (vision.getEstimatedGlobalPose().isPresent())SwerveEstimator.addVisionMeasurement(vision.getEstimatedGlobalPose().get().getFirst(), Timer.getFPGATimestamp() + vision.getEstimatedGlobalPose().get().getSecond()/1000.);
+    // }
 
-    public void setRobotPoseWithVision() {
-        //if (vision.getEstimatedGlobalPose().isPresent())resetOdometry(vision.getEstimatedGlobalPose().get().getFirst());
-    }
+    // public void setRobotPoseWithVision() {
+    //     if (vision.getEstimatedGlobalPose().isPresent())resetOdometry(vision.getEstimatedGlobalPose().get().getFirst());
+    // }
 }

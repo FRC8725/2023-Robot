@@ -36,15 +36,15 @@ public class VisionManager extends SubsystemBase {
         return instance;
     }
 
-    CvSink cvSink;
-    PhotonPipelineResult result;
+//    CvSink cvSink;
+//    PhotonPipelineResult result;
 //    PhotonPoseEstimator estimator;
 
-    PhotonCamera camera;
+//    PhotonCamera camera;
 
     public VisionManager() {
-        camera = new PhotonCamera("OV5647");
-        result = new PhotonPipelineResult();
+//        camera = new PhotonCamera("OV5647");
+//        result = new PhotonPipelineResult();
 //        estimator = new PhotonPoseEstimator(FieldConstants.aprilTagField, PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, VisionConstants.Robot2Photon);
     }
 
@@ -162,7 +162,7 @@ public class VisionManager extends SubsystemBase {
     boolean isFirstConnected = true;
     @Override
     public void periodic() {
-        result = camera.getLatestResult();
+//        result = camera.getLatestResult();
     }
 }
 
