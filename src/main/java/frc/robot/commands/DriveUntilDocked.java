@@ -45,11 +45,9 @@ public class DriveUntilDocked extends CommandBase {
         if (Math.abs(swerveSubsystem.getPitch()) > BalanceConstants.pitchThreshold){
             on = true;
         }
-        if (reverse && !on) {
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax, .0, .0)), swerveSubsystem.getRotation2d())));
-        }else if (!reverse && !on){
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)), swerveSubsystem.getRotation2d())));
-        } else if (Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold) {
+        if (!on) {
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax * (reverse ? -1 : 1), .0, .0)), swerveSubsystem.getRotation2d())));
+        }else if (Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold) {
             isClimbing = false;
             controller.setP(BalanceConstants.P_BALANCE * 0.6);
             swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(controller.calculate(-swerveSubsystem.getPitch(), 0), .0, .0)), swerveSubsystem.getRotation2d())));

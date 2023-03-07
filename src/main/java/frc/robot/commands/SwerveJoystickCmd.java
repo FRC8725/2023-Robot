@@ -59,10 +59,6 @@ public class SwerveJoystickCmd extends CommandBase {
         ySpeed = Math.abs(ySpeed) > Constants.Joystick.DEADBAND ? ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > Constants.Joystick.DEADBAND ? turningSpeed : 0.0;
 
-        if (xSpeed == 0 && ySpeed == 0 && turningSpeed == 0) {
-            this.swerveSubsystem.stopModules();
-            return;
-        }
 
         if (turntoGridaFunction.get()) {
             turningSpeed = Math.max(-1, Math.min(1, thetaPIDController.calculate(swerveSubsystem.getRotation2d().getRadians())));
