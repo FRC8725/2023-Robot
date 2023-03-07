@@ -143,7 +143,7 @@ public final class Constants {
         public static final double P_BALANCE = 0.075;
         public static final double I_BALANCE = .0;
         public static final double D_BALANCE = .0;
-        public static final double xSpeedMax = 1;
+        public static final double xSpeedMax = 1.3;
         public static final double pitchThreshold = 10.;
         public static final double pitchTolerance = 3.;
     }

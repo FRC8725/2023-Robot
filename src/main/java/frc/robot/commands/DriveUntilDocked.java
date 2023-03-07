@@ -46,9 +46,9 @@ public class DriveUntilDocked extends CommandBase {
             on = true;
         }
         if (reverse && !on) {
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax * 1.2, .0, .0)), swerveSubsystem.getRotation2d())));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax, .0, .0)), swerveSubsystem.getRotation2d())));
         }else if (!reverse && !on){
-            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(BalanceConstants.xSpeedMax * 1.2, .0, .0)), swerveSubsystem.getRotation2d())));
+            swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(BalanceConstants.xSpeedMax, .0, .0)), swerveSubsystem.getRotation2d())));
         } else if (Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold) {
             isClimbing = false;
             controller.setP(BalanceConstants.P_BALANCE * 0.6);
