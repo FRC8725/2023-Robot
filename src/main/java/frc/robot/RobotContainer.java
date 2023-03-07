@@ -6,6 +6,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -43,8 +44,7 @@ public class RobotContainer {
                 () -> -this.swerveJoystick.get_LStickX(),
                 () -> -this.swerveJoystick.get_RStickX(),
                 () -> !this.swerveJoystick.btn_topL.getAsBoolean(),
-                this.swerveJoystick.btn_topR::getAsBoolean,
-                this.swerveJoystick.btn_A::getAsBoolean
+                this.swerveJoystick.btn_topR::getAsBoolean
         ));
         armSubsystem.setDefaultCommand(new ArmJoystickCmd(
                 armSubsystem,
@@ -87,6 +87,7 @@ public class RobotContainer {
         autoCommand.addOption("(2)Middle", new MiddlePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
+        SmartDashboard.putData(new PowerDistribution(25, PowerDistribution.ModuleType.kRev));
     }
 
     public Command getAutonomousCommand() {

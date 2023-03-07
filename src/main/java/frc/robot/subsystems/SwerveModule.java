@@ -62,7 +62,7 @@ public class SwerveModule {
     private void configDriveMotor(boolean reversed) {
         driveMotor.configFactoryDefault();
         driveMotor.setCurrent(true);
-        driveMotor.setNeutralMode(NeutralMode.Coast);
+        driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.setInverted(reversed);
     }
 

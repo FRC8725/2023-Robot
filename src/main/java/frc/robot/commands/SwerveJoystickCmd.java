@@ -17,21 +17,20 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction, turntoGridaFunction;
+    private final Supplier<Boolean> fieldOrientedFunction, decreaseSpeedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
     private final PIDController thetaPIDController;
     private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kFalling);
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
                              Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-                             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction, Supplier<Boolean> turnToGrid) {
+                             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> decreaseSpeedFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningSpdFunction = turningSpdFunction;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.decreaseSpeedFunction = decreaseSpeedFunction;
-        this.turntoGridaFunction = turnToGrid;
         this.thetaPIDController = new PIDController(DriveConstants.P_JOYSTICK_TURNING, 0, 0);
         this.xLimiter = new SlewRateLimiter(DriveConstants.TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND);
         this.yLimiter = new SlewRateLimiter(DriveConstants.TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND);
@@ -60,9 +59,9 @@ public class SwerveJoystickCmd extends CommandBase {
         turningSpeed = Math.abs(turningSpeed) > Constants.Joystick.DEADBAND ? turningSpeed : 0.0;
 
 
-        if (turntoGridaFunction.get()) {
-            turningSpeed = Math.max(-1, Math.min(1, thetaPIDController.calculate(swerveSubsystem.getRotation2d().getRadians())));
-        }
+//        if (turntoGridaFunction.get()) {
+//            turningSpeed = Math.max(-1, Math.min(1, thetaPIDController.calculate(swerveSubsystem.getRotation2d().getRadians())));
+//        }
 
         // 3. Make the driving smoother
         xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND * (decreaseSpeed ? DriveConstants.DECREASE_DRIVING_SPEED_FACTOR : 1.);
