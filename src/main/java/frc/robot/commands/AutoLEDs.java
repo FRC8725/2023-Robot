@@ -26,6 +26,8 @@ public class AutoLEDs extends CommandBase {
     IntegerPublisher what2grabPub =  led_nt.getIntegerTopic("what2grab").publish();
     IntegerPublisher where2goPub =  led_nt.getIntegerTopic("where2go").publish();
 
+    BooleanSubscriber isConeSub = vision_nt.getBooleanTopic("isCone").subscribe(false);
+
     public AutoLEDs(LEDSubsystem ledSubsystem) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
@@ -66,7 +68,7 @@ public class AutoLEDs extends CommandBase {
         } else {
             if (SmartDashboard.getBoolean("isGripperOpen", false)) isIn = false;
             if (isIn) {
-                if (vision_nt.getBooleanTopic("isCone").subscribe(false).get()) ledSubsystem.setBackColor(Color.kYellow);
+                if (isConeSub.get()) ledSubsystem.setBackColor(Color.kYellow);
                 else ledSubsystem.setBackColor(Color.kPurple);
             } else {
                 ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
