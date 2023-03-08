@@ -40,7 +40,8 @@ public class GripperSubsystem extends SubsystemBase {
 
     public boolean isPiecesInRange(boolean isFar) {
         var isInRange = gripper.getDistanceSensor() < 220 + (isFar? 50: 0);
-        if (isInRange) led_nt.putValue("getItem", NetworkTableValue.makeBoolean(true, 2));
+        if (isInRange) led_nt.getBooleanTopic("getItem").publish().set(true);
+//        if (isInRange) led_nt.putValue("getItem", NetworkTableValue.makeBoolean(true, 2));
         return isInRange;
     }
 

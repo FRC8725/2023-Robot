@@ -59,7 +59,8 @@ public class CorrectPosition extends CommandBase {
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
         lastTarget = new Transform3d();
-        led_nt.putValue("isLimelight", NetworkTableValue.makeBoolean(true));
+        led_nt.getBooleanTopic("isLimelight").publish().set(true);
+//        led_nt.putValue("isLimelight", NetworkTableValue.makeBoolean(true));
     }
 
     @Override
@@ -122,7 +123,7 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        led_nt.putValue("isLimelight", NetworkTableValue.makeBoolean(false));
+        led_nt.getBooleanTopic("isLimelight").publish().set(false);
         swerveSubsystem.stopModules();
     }
 }

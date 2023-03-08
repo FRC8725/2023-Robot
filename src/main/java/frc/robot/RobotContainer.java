@@ -8,7 +8,6 @@ package frc.robot;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -95,25 +94,25 @@ public class RobotContainer {
         SmartDashboard.putData(new PowerDistribution(RobotMap.PDMPort, PowerDistribution.ModuleType.kRev));
         loadingChooser.addOption("Double-Cone",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.putValue("what2grab", NetworkTableValue.makeInteger(1))),
-                        new InstantCommand(() -> led_nt.putValue("where2go", NetworkTableValue.makeInteger(2)))
+                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(1)),
+                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(2))
                 ));
         loadingChooser.addOption("Double-Cube",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.putValue("what2grab", NetworkTableValue.makeInteger(0))),
-                        new InstantCommand(() -> led_nt.putValue("where2go", NetworkTableValue.makeInteger(2)))
+                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(0)),
+                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(2))
                 ));
         loadingChooser.addOption("Single-Cone",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.putValue("what2grab", NetworkTableValue.makeInteger(1))),
-                        new InstantCommand(() -> led_nt.putValue("where2go", NetworkTableValue.makeInteger(1)))
+                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(1)),
+                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(1))
                 ));
         loadingChooser.addOption("Single-Cube",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.putValue("what2grab", NetworkTableValue.makeInteger(0))),
-                        new InstantCommand(() -> led_nt.putValue("where2go", NetworkTableValue.makeInteger(1)))
+                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(0)),
+                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(1))
                 ));
-        loadingChooser.addOption("Ground", new InstantCommand(() -> led_nt.putValue("where2go", NetworkTableValue.makeInteger(0))));
+        loadingChooser.addOption("Ground", new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(0)));
         SmartDashboard.putData(loadingChooser);
     }
 
