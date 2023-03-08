@@ -46,8 +46,7 @@ public final class RobotMap {
 
     public static final class LEDPort {
         // PWM
-        public static final int LED_FRONT_PORT = 8;
-        public static final int LED_BACK_PORT = 9;
+        public static final int LED_PORT = 8;
     }
 
     public static final int PDMPort = 25;

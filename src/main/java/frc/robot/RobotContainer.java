@@ -6,8 +6,11 @@
 package frc.robot;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,9 +40,9 @@ public class RobotContainer {
     private final GamepadJoystick elevatorJoystick = new GamepadJoystick(1);
     private final VisionManager visionManager = new VisionManager();
     NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
+    IntegerPublisher what2grabPub =  led_nt.getIntegerTopic("what2grab").publish();
+    IntegerPublisher where2goPub =  led_nt.getIntegerTopic("where2go").publish();
     private final SendableChooser<Command> autoCommand = new SendableChooser<>();
-    private final SendableChooser<Command> loadingChooser = new SendableChooser<>();
-
 
     public RobotContainer() {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
@@ -92,28 +95,27 @@ public class RobotContainer {
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
         SmartDashboard.putData(new PowerDistribution(RobotMap.PDMPort, PowerDistribution.ModuleType.kRev));
-        loadingChooser.addOption("Double-Cone",
+        SmartDashboard.putData("Double-Cone",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(1)),
-                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(2))
+                        new InstantCommand(() -> what2grabPub.set(1)),
+                        new InstantCommand(() -> where2goPub.set(2))
                 ));
-        loadingChooser.addOption("Double-Cube",
+        SmartDashboard.putData("Double-Cube",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(0)),
-                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(2))
+                        new InstantCommand(() -> what2grabPub.set(0)),
+                        new InstantCommand(() -> where2goPub.set(2))
                 ));
-        loadingChooser.addOption("Single-Cone",
+        SmartDashboard.putData("Single-Cone",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(1)),
-                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(1))
+                        new InstantCommand(() -> what2grabPub.set(1)),
+                        new InstantCommand(() -> where2goPub.set(1))
                 ));
-        loadingChooser.addOption("Single-Cube",
+        SmartDashboard.putData("Single-Cube",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> led_nt.getIntegerTopic("what2grab").publish().set(0)),
-                        new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(1))
+                        new InstantCommand(() -> what2grabPub.set(0)),
+                        new InstantCommand(() -> where2goPub.set(1))
                 ));
-        loadingChooser.addOption("Ground", new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(0)));
-        SmartDashboard.putData(loadingChooser);
+        SmartDashboard.putData("Ground", new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(0)));
     }
 
     public Command getAutonomousCommand() {

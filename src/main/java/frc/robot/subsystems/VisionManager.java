@@ -8,9 +8,7 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableListener;
+import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +40,10 @@ public class VisionManager extends SubsystemBase {
 
 //    PhotonCamera camera;
 
+    DoubleSubscriber tidSub = NetworkTableInstance.getDefault().getTable("limelight").getDoubleTopic("tid").subscribe(-1);
+    DoubleArraySubscriber targetpose_robotspaceSub = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("targerpose_robotspace").subscribe(new double[6]);
+    BooleanSubscriber isConeSub = NetworkTableInstance.getDefault().getTable("Vision").getBooleanTopic("isCone").subscribe(false);
+
     public VisionManager() {
 //        camera = new PhotonCamera("OV5647");
 //        result = new PhotonPipelineResult();
@@ -49,7 +51,7 @@ public class VisionManager extends SubsystemBase {
     }
 
     public Transform3d getAprilTagRelative() {
-        var bestCameraToTargetArray = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]).get();
+        var bestCameraToTargetArray = targetpose_robotspaceSub.get();
 //        boolean hasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(-1) != -1;
 //        PhotonTrackedTarget target;
         Transform3d bestCameraToTarget = new Transform3d();
@@ -77,11 +79,11 @@ public class VisionManager extends SubsystemBase {
 //    }
 
     public boolean hasTarget() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getDoubleTopic("tid").subscribe(-1).get() != -1;
+        return tidSub.get() != -1;
 //        return result.hasTargets();
     }
 
-    public double getConeAngleRads() {
+//    public double getConeAngleRads() {
 //        Mat src = new Mat();
 //        if (cvSink.grabFrame(src) == 0) {
 //            outputStream.notifyError(cvSink.getError());
@@ -151,12 +153,12 @@ public class VisionManager extends SubsystemBase {
 //            angle = Math.atan((p2[1]-mid[1])/(p2[0]-mid[0]));
 //            if (p2[0]-mid[0] < 0) angle -= Math.PI;
 //        }
-
-        return NetworkTableInstance.getDefault().getTable("Vision").getDoubleTopic("ConeAngle").subscribe(0.).get();
-    }
+//
+//        return NetworkTableInstance.getDefault().getTable("Vision").getDoubleTopic("ConeAngle").subscribe(0.).get();
+//    }
 
     public boolean isCone() {
-        return NetworkTableInstance.getDefault().getTable("Vision").getBooleanTopic("isCone").subscribe(false).get();
+        return isConeSub.get();
     }
 
     boolean isFirstConnected = true;

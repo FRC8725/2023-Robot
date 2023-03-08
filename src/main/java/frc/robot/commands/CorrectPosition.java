@@ -4,15 +4,12 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -32,6 +29,7 @@ public class CorrectPosition extends CommandBase {
     private Transform3d lastTarget;
 
     NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
+    BooleanPublisher isLimelightPub = led_nt.getBooleanTopic("isLimelight").publish();
     // "left" stand for left side
     // "middle" stand for middle
     // "right" stand for right side
@@ -59,7 +57,7 @@ public class CorrectPosition extends CommandBase {
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
         lastTarget = new Transform3d();
-        led_nt.getBooleanTopic("isLimelight").publish().set(true);
+        isLimelightPub.set(true);
 //        led_nt.putValue("isLimelight", NetworkTableValue.makeBoolean(true));
     }
 
@@ -123,7 +121,7 @@ public class CorrectPosition extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        led_nt.getBooleanTopic("isLimelight").publish().set(false);
+        isLimelightPub.set(false);
         swerveSubsystem.stopModules();
     }
 }

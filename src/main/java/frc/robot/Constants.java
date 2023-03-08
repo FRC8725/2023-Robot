@@ -199,7 +199,7 @@ public final class Constants {
         public static final double LEFT_WINCH_GEAR_RATIO = 1./100 * 18 / 34;
 //        public static final double LEFT_WINCH_GEAR_RATIO = 1./100;
 
-        public static final boolean WRIST_MOTOR_INVERTED = true;
+        public static final boolean WRIST_MOTOR_INVERTED = false;
         public static final boolean ELBOW_MOTOR_INVERTED = true;
         public static final boolean WINCH_MOTOR_INVERTED = false;
         public static final double INTAKE_GEAR_RATIO = 1.;
@@ -210,7 +210,7 @@ public final class Constants {
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
-        public static final double P_WRIST = .95;
+        public static final double P_WRIST = .65;
         public static final double I_WRIST = 0;
         public static final double D_WRIST = 0;
 
@@ -226,13 +226,13 @@ public final class Constants {
 //        public static final double I_ROLL = 0;
 //        public static final double D_ROLL = 0;
 
-        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.328;
-        public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.095;
-        public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.929;
+        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.806;
+        public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.431;
+        public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.236;
 
-        public static final boolean WRIST_ABSOLUTE_ENCODER_INVERTED = false;
-        public static final boolean ELBOW_ABSOLUTE_ENCODER_INVERTED = true;
-        public static final boolean WINCH_ABSOLUTE_ENCODER_INVERTED = true;
+        public static final boolean WRIST_ABSOLUTE_ENCODER_INVERTED = true;
+        public static final boolean ELBOW_ABSOLUTE_ENCODER_INVERTED = false;
+        public static final boolean WINCH_ABSOLUTE_ENCODER_INVERTED = false;
 
         public static final double MAX_WRIST_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 2;
@@ -284,17 +284,17 @@ public final class Constants {
 
     public static final class PoseConstants {
         // Position Order: XAxis YAxis
-        public static final Pair<Double, Double> GROUND_ARM_POSE = new Pair<>(0.683, -0.354);
-        public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.5, -0.1);
-        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.415);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.069, 0.815);
+        public static final Pair<Double, Double> GROUND_ARM_POSE = new Pair<>(0.683, -0.304);
+        public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.5, -0.05);
+        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.465);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.069, 0.865);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
-        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.32);
-        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.65);
+        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.37);
+        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.70);
     }
 
     public static final class LEDConstants {
-        public static final int BUFFER_SIZE = 30;
+        public static final int BUFFER_SIZE = 60;
         // The buffer size of the front and back LED is the same.
     }
 }
