@@ -294,6 +294,7 @@ public final class Constants {
     }
 
     public static final class LEDConstants {
-        public static final int BUFFER_SIZE = 6;
+        public static final int BUFFER_SIZE = 30;
+        // The buffer size of the front and back LED is the same.
     }
 }

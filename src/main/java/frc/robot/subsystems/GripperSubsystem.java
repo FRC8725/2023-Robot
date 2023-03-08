@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +20,8 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     Gripper gripper;
+
+    NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
 //    private boolean isResetting;
 
     private GripperSubsystem() {
@@ -34,7 +39,9 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     public boolean isPiecesInRange(boolean isFar) {
-        return gripper.getDistanceSensor() < 220 + (isFar? 50: 0) ;
+        var isInRange = gripper.getDistanceSensor() < 220 + (isFar? 50: 0);
+        if (isInRange) led_nt.putValue("getItem", NetworkTableValue.makeBoolean(true, 2));
+        return isInRange;
     }
 
 //    public void reset() {

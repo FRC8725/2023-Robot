@@ -15,24 +15,37 @@ public final class LEDSubsystem extends SubsystemBase {
     public static LEDSubsystem getInstance() {
         return INSTANCE;
     }
-    AddressableLED led;
-    AddressableLEDBuffer ledBuffer;
+    AddressableLED frontLEDs, backLEDs;
+    AddressableLEDBuffer frontLEDBuffer, backLEDBuffer;
 
     private LEDSubsystem() {
-        led = new AddressableLED(RobotMap.LEDPort.LED_PORT);
-        ledBuffer = new AddressableLEDBuffer(LEDConstants.BUFFER_SIZE);
-        led.setLength(LEDConstants.BUFFER_SIZE);
-        led.start();
+        frontLEDs = new AddressableLED(RobotMap.LEDPort.LED_FRONT_PORT);
+        backLEDs = new AddressableLED(RobotMap.LEDPort.LED_BACK_PORT);
+        frontLEDBuffer = new AddressableLEDBuffer(LEDConstants.BUFFER_SIZE);
+        backLEDBuffer = new AddressableLEDBuffer(LEDConstants.BUFFER_SIZE);
+        frontLEDs.setLength(LEDConstants.BUFFER_SIZE);
+        frontLEDs.start();
+        backLEDs.setLength(LEDConstants.BUFFER_SIZE);
+        backLEDs.start();
     }
 
     @Override
     public void periodic() {
-        led.setData(ledBuffer);
+        frontLEDs.setData(frontLEDBuffer);
+        backLEDs.setData(backLEDBuffer);
     }
 
-    public void setColor(Color color) {
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setLED(i, color);
+    public void setFrontColor(Color color, int part) {
+        for (var i = frontLEDBuffer.getLength() / 2 * part;
+             i < frontLEDBuffer.getLength() - (frontLEDBuffer.getLength() / 2) * part;
+             i++) {
+            frontLEDBuffer.setLED(i, color);
+        }
+    }
+
+    public void setBackColor(Color color) {
+        for (var i = 0; i < backLEDBuffer.getLength(); i++) {
+            backLEDBuffer.setLED(i, color);
         }
     }
 
@@ -41,12 +54,21 @@ public final class LEDSubsystem extends SubsystemBase {
     // From Example LED Project
     public void rainbow() {
         // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
+        for (var i = 0; i < LEDConstants.BUFFER_SIZE; i++) {
             // Calculate the hue - hue is easier for rainbows because the color
             // shape is a circle so only one value needs to precess
-            var hue = (rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180;
+            var hue = (rainbowFirstPixelHue + (i * 180 / (LEDConstants.BUFFER_SIZE * 2))) % 180;
             // Set the value
-            ledBuffer.setHSV(i, hue, 255, 128);
+            frontLEDBuffer.setHSV(i, hue, 255, 128);
+        }
+
+        // For every pixel
+        for (var i = 0; i < LEDConstants.BUFFER_SIZE; i++) {
+            // Calculate the hue - hue is easier for rainbows because the color
+            // shape is a circle so only one value needs to precess
+            var hue = (rainbowFirstPixelHue + (i * 180 / (LEDConstants.BUFFER_SIZE * 2))) % 180;
+            // Set the value
+            backLEDBuffer.setHSV(i, hue, 255, 128);
         }
         // Increase by to make the rainbow "move"
         rainbowFirstPixelHue += 3;
