@@ -32,7 +32,8 @@ public final class LEDSubsystem extends SubsystemBase {
 
     public void setFrontColor(Color color, int part) {
         for (var i = LEDConstants.BUFFER_SIZE / 2 + ledBuffer.getLength() / 4 * part;
-             i < ledBuffer.getLength() - (ledBuffer.getLength() / 4) * part;
+             i < ledBuffer.getLength() / 2 + ledBuffer.getLength() / 4
+                     + (ledBuffer.getLength() / 4) * part;
              i++) {
             ledBuffer.setLED(i, color);
         }

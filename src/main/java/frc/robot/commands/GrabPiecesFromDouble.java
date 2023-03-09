@@ -13,6 +13,7 @@ public class GrabPiecesFromDouble extends CommandBase {
     ArmSubsystem armSubsystem;
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
+    double startTime;
 
     public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         this.armSubsystem = armSubsystem;
@@ -28,11 +29,12 @@ public class GrabPiecesFromDouble extends CommandBase {
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(true);
         pneumatics.setGripper(true);
-        Timer.delay(.2);
+        startTime = Timer.getFPGATimestamp();
     }
 
     @Override
     public boolean isFinished() {
+        if (Timer.getFPGATimestamp() - startTime < 1) return false;
         return gripperSubsystem.isPiecesInRange(false);
     }
 

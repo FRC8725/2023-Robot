@@ -4,6 +4,7 @@ import com.revrobotics.Rev2mDistanceSensor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -28,11 +29,17 @@ public class AutoLEDs extends CommandBase {
 
     BooleanSubscriber isConeSub = vision_nt.getBooleanTopic("isCone").subscribe(false);
 
+    double startTime;
+
     public AutoLEDs(LEDSubsystem ledSubsystem) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         this.ledSubsystem = ledSubsystem;
+        startTime = Timer.getFPGATimestamp();
         addRequirements(ledSubsystem);
+        ledSubsystem.setFrontColor(Color.kOrangeRed, 0);
+        ledSubsystem.setFrontColor(Color.kOrangeRed, 1);
+        ledSubsystem.setBackColor(Color.kOrangeRed);
     }
 
     @Override
@@ -63,7 +70,11 @@ public class AutoLEDs extends CommandBase {
         // Set the LEDs in back of the arm
         if (isGetItem) {
             ledSubsystem.setBackColor(Color.kLimeGreen);
-            if (!isIn) isGetItemPub.set(false, NetworkTablesJNI.now() + 2500);
+            if (!isIn) {
+                startTime = Timer.getFPGATimestamp();
+            } else if (Timer.getFPGATimestamp() - startTime > 1.5) {
+                isGetItemPub.set(false);
+            }
             isIn = true;
         } else if (isLimelight) {
             ledSubsystem.rainbow();
@@ -94,7 +105,7 @@ public class AutoLEDs extends CommandBase {
                     ledSubsystem.setFrontColor(Color.kBrown, 1);
                     break;
                 case 1:
-                    ledSubsystem.setFrontColor(Color.kLightBlue, 0);
+                    ledSubsystem.setFrontColor(Color.kBlue, 0);
                     ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                     break;
                 case 2:

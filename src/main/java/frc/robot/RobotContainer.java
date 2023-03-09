@@ -101,30 +101,27 @@ public class RobotContainer {
         autoCommand.addOption("(1)Wide", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(2)Middle", new MiddlePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-//        SmartDashboard.putData(autoCommand);
+        SmartDashboard.putData(autoCommand);
         SmartDashboard.putData(new PowerDistribution(RobotMap.PDMPort, PowerDistribution.ModuleType.kRev));
-        Shuffleboard.getTab("Driver Mode").add("Auto Chooser", autoCommand)
-                .withSize(2, 1)
-                .withPosition(6, 2);
+        ShuffleboardTab tab = Shuffleboard.getTab("Driver Mode");
+        tab.add("Auto Chooser", autoCommand)
+                .withSize(2, 1);
         try {
-            VideoSource ll = CameraServer.getVideo("limelight").getSource();
-            Shuffleboard.getTab("Driver Mode").add(ll)
+//            VideoSource ll = CameraServer.getVideo("limelight").getSource();
+            tab.addCamera("limelight", "limelight")
                     .withSize(3, 3)
-                    .withPosition(0, 0)
                     .withWidget(BuiltInWidgets.kCameraStream);
-            VideoSource rpi = CameraServer.getVideo("Processed").getSource();
-            Shuffleboard.getTab("Driver Mode").add(rpi)
+//            VideoSource rpi = CameraServer.getVideo("Processed").getSource();
+            tab.addCamera("rpi", "Processed")
                     .withSize(3, 3)
-                    .withPosition(3, 0)
                     .withWidget(BuiltInWidgets.kCameraStream);
         }
         catch (Exception e) {
             System.out.println("Error: couldn't get the cameras");
         }
-        ShuffleboardLayout loadingChooser = Shuffleboard.getTab("Driver Mode")
+        ShuffleboardLayout loadingChooser = tab
                 .getLayout("Loading", BuiltInLayouts.kGrid)
                 .withSize(2, 2)
-                .withPosition(6, 0)
                 .withProperties(Map.of("Label position", "HIDDEN"));
         loadingChooser.add(
                 new ParallelCommandGroup(
@@ -153,8 +150,7 @@ public class RobotContainer {
         loadingChooser.add(
                 new InstantCommand(() -> where2goPub.set(0))
                     .withName("Ground"))
-                    .withWidget(BuiltInWidgets.kToggleButton)
-                    .withSize(1, 1);
+                    .withWidget(BuiltInWidgets.kToggleButton);
         Shuffleboard.selectTab("Driver Mode");
         Shuffleboard.update();
     }

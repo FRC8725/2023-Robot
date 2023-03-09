@@ -17,6 +17,7 @@ public class GrabPieces extends CommandBase {
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
     VisionManager visionManager;
+    double startTime;
 
     public GrabPieces(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         // each subsystem used by the command must be passed into the
@@ -34,11 +35,12 @@ public class GrabPieces extends CommandBase {
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(true);
         pneumatics.setGripper(true);
-        Timer.delay(.2);
+        startTime = Timer.getFPGATimestamp();
     }
 
     @Override
     public boolean isFinished() {
+        if (Timer.getFPGATimestamp() - startTime < 1) return false;
         return gripperSubsystem.isPiecesInRange(false);
     }
 

@@ -13,6 +13,7 @@ public class GrabPiecesFromSingle extends CommandBase {
     ArmSubsystem armSubsystem;
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
+    double startTime;
 
     public GrabPiecesFromSingle(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         // each subsystem used by the command must be passed into the
@@ -30,7 +31,7 @@ public class GrabPiecesFromSingle extends CommandBase {
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(false);
         pneumatics.setGripper(true);
-        Timer.delay(.2);
+        startTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -40,6 +41,7 @@ public class GrabPiecesFromSingle extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        if (Timer.getFPGATimestamp() - startTime < 1) return false;
         return gripperSubsystem.isPiecesInRange(true);
     }
 
