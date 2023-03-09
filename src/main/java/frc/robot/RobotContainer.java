@@ -15,9 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -26,7 +24,9 @@ import frc.robot.commands.auto.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.PoseConstants;
 
+import javax.swing.*;
 import java.nio.channels.Pipe;
+import java.util.Map;
 
 
 /**
@@ -103,36 +103,60 @@ public class RobotContainer {
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
 //        SmartDashboard.putData(autoCommand);
         SmartDashboard.putData(new PowerDistribution(RobotMap.PDMPort, PowerDistribution.ModuleType.kRev));
-        Shuffleboard.getTab("Driver Mode").add(autoCommand).withSize(3, 1).withPosition(0, 3);
-        VideoSource ll = CameraServer.getVideo("limelight").getSource();
-        Shuffleboard.getTab("Driver Mode").add(ll).withSize(4, 3).withPosition(0, 0);
-        VideoSource rpi = CameraServer.getVideo("Processed").getSource();
-        Shuffleboard.getTab("Driver Mode").add(rpi).withSize(4, 3).withPosition(4, 0);
+        Shuffleboard.getTab("Driver Mode").add("Auto Chooser", autoCommand)
+                .withSize(2, 1)
+                .withPosition(6, 2);
+        try {
+            VideoSource ll = CameraServer.getVideo("limelight").getSource();
+            Shuffleboard.getTab("Driver Mode").add(ll)
+                    .withSize(3, 3)
+                    .withPosition(0, 0)
+                    .withWidget(BuiltInWidgets.kCameraStream);
+            VideoSource rpi = CameraServer.getVideo("Processed").getSource();
+            Shuffleboard.getTab("Driver Mode").add(rpi)
+                    .withSize(3, 3)
+                    .withPosition(3, 0)
+                    .withWidget(BuiltInWidgets.kCameraStream);
+        }
+        catch (Exception e) {
+            System.out.println("Error: couldn't get the cameras");
+        }
         ShuffleboardLayout loadingChooser = Shuffleboard.getTab("Driver Mode")
-                .getLayout("Loading", BuiltInLayouts.kList)
-                .withSize(5, 1).withPosition(3, 3);
-        loadingChooser.add("Double-Cone",
+                .getLayout("Loading", BuiltInLayouts.kGrid)
+                .withSize(2, 2)
+                .withPosition(6, 0)
+                .withProperties(Map.of("Label position", "HIDDEN"));
+        loadingChooser.add(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> what2grabPub.set(1)),
                         new InstantCommand(() -> where2goPub.set(2))
-                ));
-        loadingChooser.add("Double-Cube",
+                ).withName("Double-Cone"))
+                .withWidget(BuiltInWidgets.kToggleButton);
+        loadingChooser.add(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> what2grabPub.set(0)),
                         new InstantCommand(() -> where2goPub.set(2))
-                ));
-        loadingChooser.add("Single-Cone",
+                ).withName("Double-Cube"))
+                .withWidget(BuiltInWidgets.kToggleButton);
+        loadingChooser.add(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> what2grabPub.set(1)),
                         new InstantCommand(() -> where2goPub.set(1))
-                ));
-        loadingChooser.add("Single-Cube",
+                ).withName("Single-Cone"))
+                .withWidget(BuiltInWidgets.kToggleButton);
+        loadingChooser.add(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> what2grabPub.set(0)),
                         new InstantCommand(() -> where2goPub.set(1))
-                ));
-        loadingChooser.add("Ground", new InstantCommand(() -> led_nt.getIntegerTopic("where2go").publish().set(0)));
+                ).withName("Single-Cube"))
+                .withWidget(BuiltInWidgets.kToggleButton);
+        loadingChooser.add(
+                new InstantCommand(() -> where2goPub.set(0))
+                    .withName("Ground"))
+                    .withWidget(BuiltInWidgets.kToggleButton)
+                    .withSize(1, 1);
         Shuffleboard.selectTab("Driver Mode");
+        Shuffleboard.update();
     }
 
     public Command getAutonomousCommand() {

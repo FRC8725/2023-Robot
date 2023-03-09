@@ -47,18 +47,20 @@ public class AutoLEDs extends CommandBase {
 
     @Override
     public void execute() {
-
         if (DriverStation.isDisabled()) {
             ledSubsystem.setFrontColor(Color.kOrangeRed, 0);
             ledSubsystem.setFrontColor(Color.kOrangeRed, 1);
             ledSubsystem.setBackColor(Color.kOrangeRed);
         }
 
+        // Read the NetworkTable Data
         boolean isGetItem = isGetItemSub.get();
         boolean isLimelight = isLimelightSub.get();
+        boolean isCone = isConeSub.get();
         int where2go = (int) where2goSub.get();
         var what2Grab = what2GrabSub.get();
 
+        // Set the LEDs in back of the arm
         if (isGetItem) {
             ledSubsystem.setBackColor(Color.kLimeGreen);
             if (!isIn) isGetItemPub.set(false, NetworkTablesJNI.now() + 2500);
@@ -68,15 +70,16 @@ public class AutoLEDs extends CommandBase {
         } else {
             if (SmartDashboard.getBoolean("isGripperOpen", false)) isIn = false;
             if (isIn) {
-                if (isConeSub.get()) ledSubsystem.setBackColor(Color.kYellow);
+                if (isCone) ledSubsystem.setBackColor(Color.kYellow);
                 else ledSubsystem.setBackColor(Color.kPurple);
             } else {
                 ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
             }
         }
 
+        // Set the LEDs in front of the arm
         if (isIn) {
-            if (vision_nt.getBooleanTopic("isCone").subscribe(false).get()) {
+            if (isCone) {
                 ledSubsystem.setFrontColor(Color.kYellow, 0);
                 ledSubsystem.setFrontColor(Color.kYellow, 1);
             }
