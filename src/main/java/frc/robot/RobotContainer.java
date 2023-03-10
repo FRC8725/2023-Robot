@@ -94,6 +94,11 @@ public class RobotContainer {
         elevatorJoystick.btn_B.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
         elevatorJoystick.btn_A.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.LOW_ARM_POSE, true, true));
         elevatorJoystick.btn_X.onTrue(new GrabPiecesFromSingle(armSubsystem, gripperSubsystem, pneumatics));
+        elevatorJoystick.POV_North.onTrue(new InstantCommand(() -> where2goPub.set(2)));
+        elevatorJoystick.POV_South.onTrue(new InstantCommand(() -> where2goPub.set(1)));
+        elevatorJoystick.POV_East.onTrue(new InstantCommand(() -> what2grabPub.set(1)));
+        elevatorJoystick.POV_West.onTrue(new InstantCommand(() -> what2grabPub.set(0)));
+        elevatorJoystick.btn_Back.onTrue(new InstantCommand(() -> where2goPub.set(0)));
     }
 
     private void putToDashboard() {
