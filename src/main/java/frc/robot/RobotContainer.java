@@ -104,8 +104,6 @@ public class RobotContainer {
         SmartDashboard.putData(autoCommand);
         SmartDashboard.putData(new PowerDistribution(RobotMap.PDMPort, PowerDistribution.ModuleType.kRev));
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Mode");
-        tab.add("Auto Chooser", autoCommand)
-                .withSize(2, 1);
         try {
 //            VideoSource ll = CameraServer.getVideo("limelight").getSource();
             tab.addCamera("limelight", "limelight")
@@ -119,6 +117,8 @@ public class RobotContainer {
         catch (Exception e) {
             System.out.println("Error: couldn't get the cameras");
         }
+        tab.add("Auto Chooser", autoCommand)
+                .withSize(2, 1);
         ShuffleboardLayout loadingChooser = tab
                 .getLayout("Loading", BuiltInLayouts.kGrid)
                 .withSize(2, 2)

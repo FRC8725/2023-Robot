@@ -37,9 +37,7 @@ public class AutoLEDs extends CommandBase {
         this.ledSubsystem = ledSubsystem;
         startTime = Timer.getFPGATimestamp();
         addRequirements(ledSubsystem);
-        ledSubsystem.setFrontColor(Color.kOrangeRed, 0);
-        ledSubsystem.setFrontColor(Color.kOrangeRed, 1);
-        ledSubsystem.setBackColor(Color.kOrangeRed);
+        ledSubsystem.setIdle(true);
     }
 
     @Override
@@ -54,10 +52,10 @@ public class AutoLEDs extends CommandBase {
 
     @Override
     public void execute() {
-        if (DriverStation.isDisabled()) {
-            ledSubsystem.setFrontColor(Color.kOrangeRed, 0);
-            ledSubsystem.setFrontColor(Color.kOrangeRed, 1);
-            ledSubsystem.setBackColor(Color.kOrangeRed);
+        ledSubsystem.setIdle(DriverStation.isDisabled());
+        if (DriverStation.isAutonomousEnabled()) {
+            ledSubsystem.autoMode();
+            return;
         }
 
         // Read the NetworkTable Data
@@ -91,21 +89,18 @@ public class AutoLEDs extends CommandBase {
         // Set the LEDs in front of the arm
         if (isIn) {
             if (isCone) {
-                ledSubsystem.setFrontColor(Color.kYellow, 0);
-                ledSubsystem.setFrontColor(Color.kYellow, 1);
+                ledSubsystem.setFrontColor(Color.kYellow);
             }
             else {
-                ledSubsystem.setFrontColor(Color.kPurple, 0);
-                ledSubsystem.setFrontColor(Color.kPurple, 1);
+                ledSubsystem.setFrontColor(Color.kPurple);
             }
         } else {
             switch (where2go) {
                 case 0:
-                    ledSubsystem.setFrontColor(Color.kBrown, 0);
-                    ledSubsystem.setFrontColor(Color.kBrown, 1);
+                    ledSubsystem.setFrontColor(Color.fromHSV(0, 0, 0));
                     break;
                 case 1:
-                    ledSubsystem.setFrontColor(Color.kBlue, 0);
+                    ledSubsystem.setFrontColor(Color.kCyan, 0);
                     ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                     break;
                 case 2:
@@ -123,8 +118,6 @@ public class AutoLEDs extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        ledSubsystem.setFrontColor(Color.kOrangeRed, 0);
-        ledSubsystem.setFrontColor(Color.kOrangeRed, 1);
-        ledSubsystem.setBackColor(Color.kOrangeRed);
+        ledSubsystem.setIdle(true);
     }
 }
