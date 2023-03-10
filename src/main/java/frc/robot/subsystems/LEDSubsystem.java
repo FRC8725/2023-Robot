@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.RobotMap;
@@ -54,6 +55,7 @@ public final class LEDSubsystem extends SubsystemBase {
     }
 
     public void setBackColor(Color color, int part) {
+        part = (part > 0)? 0: 1;
         for (var i = ledBuffer.getLength() / 4 * part;
              i < ledBuffer.getLength() / 4 + (ledBuffer.getLength() / 4) * part;
              i++) {

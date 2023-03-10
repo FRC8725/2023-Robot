@@ -79,8 +79,14 @@ public class AutoLEDs extends CommandBase {
         } else {
             if (SmartDashboard.getBoolean("isGripperOpen", false)) isIn = false;
             if (isIn) {
-                if (isCone) ledSubsystem.setBackColor(Color.kYellow);
-                else ledSubsystem.setBackColor(Color.kPurple);
+                if (isCone) {
+                    ledSubsystem.setFrontColor(Color.kYellow);
+                    ledSubsystem.setBackColor(Color.kYellow);
+                }
+                else {
+                    ledSubsystem.setFrontColor(Color.kPurple);
+                    ledSubsystem.setBackColor(Color.kPurple);
+                }
             } else {
                 switch (where2go) {
                     case 0:
@@ -91,7 +97,7 @@ public class AutoLEDs extends CommandBase {
                         ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                         break;
                     case 2:
-                        ledSubsystem.setBackColor(Color.kWhite, 0);
+                        ledSubsystem.setBackColor(Color.kSalmon, 0);
                         ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                         break;
                 }
@@ -99,14 +105,7 @@ public class AutoLEDs extends CommandBase {
         }
 
         // Set the LEDs in front of the arm
-        if (isIn) {
-            if (isCone) {
-                ledSubsystem.setFrontColor(Color.kYellow);
-            }
-            else {
-                ledSubsystem.setFrontColor(Color.kPurple);
-            }
-        } else {
+        if (!isIn) {
             switch (where2go) {
                 case 0:
                     ledSubsystem.setFrontColor(Color.fromHSV(0, 0, 0));
@@ -116,7 +115,7 @@ public class AutoLEDs extends CommandBase {
                     ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                     break;
                 case 2:
-                    ledSubsystem.setFrontColor(Color.kWhite, 0);
+                    ledSubsystem.setFrontColor(Color.kSalmon, 0);
                     ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                     break;
             }

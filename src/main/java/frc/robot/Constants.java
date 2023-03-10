@@ -99,8 +99,8 @@ public final class Constants {
         public static final double P_Y_CONTROLLER = 1.;
         public static final double P_THETA_CONTROLLER = .6;
 
-        public static final double CORRECT_POSITION_X_CONTROLLER = 1;
-        public static final double CORRECT_POSITION_Y_CONTROLLER = 1;
+        public static final double CORRECT_POSITION_X_CONTROLLER = 1.;
+        public static final double CORRECT_POSITION_Y_CONTROLLER = 1.;
         public static final double CORRECT_POSITION_THETA_CONTROLLER = 1.7;
 
         public static final TrapezoidProfile.Constraints DRIVE_CONTROLLER_CONSTRAINTS = //

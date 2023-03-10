@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -26,7 +27,7 @@ public class CorrectPosition extends CommandBase {
     final private VisionManager visionManager;
     private final String whereChase;
 
-    private Transform3d lastTarget;
+    private Pose2d lastGoalPose;
 
     NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
     BooleanPublisher isLimelightPub = led_nt.getBooleanTopic("isLimelight").publish();
@@ -56,7 +57,7 @@ public class CorrectPosition extends CommandBase {
         xController.reset(swerveSubsystem.getPose().getX());
         yController.reset(swerveSubsystem.getPose().getY());
         thetaController.reset(swerveSubsystem.getPose().getRotation().getRadians());
-        lastTarget = new Transform3d();
+        lastGoalPose = new Pose2d();
         isLimelightPub.set(true);
 //        led_nt.putValue("isLimelight", NetworkTableValue.makeBoolean(true));
     }
@@ -64,10 +65,6 @@ public class CorrectPosition extends CommandBase {
     @Override
     public void execute() {
         var relativePos = visionManager.getAprilTagRelative();
-        if (!visionManager.hasTarget()) relativePos = lastTarget;
-        else lastTarget = relativePos;
-
-        if (relativePos.getX() == 0 && relativePos.getY() == 0 && relativePos.getZ() == 0) return;
 
         var robotPose = new Pose3d(
                 swerveSubsystem.getPose().getX(),
@@ -94,7 +91,12 @@ public class CorrectPosition extends CommandBase {
                 tag2goal = VisionConstants.Tag2Goal;
         }
 
-        var goalPose = targetPose.transformBy(tag2goal).toPose2d();
+        Pose2d goalPose;
+        if (visionManager.hasTarget()) goalPose = targetPose.transformBy(tag2goal).toPose2d();
+        else goalPose = lastGoalPose;
+
+        if (goalPose.getX() == 0 && goalPose.getY() == 0) return;
+        else lastGoalPose = goalPose;
 
         xController.setGoal(goalPose.getX());
         yController.setGoal(goalPose.getY());
