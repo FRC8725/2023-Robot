@@ -79,10 +79,10 @@ public final class Constants {
         // Neo: 12; Falcon: 13.5
         public static final double PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
 
-        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.65;
+        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.8;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
                 PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 3;
-        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 3;
+        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 2.5;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double DECREASE_DRIVING_SPEED_FACTOR = .4;
         public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
@@ -286,11 +286,11 @@ public final class Constants {
         // Position Order: XAxis YAxis
         public static final Pair<Double, Double> GROUND_ARM_POSE = new Pair<>(0.683, -0.304);
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.5, -0.05);
-        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.465);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(1.069, 0.865);
+        public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.535);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(0.959, 0.865);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
-        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.37);
-        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.70);
+        public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.32);
+        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.77);
     }
 
     public static final class LEDConstants {

@@ -53,6 +53,14 @@ public final class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    public void setBackColor(Color color, int part) {
+        for (var i = ledBuffer.getLength() / 4 * part;
+             i < ledBuffer.getLength() / 4 + (ledBuffer.getLength() / 4) * part;
+             i++) {
+            ledBuffer.setLED(i, color);
+        }
+    }
+
     public void setBackColor(Color color) {
         for (var i = 0; i < ledBuffer.getLength() / 2; i++) {
             ledBuffer.setLED(i, color);

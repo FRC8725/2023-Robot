@@ -82,7 +82,19 @@ public class AutoLEDs extends CommandBase {
                 if (isCone) ledSubsystem.setBackColor(Color.kYellow);
                 else ledSubsystem.setBackColor(Color.kPurple);
             } else {
-                ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
+                switch (where2go) {
+                    case 0:
+                        ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
+                        break;
+                    case 1:
+                        ledSubsystem.setBackColor(Color.kCyan, 0);
+                        ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
+                        break;
+                    case 2:
+                        ledSubsystem.setBackColor(Color.kWhite, 0);
+                        ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
+                        break;
+                }
             }
         }
 
