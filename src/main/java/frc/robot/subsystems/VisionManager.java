@@ -41,7 +41,7 @@ public class VisionManager extends SubsystemBase {
 //    PhotonCamera camera;
 
     DoubleSubscriber tidSub = NetworkTableInstance.getDefault().getTable("limelight").getDoubleTopic("tid").subscribe(-1);
-    DoubleArraySubscriber targetpose_robotspaceSub = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("targerpose_robotspace").subscribe(new double[6]);
+    DoubleArraySubscriber targetpose_robotspaceSub = NetworkTableInstance.getDefault().getTable("limelight").getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
 //    BooleanSubscriber isConeSub = NetworkTableInstance.getDefault().getTable("Vision").getBooleanTopic("isCone").subscribe(false);
 
     public VisionManager() {
@@ -79,7 +79,7 @@ public class VisionManager extends SubsystemBase {
 //    }
 
     public boolean hasTarget() {
-        return tidSub.get() != -1;
+        return tidSub.get() != -1.;
 //        return result.hasTargets();
     }
 

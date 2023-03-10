@@ -77,17 +77,22 @@ public final class LEDSubsystem extends SubsystemBase {
         rainbowFirstPixelHue %= 180;
     }
 
-    private int idleFirstPixelLightness = 0;
+    private int idleFirstPixel = 0;
 
     public void idleMode() {
-        // For every pixel
         for (var i = 0; i < LEDConstants.BUFFER_SIZE; i++) {
-            int lightness = idleFirstPixelLightness + (int)(255 * ((i + 1) / 30.));
-            lightness %= 255;
-            ledBuffer.setHSV(i, 5, 255, lightness);
+            ledBuffer.setHSV(i, 0, 0, 0);
         }
-        idleFirstPixelLightness += 2;
-        idleFirstPixelLightness %= 255;
+        // For every pixel
+        int count = 0;
+        for (var i = idleFirstPixel; i < idleFirstPixel + 30; i++, count++) {
+            int lightness = (int)(255 * (count / 30.));
+            lightness = Math.abs(lightness);
+            lightness %= 255;
+            ledBuffer.setHSV(i % LEDConstants.BUFFER_SIZE, 5, 255, lightness);
+        }
+        idleFirstPixel += 1;
+        idleFirstPixel %= LEDConstants.BUFFER_SIZE;
     }
 
     boolean isFirstAuto = true;
