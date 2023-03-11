@@ -2,10 +2,10 @@ package frc.lib;
 
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 
-public class LazyTalonFX extends WPI_TalonFX {
+public class LazyTalonFX extends TalonFX {
 
     private final double gearRatio;
     public LazyTalonFX(int deviceNumber, double gearRatio) {
