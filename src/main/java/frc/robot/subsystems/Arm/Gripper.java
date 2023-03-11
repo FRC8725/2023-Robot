@@ -8,6 +8,7 @@ import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.lib.LazySparkMax;
 import frc.lib.LazyTalonFX;
@@ -28,7 +29,6 @@ public class Gripper {
 
     ProfiledPIDController rollProfiledPIDController;
     private final Rev2mDistanceSensor distanceSensor;
-    private double setpoint;
 
     private Gripper() {
         Timer.delay(2);
@@ -49,13 +49,20 @@ public class Gripper {
 
         distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
         distanceSensor.setAutomaticMode(true);
+        distanceSensor.setRangeProfile(com.revrobotics.Rev2mDistanceSensor.RangeProfile.kHighSpeed);
     }
+
+    public void setDistanceEnable(boolean enable) {
+        if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
+    }
+
 
     public double getDistanceSensor() {
 //        return distanceSensor.getRange();
-        double range = distanceSensor.getRange(Unit.kMillimeters);
-        if (distanceSensor.isRangeValid()) return range;
-        else return 2000;
+        if (!distanceSensor.isEnabled()) distanceSensor.setEnabled(true);
+        double range = 2000;
+        if (distanceSensor.isRangeValid()) range = distanceSensor.getRange(Unit.kMillimeters);
+        return range;
     }
 
 //    public void calculate() {

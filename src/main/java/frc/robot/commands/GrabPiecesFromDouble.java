@@ -14,6 +14,7 @@ public class GrabPiecesFromDouble extends CommandBase {
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
     double startTime;
+    boolean firstLoop;
 
     public GrabPiecesFromDouble(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         this.armSubsystem = armSubsystem;
@@ -30,17 +31,27 @@ public class GrabPiecesFromDouble extends CommandBase {
         armSubsystem.setHorizontal(true);
         pneumatics.setGripper(true);
         startTime = Timer.getFPGATimestamp();
+        firstLoop = true;
+    }
+
+    @Override
+    public void execute() {
+        if (Timer.getFPGATimestamp() - startTime < 1) return;
+        if (gripperSubsystem.isPiecesInRange(false) && firstLoop) {
+            pneumatics.setGripper(false);
+            armSubsystem.setTransporting(true);
+            firstLoop = false;
+            startTime = Timer.getFPGATimestamp();
+        }
     }
 
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - startTime < 1) return false;
-        return gripperSubsystem.isPiecesInRange(false);
+        return (Timer.getFPGATimestamp() - startTime) > 1 && !firstLoop;
     }
 
     @Override
-    public void end(boolean interrupted) {
-        pneumatics.setGripper(false);
-        armSubsystem.reset();
+    public void end(boolean interrupted) {   
+        if (gripperSubsystem.isPiecesInRange(false)) armSubsystem.reset();
     }
 }

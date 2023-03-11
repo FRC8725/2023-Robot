@@ -65,9 +65,10 @@ public class AutoLEDs extends CommandBase {
         int where2go = (int) where2goSub.get();
         var what2Grab = what2GrabSub.get();
 
-        // Set the LEDs in back of the arm
+        // Set the LEDs of the arm
         if (isGetItem) {
             ledSubsystem.setBackColor(Color.kLimeGreen);
+            ledSubsystem.setFrontColor(Color.kLimeGreen);
             if (!isIn) {
                 startTime = Timer.getFPGATimestamp();
             } else if (Timer.getFPGATimestamp() - startTime > 1.5) {
@@ -78,46 +79,35 @@ public class AutoLEDs extends CommandBase {
             ledSubsystem.rainbow();
         } else {
             if (SmartDashboard.getBoolean("isGripperOpen", false)) isIn = false;
-            if (isIn) {
-                if (isCone) {
-                    ledSubsystem.setFrontColor(Color.kYellow);
-                    ledSubsystem.setBackColor(Color.kYellow);
-                }
-                else {
-                    ledSubsystem.setFrontColor(Color.kPurple);
-                    ledSubsystem.setBackColor(Color.kPurple);
-                }
-            } else {
-                switch (where2go) {
-                    case 0:
-                        ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
-                        break;
-                    case 1:
-                        ledSubsystem.setBackColor(Color.kCyan, 0);
-                        ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
-                        break;
-                    case 2:
-                        ledSubsystem.setBackColor(Color.kSalmon, 0);
-                        ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
-                        break;
-                }
-            }
-        }
-
-        // Set the LEDs in front of the arm
-        if (!isIn) {
+            // if (isIn) {
+            //     if (isCone) {
+            //         ledSubsystem.setFrontColor(Color.kYellow);
+            //         ledSubsystem.setBackColor(Color.kYellow);
+            //     }
+            //     else {
+            //         ledSubsystem.setFrontColor(Color.kPurple);
+            //         ledSubsystem.setBackColor(Color.kPurple);
+            //     }
+            // } else {
+            ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
             switch (where2go) {
                 case 0:
                     ledSubsystem.setFrontColor(Color.fromHSV(0, 0, 0));
+                    ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
                     break;
                 case 1:
                     ledSubsystem.setFrontColor(Color.kCyan, 0);
                     ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
+                    ledSubsystem.setBackColor(Color.kCyan, 0);
+                    ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                     break;
                 case 2:
-                    ledSubsystem.setFrontColor(Color.kSalmon, 0);
+                    ledSubsystem.setFrontColor(Color.kGhostWhite, 0);
                     ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
+                    ledSubsystem.setBackColor(Color.kGhostWhite, 0);
+                    ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
                     break;
+                // }
             }
         }
     }

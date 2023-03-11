@@ -58,8 +58,8 @@ public class VisionManager extends SubsystemBase {
         if (hasTarget()) {
 //            target = result.getBestTarget();
             bestCameraToTarget = new Transform3d(
-                    new Translation3d (bestCameraToTargetArray[2], -bestCameraToTargetArray[0], bestCameraToTargetArray[1]),
-                    new Rotation3d(bestCameraToTargetArray[3], bestCameraToTargetArray[5], bestCameraToTargetArray[4]));
+                    new Translation3d (bestCameraToTargetArray[0], -bestCameraToTargetArray[1], bestCameraToTargetArray[2]),
+                    new Rotation3d(bestCameraToTargetArray[3], bestCameraToTargetArray[4], bestCameraToTargetArray[5]));
         }
         return bestCameraToTarget;
     }

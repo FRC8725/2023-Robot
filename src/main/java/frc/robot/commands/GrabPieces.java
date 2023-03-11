@@ -47,5 +47,6 @@ public class GrabPieces extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         pneumatics.setGripper(false);
+        armSubsystem.reset();
     }
 }

@@ -42,7 +42,8 @@ public final class LEDSubsystem extends SubsystemBase {
              i < ledBuffer.getLength() / 2 + ledBuffer.getLength() / 4
                      + (ledBuffer.getLength() / 4) * part;
              i++) {
-            ledBuffer.setLED(i, color);
+            Color _color = new Color(color.red * 0.5, color.green * 0.5, color.blue * 0.5);
+            ledBuffer.setLED(i, _color);
         }
     }
 
@@ -59,7 +60,9 @@ public final class LEDSubsystem extends SubsystemBase {
         for (var i = ledBuffer.getLength() / 4 * part;
              i < ledBuffer.getLength() / 4 + (ledBuffer.getLength() / 4) * part;
              i++) {
-            ledBuffer.setLED(i, color);
+            // ledBuffer.setLED(i, color);
+            Color _color = new Color(color.red * 0.5, color.green * 0.5, color.blue * 0.5);
+            ledBuffer.setLED(i, _color);
         }
     }
 

@@ -14,6 +14,8 @@ public class ResetArm extends CommandBase {
     GripperSubsystem gripperSubsystem;
     Pneumatics pneumatics;
 
+    double startTime;
+
     public ResetArm(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, Pneumatics pneumatics) {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
@@ -23,7 +25,7 @@ public class ResetArm extends CommandBase {
 
     @Override
     public void initialize() {
-        pneumatics.setGripper(false);
+        startTime = Timer.getFPGATimestamp();
         armSubsystem.reset();
 //        gripperSubsystem.reset();
     }
@@ -31,11 +33,11 @@ public class ResetArm extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return true;
+        return Timer.getFPGATimestamp() - startTime > 1;
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        pneumatics.setGripper(false);
     }
 }

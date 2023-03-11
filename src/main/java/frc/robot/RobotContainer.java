@@ -65,8 +65,8 @@ public class RobotContainer {
                 armSubsystem,
                 () -> elevatorJoystick.get_LStickY(),
                 () -> elevatorJoystick.get_RStickY(),
-                () -> elevatorJoystick.POV_North.getAsBoolean(),
-                () -> elevatorJoystick.POV_South.getAsBoolean()
+                () -> elevatorJoystick.btn_Start.getAsBoolean(),
+                () -> elevatorJoystick.btn_Back.getAsBoolean()
         ));
         ledSubsystem.setDefaultCommand(new AutoLEDs(ledSubsystem));
         configureButtonBindings();
@@ -78,6 +78,7 @@ public class RobotContainer {
         // swerveJoystick.btn_X.whileTrue(new CorrectPosition(0, visionManager));
         // swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
         swerveJoystick.btn_B.onTrue(new LockChassis(swerveSubsystem));
+        swerveJoystick.btn_X.onTrue(new InstantCommand(() -> where2goPub.set(0)));
         swerveJoystick.POV_West.whileTrue(new CorrectPosition("left", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
         swerveJoystick.POV_North.whileTrue(new CorrectPosition("middle", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
         swerveJoystick.POV_East.whileTrue(new CorrectPosition("right", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
@@ -98,7 +99,6 @@ public class RobotContainer {
         elevatorJoystick.POV_South.onTrue(new InstantCommand(() -> where2goPub.set(1)));
         elevatorJoystick.POV_East.onTrue(new InstantCommand(() -> what2grabPub.set(1)));
         elevatorJoystick.POV_West.onTrue(new InstantCommand(() -> what2grabPub.set(0)));
-        elevatorJoystick.btn_Back.onTrue(new InstantCommand(() -> where2goPub.set(0)));
     }
 
     private void putToDashboard() {

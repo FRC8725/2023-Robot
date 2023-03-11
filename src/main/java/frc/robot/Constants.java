@@ -79,10 +79,10 @@ public final class Constants {
         // Neo: 12; Falcon: 13.5
         public static final double PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = 2 * 2 * Math.PI;
 
-        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.8;
+        public static final double TELEOP_DRIVE_MAX_SPEED_METERS_PER_SECOND = PHYSICAL_MAX_SPEED_METERS_PER_SECOND * 0.85;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = //
                 PHYSICAL_MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 3;
-        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 2.5;
+        public static final double TELEOP_DRIVE_MAX_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double TELEOP_DRIVE_MAX_ANGULAR_ACCELERATION_UNITS_PER_SECOND = 3;
         public static final double DECREASE_DRIVING_SPEED_FACTOR = .4;
         public static final double DECREASE_TURNING_SPEED_FACTOR = .6;
@@ -114,15 +114,10 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static final double Y_OFFSET = Units.inchesToMeters(21.319);
-        public static final Transform3d Photon2Robot = new Transform3d(
-                new Translation3d(-DriveConstants.WHEEL_BASE / 2, 0, 0.5),
-                new Rotation3d());
-        public static final Transform3d Robot2Photon = Photon2Robot.inverse();
         public static final Transform3d Tag2Goal =
                 new Transform3d(
-                        new Translation3d(Units.inchesToMeters(16.113) + DriveConstants.TRACK_WITH_BUMPER_WIDTH / 2, 0, 0),
-                        new Rotation3d(0, 0, Math.PI));
+                        new Translation3d(-DriveConstants.TRACK_WITH_BUMPER_WIDTH / 2, 0, 0),
+                        new Rotation3d(0, 0, 0));
         public static final Transform3d GoalMid2Left =
                 new Transform3d(
                         new Translation3d(0, Units.inchesToMeters(21.319), 0), new Rotation3d());
@@ -290,7 +285,7 @@ public final class Constants {
         public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(0.959, 0.865);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
         public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.32);
-        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.565, 0.77);
+        public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.505, 0.77);
     }
 
     public static final class LEDConstants {
