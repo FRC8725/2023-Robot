@@ -5,7 +5,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.BooleanSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -20,6 +27,12 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
+
+    private XboxController chassisController = new XboxController(0);
+    private XboxController armController = new XboxController(1);
+
+    NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
+    BooleanSubscriber isGetItemSub = led_nt.getBooleanTopic("getItem").subscribe(false);
 
 
     /**
@@ -56,6 +69,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        armController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
     }
 
 
@@ -86,6 +101,9 @@ public class Robot extends TimedRobot {
     }
 
 
+    double startTime;
+    boolean firstLoop;
+
     @Override
     public void teleopInit() {
         // This makes sure that the autonomous stops running when
@@ -95,14 +113,36 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+        startTime = Timer.getFPGATimestamp() - 5;
+        firstLoop = true;
     }
-
-
     /**
      * This method is called periodically during operator control.
      */
     @Override
     public void teleopPeriodic() {
+        if (isGetItemSub.get()) {
+            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+            armController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+        } else {
+            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+            armController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        }
+        if (Timer.getFPGATimestamp() - startTime < 1) {
+            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+            armController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+        } else {
+            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+            armController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        }
+
+        if (SmartDashboard.getBoolean("atArmSetpoint", false)) {
+            if (firstLoop) startTime = Timer.getFPGATimestamp();
+            firstLoop = false;
+        } else {
+            firstLoop = true;
+        }
+
     }
 
 

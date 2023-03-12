@@ -44,8 +44,8 @@ public class RobotContainer {
     private final GripperSubsystem gripperSubsystem = GripperSubsystem.getInstance();
     private final Pneumatics pneumatics = Pneumatics.getInstance();
     private final LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
-    private final GamepadJoystick swerveJoystick = new GamepadJoystick(0);
-    private final GamepadJoystick elevatorJoystick = new GamepadJoystick(1);
+    private final XboxJoystick swerveJoystick = new XboxJoystick(0);
+    private final XboxJoystick elevatorJoystick = new XboxJoystick(1);
     private final VisionManager visionManager = new VisionManager();
     NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
     IntegerPublisher what2grabPub =  led_nt.getIntegerTopic("what2grab").publish();
@@ -65,8 +65,8 @@ public class RobotContainer {
                 armSubsystem,
                 () -> elevatorJoystick.get_LStickY(),
                 () -> elevatorJoystick.get_RStickY(),
-                () -> elevatorJoystick.btn_Start.getAsBoolean(),
-                () -> elevatorJoystick.btn_Back.getAsBoolean()
+                () -> elevatorJoystick.btn_RStick.getAsBoolean(),
+                () -> elevatorJoystick.btn_LStick.getAsBoolean()
         ));
         ledSubsystem.setDefaultCommand(new AutoLEDs(ledSubsystem));
         configureButtonBindings();
