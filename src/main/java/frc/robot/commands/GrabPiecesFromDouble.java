@@ -1,3 +1,4 @@
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -52,6 +53,6 @@ public class GrabPiecesFromDouble extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {   
-        if (gripperSubsystem.isPiecesInRange(false)) armSubsystem.reset();
+        if (!interrupted) armSubsystem.reset();
     }
 }

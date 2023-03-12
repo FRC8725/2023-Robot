@@ -107,7 +107,6 @@ public class RobotContainer {
         autoCommand.addOption("(2)Middle", new MiddlePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         SmartDashboard.putData(autoCommand);
-        SmartDashboard.putData(new PowerDistribution(RobotMap.PDMPort, PowerDistribution.ModuleType.kRev));
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Mode");
         try {
 //            VideoSource ll = CameraServer.getVideo("limelight").getSource();
@@ -156,7 +155,6 @@ public class RobotContainer {
                 new InstantCommand(() -> where2goPub.set(0))
                     .withName("Ground"))
                     .withWidget(BuiltInWidgets.kToggleButton);
-        Shuffleboard.selectTab("Driver Mode");
         Shuffleboard.update();
     }
 

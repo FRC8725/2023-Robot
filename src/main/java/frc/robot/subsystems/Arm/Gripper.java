@@ -4,12 +4,14 @@ package frc.robot.subsystems.Arm;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.LazySparkMax;
 import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap.ArmPort;
@@ -48,15 +50,16 @@ public class Gripper {
 //        rollProfiledPIDController.disableContinuousInput();
 
         distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
+        distanceSensor.setRangeProfile(RangeProfile.kDefault);
         distanceSensor.setAutomaticMode(true);
-        distanceSensor.setRangeProfile(com.revrobotics.Rev2mDistanceSensor.RangeProfile.kHighSpeed);
     }
 
     public void setDistanceEnable(boolean enable) {
-        if (distanceSensor.isEnabled() != enable) {
-            distanceSensor.setEnabled(enable);
-            if (enable) distanceSensor.setAutomaticMode(true);
-        }
+        if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
+    }
+
+    public void putSmartDashboard() {
+        SmartDashboard.putNumber("distance", distanceSensor.getRange());
     }
 
 
@@ -66,6 +69,10 @@ public class Gripper {
         double range = 2000;
         if (distanceSensor.isRangeValid()) range = distanceSensor.getRange(Unit.kMillimeters);
         return range;
+    }
+
+    public boolean isDistanceRangeValid() {
+        return distanceSensor.isRangeValid();
     }
 
 //    public void calculate() {

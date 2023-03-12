@@ -35,9 +35,9 @@ public class ArmJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         var xSpeed = this.xSpdFunction.get();
-        xSpeed = Math.abs(xSpeed) > Constants.Joystick.DEADBAND ? xSpeed: 0;
+        xSpeed = Math.abs(xSpeed) > 0.5 ? xSpeed: 0;
         var ySpeed = this.ySpdFunction.get();
-        ySpeed = Math.abs(ySpeed) > Constants.Joystick.DEADBAND ? ySpeed: 0;
+        ySpeed = Math.abs(ySpeed) > 0.5 ? ySpeed: 0;
         armSubsystem.setSpeed(xSpeed, ySpeed);
 
         if (!firstPressed) {

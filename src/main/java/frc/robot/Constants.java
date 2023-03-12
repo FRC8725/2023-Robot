@@ -34,7 +34,7 @@ public final class Constants {
         public static final double TURNING_ENCODER_ROT_2_RAD = TURNING_MOTOR_GEAR_RATIO * 2 * Math.PI;
         public static final double TURNING_ENCODER_RPM_2_RAD_PER_SEC = TURNING_ENCODER_ROT_2_RAD / 60;
         public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_METERS * 2 * Math.PI;
-        public static final double P_TURNING = .9;
+        public static final double P_TURNING = .75;
         public static final double I_TURNING = 0;
         public static final double D_TURNING = 0;
     }
