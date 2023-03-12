@@ -34,7 +34,7 @@ public final class Constants {
         public static final double TURNING_ENCODER_ROT_2_RAD = TURNING_MOTOR_GEAR_RATIO * 2 * Math.PI;
         public static final double TURNING_ENCODER_RPM_2_RAD_PER_SEC = TURNING_ENCODER_ROT_2_RAD / 60;
         public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER_METERS * 2 * Math.PI;
-        public static final double P_TURNING = .5;
+        public static final double P_TURNING = .9;
         public static final double I_TURNING = 0;
         public static final double D_TURNING = 0;
     }
@@ -168,8 +168,8 @@ public final class Constants {
         public static final double UPPER_ARM_LENGTH = Units.inchesToMeters(29.5);
         public static final double FOREARM_LENGTH = Units.inchesToMeters(32.5);
 
-        public static final double xSpdConvertFactor = 0.2;
-        public static final double ySpdConvertFactor = 0.2;
+        public static final double xSpdConvertFactor = 0.3;
+        public static final double ySpdConvertFactor = 0.3;
 
         public static final double P_WINCH_BRAKE = .3;
         public static final double P_WRIST_BRAKE = .1;

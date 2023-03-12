@@ -53,7 +53,10 @@ public class Gripper {
     }
 
     public void setDistanceEnable(boolean enable) {
-        if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
+        if (distanceSensor.isEnabled() != enable) {
+            distanceSensor.setEnabled(enable);
+            if (enable) distanceSensor.setAutomaticMode(true);
+        }
     }
 
 
