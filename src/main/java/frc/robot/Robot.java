@@ -121,13 +121,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        if (isGetItemSub.get()) {
-            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
-            armController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
-        } else {
-            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-            armController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-        }
         if (Timer.getFPGATimestamp() - startTime < 1) {
             chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
             armController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
@@ -136,7 +129,7 @@ public class Robot extends TimedRobot {
             armController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         }
 
-        if (SmartDashboard.getBoolean("atArmSetpoint", false)) {
+        if (SmartDashboard.getBoolean("atArmSetpoint", false) || isGetItemSub.get()) {
             if (firstLoop) startTime = Timer.getFPGATimestamp();
             firstLoop = false;
         } else {

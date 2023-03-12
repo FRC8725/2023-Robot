@@ -39,7 +39,7 @@ public class XboxJoystick extends CommandXboxController {
     }
 
     public double get_LStickY() {
-        return this.getLeftY();
+        return -this.getLeftY();
     }
 
     public double get_RStickX() {
@@ -47,7 +47,7 @@ public class XboxJoystick extends CommandXboxController {
     }
 
     public double get_RStickY() {
-        return this.getRightY();
+        return -this.getRightY();
     }
 
     public double get_LeftTriggerAxis() {
