@@ -214,6 +214,11 @@ public class ArmSubsystem extends SubsystemBase {
                     desiredElbowAngle = lastDesiredElbowAngle;
                     desiredWinchAngle = lastDesiredWinchAngle;
                 }
+            }        
+            elbow.setSetpoint(desiredElbowAngle - (winch.getAbsoluteEncoderRad() - desiredWinchAngle));        
+            if (elbow.getSetpoint() > Units.degreesToRadians(130)) {
+                desiredElbowAngle = 130;
+                desiredWinchAngle = 0;
             }
             xAxisMemory = xAxis;
             yAxisMemory = yAxis;

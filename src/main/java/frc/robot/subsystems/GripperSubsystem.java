@@ -25,28 +25,28 @@ public class GripperSubsystem extends SubsystemBase {
     NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
     BooleanPublisher getItemPub = led_nt.getBooleanTopic("getItem").publish();
 
-    double lastUsedTime;
-    double startTime;
+    // double lastUsedTime;
+    // double startTime;
 
-    boolean firstLoop;
+    // boolean firstLoop;
 //    private boolean isResetting;
 
     private GripperSubsystem() {
         Timer.delay(2);
         gripper = Gripper.getInstance();
-        lastUsedTime = Timer.getFPGATimestamp();
+        // lastUsedTime = Timer.getFPGATimestamp();
 //        reset();
     }
 
     @Override
     public void periodic() {
-        if (Timer.getFPGATimestamp() - lastUsedTime > 4) {
-            gripper.setDistanceEnable(false);
-            firstLoop = true;
-        } 
-        else {
-            gripper.setDistanceEnable(true);
-        }
+        // if (Timer.getFPGATimestamp() - lastUsedTime > 4) {
+        //     gripper.setDistanceEnable(false);
+        //     firstLoop = true;
+        // } 
+        // else {
+        //     gripper.setDistanceEnable(true);
+        // }
         gripper.putSmartDashboard();
 //        gripper.calculate();
 //        if (gripper.atRollSetpoint()) isResetting = false;
@@ -57,13 +57,13 @@ public class GripperSubsystem extends SubsystemBase {
 
     public boolean isPiecesInRange(boolean isFar) {
         // gripper.setDistanceEnable(true);  
-        lastUsedTime = Timer.getFPGATimestamp();
-        if (firstLoop) {
-            startTime = Timer.getFPGATimestamp();
-            firstLoop = false;
-        }
-        if (Timer.getFPGATimestamp() - startTime < 1) return false;
-        var isInRange = gripper.getDistanceSensor() < 200 + (isFar? 50: 0);
+        // lastUsedTime = Timer.getFPGATimestamp();
+        // if (firstLoop) {
+        //     startTime = Timer.getFPGATimestamp();
+        //     firstLoop = false;
+        // }
+        // if (Timer.getFPGATimestamp() - startTime < 1) return false;
+        var isInRange = gripper.getDistanceSensor() < 8 + (isFar? 0.5: 0);
         if (isInRange) getItemPub.set(true);
 //        if (isInRange) led_nt.putValue("getItem", NetworkTableValue.makeBoolean(true, 2));
         return isInRange;
@@ -71,7 +71,7 @@ public class GripperSubsystem extends SubsystemBase {
 
     public boolean isDistanceOn() {
         return gripper.isDistanceRangeValid();
-    }
+    }   
 
 //    public void reset() {
 //        gripper.setRollSetpoint(0);

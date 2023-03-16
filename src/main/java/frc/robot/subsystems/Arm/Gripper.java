@@ -1,6 +1,8 @@
 package frc.robot.subsystems.Arm;
 
 
+import javax.sound.sampled.Line;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor;
@@ -9,6 +11,7 @@ import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +34,8 @@ public class Gripper {
 
     ProfiledPIDController rollProfiledPIDController;
     private final Rev2mDistanceSensor distanceSensor;
+    double lastRange = 0;
+
 
     private Gripper() {
         Timer.delay(2);
@@ -49,25 +54,32 @@ public class Gripper {
 //        rollProfiledPIDController.setTolerance(ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS);
 //        rollProfiledPIDController.disableContinuousInput();
 
-        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
-        distanceSensor.setRangeProfile(RangeProfile.kDefault);
+        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);  
+        distanceSensor.setEnabled(true);
         distanceSensor.setAutomaticMode(true);
+        distanceSensor.setDistanceUnits(Unit.kInches);
+        distanceSensor.setMeasurementPeriod(0.2);
+        distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
+
+        lastRange = 0;
     }
 
-    public void setDistanceEnable(boolean enable) {
-        if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
-    }
+    // public void setDistanceEnable(boolean enable) {
+        // if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
+    // }
 
     public void putSmartDashboard() {
-        SmartDashboard.putNumber("distance", distanceSensor.getRange());
+        // SmartDashboard.putNumber("distance", distanceSensor.getRange());
     }
 
 
     public double getDistanceSensor() {
 //        return distanceSensor.getRange();
-        if (!distanceSensor.isEnabled()) distanceSensor.setEnabled(true);
-        double range = 2000;
-        if (distanceSensor.isRangeValid()) range = distanceSensor.getRange(Unit.kMillimeters);
+        // if (!distanceSensor.isEnabled()) distanceSensor.setEnabled(true);
+        double range = 78.74;
+        if (distanceSensor.isRangeValid()) range = distanceSensor.GetRange();
+        if (range == lastRange) return 78.74;
+        lastRange = range;
         return range;
     }
 
