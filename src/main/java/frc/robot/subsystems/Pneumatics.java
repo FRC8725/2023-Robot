@@ -11,12 +11,20 @@ public class Pneumatics extends SubsystemBase {
     private final static Pneumatics INSTANCE = new Pneumatics();
     Compressor compressor;
 
+    PneumaticHub pneumaticHub;
+
 //    DoubleSolenoid gripperPressureSwitcher;
     DoubleSolenoid gripperReleaser;
+
+    boolean isFirstLoop;
+    Timer gameTimer = new Timer();
+    Timer pneumaticTimer = new Timer();
+
 
     private Pneumatics() {
         PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
         compressor = new Compressor(RobotMap.PneumaticsPort.PNEUMATIC_HUB_PORT, moduleType);
+        pneumaticHub = new PneumaticHub(RobotMap.PneumaticsPort.PNEUMATIC_HUB_PORT);
 //        gripperPressureSwitcher = new DoubleSolenoid(RobotMap.PneumaticsPort.REV_PH_PORT, moduleType,
 //        RobotMap.ArmPort.GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID[0],
 //        RobotMap.ArmPort.GRIPPER_PRESSURE_SWITCHER_DOUBLE_SOLENOID[1]);
@@ -25,6 +33,11 @@ public class Pneumatics extends SubsystemBase {
         RobotMap.ArmPort.GRIPPER_RELEASE_DOUBLE_SOLENOID[0],
         RobotMap.ArmPort.GRIPPER_RELEASE_DOUBLE_SOLENOID[1]);
         gripperReleaser.set(DoubleSolenoid.Value.kReverse);
+        gameTimer.stop();
+        gameTimer.reset();
+        pneumaticTimer.stop();
+        pneumaticTimer.reset();
+        isFirstLoop = true;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -34,8 +47,29 @@ public class Pneumatics extends SubsystemBase {
 
     @Override
     public void periodic() {
-        compressor.enableDigital();
         SmartDashboard.putBoolean("isGripperOpen", getGripperStatus());
+        SmartDashboard.putNumber("pneumaticTimer", pneumaticTimer.get());
+
+        if (isFirstLoop) {
+            if (!pneumaticHub.getPressureSwitch()) {
+                isFirstLoop = false;
+                gameTimer.start();
+            }
+        } else {
+            if (compressor.isEnabled()) pneumaticTimer.start();
+            else pneumaticTimer.stop();
+        }
+
+        if (pneumaticTimer.get() > 18) compressor.disable();
+        else compressor.enableDigital();
+
+        if (gameTimer.get() > 180) {
+            isFirstLoop = true;
+            gameTimer.stop();
+            gameTimer.reset();
+            pneumaticTimer.stop();
+            pneumaticTimer.reset();
+        }
     }
 
     public void setGripper(boolean isOpen) {
