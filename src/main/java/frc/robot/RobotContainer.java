@@ -5,17 +5,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,8 +18,6 @@ import frc.robot.commands.auto.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.PoseConstants;
 
-import javax.swing.*;
-import java.nio.channels.Pipe;
 import java.util.Map;
 
 
@@ -46,7 +37,7 @@ public class RobotContainer {
     private final Pneumatics pneumatics = Pneumatics.getInstance();
     private final LEDSubsystem ledSubsystem = LEDSubsystem.getInstance();
     private final XboxJoystick swerveJoystick = new XboxJoystick(0);
-    private final XboxJoystick elevatorJoystick = new XboxJoystick(1);
+    private final XboxJoystick armJoystick = new XboxJoystick(1);
     private final VisionManager visionManager = new VisionManager();
     NetworkTable led_nt = NetworkTableInstance.getDefault().getTable("LEDs");
     IntegerPublisher what2grabPub =  led_nt.getIntegerTopic("what2grab").publish();
@@ -64,10 +55,10 @@ public class RobotContainer {
         ));
         armSubsystem.setDefaultCommand(new ArmJoystickCmd(
                 armSubsystem,
-                () -> elevatorJoystick.get_RStickY(),
-                () -> elevatorJoystick.get_LStickY(),
-                () -> elevatorJoystick.btn_RStick.getAsBoolean(),
-                () -> elevatorJoystick.btn_LStick.getAsBoolean()
+                () -> armJoystick.get_RStickY(),
+                () -> armJoystick.get_LStickY(),
+                () -> armJoystick.btn_RStick.getAsBoolean(),
+                () -> armJoystick.btn_LStick.getAsBoolean()
         ));
         ledSubsystem.setDefaultCommand(new AutoLEDs(ledSubsystem));
         configureButtonBindings();
@@ -80,12 +71,7 @@ public class RobotContainer {
         // swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
         swerveJoystick.btn_B.onTrue(new LockChassis(swerveSubsystem));
         swerveJoystick.btn_X.onTrue(new InstantCommand(() -> where2goPub.set(0)));
-        swerveJoystick.btn_Y.onTrue(new SequentialCommandGroup(
-                new InstantCommand(gripperSubsystem::killDistance),
-                new InstantCommand(() -> swerveJoystick.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1)),
-                new WaitCommand(0.5),
-                new InstantCommand(() -> swerveJoystick.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0))
-        )).debounce(1, Debouncer.DebounceType.kRising);
+        swerveJoystick.btn_Y.onTrue(new SequentialCommandGroup(new InstantCommand(gripperSubsystem::killDistance))).debounce(1, Debouncer.DebounceType.kRising);
         swerveJoystick.POV_West.whileTrue(new CorrectPosition("left", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
         swerveJoystick.POV_North.whileTrue(new CorrectPosition("middle", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
         swerveJoystick.POV_East.whileTrue(new CorrectPosition("right", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
@@ -93,19 +79,19 @@ public class RobotContainer {
         swerveJoystick.btn_triggerL.whileTrue(new DriveUntilDocked(false, swerveSubsystem));
 
 //        elevatorJoystick.btn_triggerL.whileTrue(new RunGripper(gripperSubsystem, visionManager, pneumatics));
-        elevatorJoystick.btn_topL.onTrue(new GrabPiecesFromDouble(armSubsystem, gripperSubsystem, pneumatics));
-        elevatorJoystick.btn_triggerL.onTrue(new GrabPieces(armSubsystem, gripperSubsystem, pneumatics));
-        elevatorJoystick.btn_topR.onTrue(new ResetArm(armSubsystem, gripperSubsystem, pneumatics));
-        elevatorJoystick.btn_triggerR.onTrue(new ReleaseGripper(pneumatics));
+        armJoystick.btn_topL.onTrue(new GrabPiecesFromDouble(armSubsystem, gripperSubsystem, pneumatics));
+        armJoystick.btn_triggerL.onTrue(new GrabPieces(armSubsystem, gripperSubsystem, pneumatics));
+        armJoystick.btn_topR.onTrue(new ResetArm(armSubsystem, gripperSubsystem, pneumatics));
+        armJoystick.btn_triggerR.onTrue(new ReleaseGripper(pneumatics));
 //        elevatorJoystick.btn_Y.onTrue(new RunElevatorToPosition(m_elevatorSubsystem, PoseConstants.kHighElevatorPose));
-        elevatorJoystick.btn_Y.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.HIGH_ARM_POSE, true, true));
-        elevatorJoystick.btn_B.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
-        elevatorJoystick.btn_A.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.LOW_ARM_POSE, true, true));
-        elevatorJoystick.btn_X.onTrue(new GrabPiecesFromSingle(armSubsystem, gripperSubsystem, pneumatics));
-        elevatorJoystick.POV_North.onTrue(new InstantCommand(() -> where2goPub.set(2)));
-        elevatorJoystick.POV_South.onTrue(new InstantCommand(() -> where2goPub.set(1)));
-        elevatorJoystick.POV_East.onTrue(new InstantCommand(() -> what2grabPub.set(1)));
-        elevatorJoystick.POV_West.onTrue(new InstantCommand(() -> what2grabPub.set(0)));
+        armJoystick.btn_Y.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.HIGH_ARM_POSE, true, true));
+        armJoystick.btn_B.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.MID_ARM_POSE, true, true));
+        armJoystick.btn_A.onTrue(new RunArmToPosition(armSubsystem, gripperSubsystem, PoseConstants.LOW_ARM_POSE, true, true));
+        armJoystick.btn_X.onTrue(new GrabPiecesFromSingle(armSubsystem, gripperSubsystem, pneumatics));
+        armJoystick.POV_North.onTrue(new InstantCommand(() -> where2goPub.set(2)));
+        armJoystick.POV_South.onTrue(new InstantCommand(() -> where2goPub.set(1)));
+        armJoystick.POV_East.onTrue(new InstantCommand(() -> what2grabPub.set(1)));
+        armJoystick.POV_West.onTrue(new InstantCommand(() -> what2grabPub.set(0)));
     }
 
     private void putToDashboard() {

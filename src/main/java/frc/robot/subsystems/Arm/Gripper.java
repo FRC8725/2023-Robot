@@ -71,6 +71,7 @@ public class Gripper {
 
     public void putSmartDashboard() {
         // SmartDashboard.putNumber("distance", distanceSensor.getRange());
+        SmartDashboard.putBoolean("isDistanceEnable", isEnable);
     }
 
 

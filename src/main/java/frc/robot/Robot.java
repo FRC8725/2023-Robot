@@ -130,6 +130,14 @@ public class Robot extends TimedRobot {
             firstLoop = true;
         }
 
+        if (!SmartDashboard.getBoolean("isDistanceEnable", true)) {
+            chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+            if (firstLoop) startTime = Timer.getFPGATimestamp();
+            firstLoop = false;
+        } else {
+            firstLoop = true;
+        }
+
         if (Timer.getFPGATimestamp() - startTime > 0.4) {
             chassisController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
             armController.setRumble(GenericHID.RumbleType.kBothRumble, 0);
