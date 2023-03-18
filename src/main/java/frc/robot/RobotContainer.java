@@ -63,8 +63,8 @@ public class RobotContainer {
         ));
         armSubsystem.setDefaultCommand(new ArmJoystickCmd(
                 armSubsystem,
-                () -> elevatorJoystick.get_LStickY(),
                 () -> elevatorJoystick.get_RStickY(),
+                () -> elevatorJoystick.get_LStickY(),
                 () -> elevatorJoystick.btn_RStick.getAsBoolean(),
                 () -> elevatorJoystick.btn_LStick.getAsBoolean()
         ));
