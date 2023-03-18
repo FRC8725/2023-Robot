@@ -34,8 +34,8 @@ public class Gripper {
 
     ProfiledPIDController rollProfiledPIDController;
     private final Rev2mDistanceSensor distanceSensor;
-    double lastRange = 0;
-
+    double lastRange;
+    boolean isEnable;
 
     private Gripper() {
         Timer.delay(2);
@@ -62,6 +62,7 @@ public class Gripper {
         distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
 
         lastRange = 0;
+        isEnable = true;
     }
 
     // public void setDistanceEnable(boolean enable) {
@@ -77,6 +78,7 @@ public class Gripper {
 //        return distanceSensor.getRange();
         // if (!distanceSensor.isEnabled()) distanceSensor.setEnabled(true);
         double range = 78.74;
+        if (!isEnable) return range;
         if (distanceSensor.isRangeValid()) range = distanceSensor.GetRange();
         if (range == lastRange) return 78.74;
         lastRange = range;
@@ -85,6 +87,11 @@ public class Gripper {
 
     public boolean isDistanceRangeValid() {
         return distanceSensor.isRangeValid();
+    }
+
+    public void disableDistance() {
+        distanceSensor.setEnabled(false);
+        isEnable = false;
     }
 
 //    public void calculate() {

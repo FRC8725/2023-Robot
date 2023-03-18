@@ -71,7 +71,11 @@ public class GripperSubsystem extends SubsystemBase {
 
     public boolean isDistanceOn() {
         return gripper.isDistanceRangeValid();
-    }   
+    }
+
+    public void killDistance() {
+        gripper.disableDistance();
+    }
 
 //    public void reset() {
 //        gripper.setRollSetpoint(0);

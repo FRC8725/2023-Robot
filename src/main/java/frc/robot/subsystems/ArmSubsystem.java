@@ -230,7 +230,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setSpeed(double spdX, double spdY) {
         if (isResetting) return;
         isElbowLocked = false;
-//          q   Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
+//        Translation2d vectorUpperArm = new Translation2d(ArmConstants.UPPER_ARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + Math.PI/2));
 //        Translation2d vectorForearm = new Translation2d(ArmConstants.FOREARM_LENGTH, Rotation2d.fromRadians(winch.getAbsoluteEncoderRad() + elbow.getAbsoluteEncoderRad() + Math.PI/2));
 //        Translation2d point = vectorUpperArm.plus(vectorForearm);
         var armPosition = getArmPosition();

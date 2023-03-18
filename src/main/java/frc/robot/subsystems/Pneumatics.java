@@ -60,7 +60,7 @@ public class Pneumatics extends SubsystemBase {
             else pneumaticTimer.stop();
         }
 
-        if (pneumaticTimer.get() > 18) compressor.disable();
+        if (pneumaticTimer.get() > 36) compressor.disable();
         else compressor.enableDigital();
 
         if (gameTimer.get() > 180) {

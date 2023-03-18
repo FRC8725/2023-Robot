@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -79,6 +80,12 @@ public class RobotContainer {
         // swerveJoystick.btn_Y.whileTrue(new CorrectPosition(1, visionManager));
         swerveJoystick.btn_B.onTrue(new LockChassis(swerveSubsystem));
         swerveJoystick.btn_X.onTrue(new InstantCommand(() -> where2goPub.set(0)));
+        swerveJoystick.btn_Y.onTrue(new SequentialCommandGroup(
+                new InstantCommand(gripperSubsystem::killDistance),
+                new InstantCommand(() -> swerveJoystick.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1)),
+                new WaitCommand(0.5),
+                new InstantCommand(() -> swerveJoystick.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0))
+        )).debounce(1, Debouncer.DebounceType.kRising);
         swerveJoystick.POV_West.whileTrue(new CorrectPosition("left", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
         swerveJoystick.POV_North.whileTrue(new CorrectPosition("middle", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
         swerveJoystick.POV_East.whileTrue(new CorrectPosition("right", visionManager)).debounce(.1, Debouncer.DebounceType.kBoth);
