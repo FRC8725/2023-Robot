@@ -181,7 +181,7 @@ public final class Constants {
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(12);
         public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(6);
-        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
+        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(8);
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
 
 //        public static final double kElevatorGearRatio = 1./9;
@@ -199,9 +199,9 @@ public final class Constants {
         public static final boolean WINCH_MOTOR_INVERTED = false;
         public static final double INTAKE_GEAR_RATIO = 1.;
 
-        public static final double MAX_WINCH_SPEED = .23;
-        public static final double MAX_ELBOW_SPEED = .42;
-        public static final double MAX_WRIST_SPEED = .25;
+        public static final double MAX_WINCH_SPEED = .7;
+        public static final double MAX_ELBOW_SPEED = .7;
+        public static final double MAX_WRIST_SPEED = .4;
         public static final double MAX_ROLL_SPEED = .4;
         public static final double INTAKE_SPEED = .5;
 
@@ -209,13 +209,13 @@ public final class Constants {
         public static final double I_WRIST = 0;
         public static final double D_WRIST = 0;
 
-        public static final double P_ELBOW = 1.5;
-        public static final double I_ELBOW = 0;
-        public static final double D_ELBOW = 0;
+        public static final double P_ELBOW = .65;
+        public static final double I_ELBOW = 0.0001;
+        public static final double D_ELBOW = 0.0000025;
 
-        public static final double P_WINCH = 1.2;
-        public static final double I_WINCH = 0;
-        public static final double D_WINCH = 0;
+        public static final double P_WINCH = .65;
+        public static final double I_WINCH = 0.0001;
+        public static final double D_WINCH = 0.0000025;
 //
 //        public static final double P_ROLL = .7;
 //        public static final double I_ROLL = 0;
@@ -223,18 +223,18 @@ public final class Constants {
 
         public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.806;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.431;
-        public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.236;
+        public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.904;
 
         public static final boolean WRIST_ABSOLUTE_ENCODER_INVERTED = true;
         public static final boolean ELBOW_ABSOLUTE_ENCODER_INVERTED = false;
         public static final boolean WINCH_ABSOLUTE_ENCODER_INVERTED = false;
 
         public static final double MAX_WRIST_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
-        public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 2;
-        public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
-        public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI / 3;
-        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 0.2;
-        public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI * 0.2;
+        public static final double MAX_WRIST_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
+        public static final double MAX_ELBOW_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 1.5;
+        public static final double MAX_ELBOW_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI * 0.8;
+        public static final double MAX_WINCH_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI * 0.5;
+        public static final double MAX_WINCH_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI * 0.8;
 //        public static final double MAX_ROLL_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI*3/2;
 //        public static final double MAX_ROLL_ANGULAR_ACCELERATION_RADIANS_PER_SECOND = Math.PI;
 

@@ -199,6 +199,7 @@ public class ArmSubsystem extends SubsystemBase {
         setSetpoint(xAxis, yAxis);
         if (xAxis == xAxisMemory && yAxis == yAxisMemory) {
             winch.setSetpoint(desiredWinchAngle);
+            isElbowLocked = false;
             xAxisMemory = Integer.MAX_VALUE;
             yAxisMemory = Integer.MAX_VALUE;
         } else {
