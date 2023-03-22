@@ -206,8 +206,8 @@ public final class Constants {
         public static final double INTAKE_SPEED = .5;
 
         public static final double P_WRIST = .65;
-        public static final double I_WRIST = 0;
-        public static final double D_WRIST = 0;
+        public static final double I_WRIST = 0.0001;
+        public static final double D_WRIST = 0.0000025;
 
         public static final double P_ELBOW = .65;
         public static final double I_ELBOW = 0.0001;
@@ -221,7 +221,7 @@ public final class Constants {
 //        public static final double I_ROLL = 0;
 //        public static final double D_ROLL = 0;
 
-        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.826;
+        public static final double WRIST_ABSOLUTE_ENCODER_OFFSET = 0.786;
         public static final double ELBOW_ABSOLUTE_ENCODER_OFFSET = 0.426;
         public static final double WINCH_ABSOLUTE_ENCODER_OFFSET = 0.895;
 
@@ -282,7 +282,7 @@ public final class Constants {
         public static final Pair<Double, Double> GROUND_ARM_POSE = new Pair<>(0.683, -0.304);
         public static final Pair<Double, Double> LOW_ARM_POSE = new Pair<>(0.5, -0.05);
         public static final Pair<Double, Double> MID_ARM_POSE = new Pair<>(0.694, 0.535);
-        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(0.959, 0.865);
+        public static final Pair<Double, Double> HIGH_ARM_POSE = new Pair<>(0.979, 0.865);
         public static final Pair<Double, Double> VERTICAL_GRAB_ARM_POSE = new Pair<>(0.74, 0.05);
         public static final Pair<Double, Double> LOADING_ZONE_SINGLE_POSE = new Pair<>(0.455, 0.32);
         public static final Pair<Double, Double> LOADING_ZONE_DOUBLE_POSE = new Pair<>(0.505, 0.77);
