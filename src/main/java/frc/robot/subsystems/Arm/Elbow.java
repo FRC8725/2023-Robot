@@ -69,7 +69,7 @@ public class Elbow {
     }
 
     public boolean atSetpoint() {
-        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ArmConstants.PID_WINCH_ANGULAR_TOLERANCE_RADS;
+        return Math.abs(setpoint - getAbsoluteEncoderRad()) < ArmConstants.PID_ELBOW_ANGULAR_TOLERANCE_RADS;
     }
 
     public void stop() {

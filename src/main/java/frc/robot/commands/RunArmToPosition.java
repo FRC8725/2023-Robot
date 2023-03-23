@@ -57,7 +57,7 @@ public class RunArmToPosition extends CommandBase {
 
     @Override
     public void execute() {
-        if (isFirstLoop && armSubsystem.atWinchSetpoint()) {
+        if (isFirstLoop && armSubsystem.atSetpoint()) {
             armSubsystem.moveTwice(xAxis, yAxis);
             armSubsystem.setHorizontal(isHorizontal);
             armSubsystem.setPlacing(isPlacing);

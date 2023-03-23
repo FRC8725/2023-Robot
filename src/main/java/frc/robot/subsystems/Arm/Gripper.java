@@ -40,7 +40,7 @@ public class Gripper {
     private Gripper() {
         Timer.delay(2);
 //        rollMotor = new LazyTalonFX(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
-////        rollMotor = new LazySparkMax(ElevatorPort.ROLL_MOTOR, ElevatorConstants.ROLL_MOTOR_GEAR_RATIO);
+//        rollMotor = new LazySparkMax(ElevatorPort.ROLL_MOTOR, ElevatorConstants.ROLL_MOTOR_GEAR_RATIO);
 //        rollMotor.setNeutralMode(NeutralMode.Brake);
 //        rollMotor.setSelectedSensorPosition(0);
 //

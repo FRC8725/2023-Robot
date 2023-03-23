@@ -180,8 +180,8 @@ public final class Constants {
 //        public static final double kPIDElevatorPositionTolerance = 0.001;
 //        public static final double kPIDArmPositionTolerance = .001;
         public static final double PID_GRIPPER_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(12);
-        public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(6);
-        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(8);
+        public static final double PID_ELBOW_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(12);
+        public static final double PID_WINCH_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(10);
         public static final double PID_ROLL_ANGULAR_TOLERANCE_RADS = Units.degreesToRadians(5);
 
 //        public static final double kElevatorGearRatio = 1./9;
