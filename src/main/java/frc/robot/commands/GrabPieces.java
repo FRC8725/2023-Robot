@@ -31,11 +31,17 @@ public class GrabPieces extends CommandBase {
     @Override
     public void initialize() {
         armSubsystem.setSetpoint(Constants.PoseConstants.GROUND_ARM_POSE.getFirst(), Constants.PoseConstants.GROUND_ARM_POSE.getSecond());
+        armSubsystem.setDesiredWinchAngle(0);
         armSubsystem.setTransporting(false);
         armSubsystem.setPlacing(false);
         armSubsystem.setHorizontal(true);
         pneumatics.setGripper(true);
         startTime = Timer.getFPGATimestamp();
+    }
+
+    @Override
+    public void execute() {
+        if (armSubsystem.atElbowSetpoint()) armSubsystem.setSetpoint(Constants.PoseConstants.GROUND_ARM_POSE.getFirst(), Constants.PoseConstants.GROUND_ARM_POSE.getSecond());
     }
 
     @Override

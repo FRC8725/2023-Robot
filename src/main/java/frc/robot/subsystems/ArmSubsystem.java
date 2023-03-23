@@ -136,6 +136,10 @@ public class ArmSubsystem extends SubsystemBase {
         return Math.abs(result) > 1 ? -1 : Math.acos(result);
     }
 
+    public void setDesiredWinchAngle(double angle) {
+        winch.setSetpoint(angle);
+    }
+
     public void setSetpoint(double xAxis, double yAxis) {
         double distanceSquared = Math.pow(xAxis, 2) + Math.pow(yAxis, 2);
         double distance = Math.sqrt(distanceSquared);
@@ -182,6 +186,10 @@ public class ArmSubsystem extends SubsystemBase {
         return winch.atSetpoint();
     }
 
+    public boolean atElbowSetpoint() {
+        return elbow.atSetpoint();
+    }
+
     private double xAxisMemory = Integer.MAX_VALUE;
     private double yAxisMemory = Integer.MAX_VALUE;
 
@@ -217,8 +225,8 @@ public class ArmSubsystem extends SubsystemBase {
                 }
             }        
             elbow.setSetpoint(desiredElbowAngle - (winch.getAbsoluteEncoderRad() - desiredWinchAngle));        
-            if (elbow.getSetpoint() > Units.degreesToRadians(130)) {
-                desiredElbowAngle = 130;
+            if (elbow.getSetpoint() > Units.degreesToRadians(145)) {
+                desiredElbowAngle = 145;
                 desiredWinchAngle = 0;
             }
             xAxisMemory = xAxis;
