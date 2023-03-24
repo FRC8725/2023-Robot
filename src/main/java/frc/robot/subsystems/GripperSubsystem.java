@@ -32,7 +32,7 @@ public class GripperSubsystem extends SubsystemBase {
 //    private boolean isResetting;
 
     private GripperSubsystem() {
-        Timer.delay(3.8);
+        Timer.delay(4);
         gripper = Gripper.getInstance();
         // lastUsedTime = Timer.getFPGATimestamp();
 //        reset();
@@ -48,6 +48,7 @@ public class GripperSubsystem extends SubsystemBase {
         //     gripper.setDistanceEnable(true);
         // }
         gripper.putSmartDashboard();
+        gripper.autoSwitchDistance();
 //        gripper.calculate();
 //        if (gripper.atRollSetpoint()) isResetting = false;
         // gripper.enableDistance();

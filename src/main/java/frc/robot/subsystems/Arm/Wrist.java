@@ -53,7 +53,7 @@ public class Wrist {
         wristMotor.set(speed);
         SmartDashboard.putNumber("Wrist Absolute", absoluteEncoder.getAbsolutePosition());
 //        SmartDashboard.putNumber("Wrist Encoder", getAbsoluteEncoderRad());
-        SmartDashboard.putNumber("Wrist Setpoint Degrees", Units.radiansToDegrees(wristProfiledPIDController.getGoal().position));
+//        SmartDashboard.putNumber("Wrist Setpoint Degrees", Units.radiansToDegrees(wristProfiledPIDController.getGoal().position));
     }
 
     public void resetEncoder() {

@@ -42,7 +42,7 @@ public class Elbow {
         else speed = MathUtil.clamp(elbowProfiledPIDController.calculate(getAbsoluteEncoderRad()), -ArmConstants.MAX_ELBOW_SPEED, ArmConstants.MAX_ELBOW_SPEED);
         elbowMotor.set(speed);
         SmartDashboard.putNumber("Elbow Absolute", absoluteEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
+//        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
 //        SmartDashboard.putNumber("Elbow Encoder", getAbsoluteEncoderRad());
     }
 
@@ -59,7 +59,7 @@ public class Elbow {
 
     public void setSetpoint(double setpoint) {
         setpoint = MathUtil.clamp(setpoint, ArmConstants.MIN_ELBOW_ANGLE, ArmConstants.MAX_ELBOW_ANGLE);
-        SmartDashboard.putNumber("Elbow Setpoint", setpoint);
+//        SmartDashboard.putNumber("Elbow Setpoint", setpoint);
         elbowProfiledPIDController.setGoal(setpoint);
         this.setpoint = setpoint;
     }

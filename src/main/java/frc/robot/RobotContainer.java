@@ -99,7 +99,7 @@ public class RobotContainer {
         autoCommand.addOption("(1)Wide", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(2)Middle", new MiddlePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
-        SmartDashboard.putData(autoCommand);
+//        SmartDashboard.putData(autoCommand);
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Mode");
         try {
 //            VideoSource ll = CameraServer.getVideo("limelight").getSource();
@@ -107,47 +107,47 @@ public class RobotContainer {
                     .withSize(3, 3)
                     .withWidget(BuiltInWidgets.kCameraStream);
 //            VideoSource rpi = CameraServer.getVideo("Processed").getSource();
-            tab.addCamera("rpi", "Processed")
-                    .withSize(3, 3)
-                    .withWidget(BuiltInWidgets.kCameraStream);
+//            tab.addCamera("rpi", "Processed")
+//                    .withSize(3, 3)
+//                    .withWidget(BuiltInWidgets.kCameraStream);
         }
         catch (Exception e) {
             System.out.println("Error: couldn't get the cameras");
         }
         tab.add("Auto Chooser", autoCommand)
                 .withSize(2, 1);
-        ShuffleboardLayout loadingChooser = tab
-                .getLayout("Loading", BuiltInLayouts.kGrid)
-                .withSize(2, 2)
-                .withProperties(Map.of("Label position", "HIDDEN"));
-        loadingChooser.add(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> what2grabPub.set(1)),
-                        new InstantCommand(() -> where2goPub.set(2))
-                ).withName("Double-Cone"))
-                .withWidget(BuiltInWidgets.kToggleButton);
-        loadingChooser.add(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> what2grabPub.set(0)),
-                        new InstantCommand(() -> where2goPub.set(2))
-                ).withName("Double-Cube"))
-                .withWidget(BuiltInWidgets.kToggleButton);
-        loadingChooser.add(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> what2grabPub.set(1)),
-                        new InstantCommand(() -> where2goPub.set(1))
-                ).withName("Single-Cone"))
-                .withWidget(BuiltInWidgets.kToggleButton);
-        loadingChooser.add(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> what2grabPub.set(0)),
-                        new InstantCommand(() -> where2goPub.set(1))
-                ).withName("Single-Cube"))
-                .withWidget(BuiltInWidgets.kToggleButton);
-        loadingChooser.add(
-                new InstantCommand(() -> where2goPub.set(0))
-                    .withName("Ground"))
-                    .withWidget(BuiltInWidgets.kToggleButton);
+//        ShuffleboardLayout loadingChooser = tab
+//                .getLayout("Loading", BuiltInLayouts.kGrid)
+//                .withSize(2, 2)
+//                .withProperties(Map.of("Label position", "HIDDEN"));
+//        loadingChooser.add(
+//                new ParallelCommandGroup(
+//                        new InstantCommand(() -> what2grabPub.set(1)),
+//                        new InstantCommand(() -> where2goPub.set(2))
+//                ).withName("Double-Cone"))
+//                .withWidget(BuiltInWidgets.kToggleButton);
+//        loadingChooser.add(
+//                new ParallelCommandGroup(
+//                        new InstantCommand(() -> what2grabPub.set(0)),
+//                        new InstantCommand(() -> where2goPub.set(2))
+//                ).withName("Double-Cube"))
+//                .withWidget(BuiltInWidgets.kToggleButton);
+//        loadingChooser.add(
+//                new ParallelCommandGroup(
+//                        new InstantCommand(() -> what2grabPub.set(1)),
+//                        new InstantCommand(() -> where2goPub.set(1))
+//                ).withName("Single-Cone"))
+//                .withWidget(BuiltInWidgets.kToggleButton);
+//        loadingChooser.add(
+//                new ParallelCommandGroup(
+//                        new InstantCommand(() -> what2grabPub.set(0)),
+//                        new InstantCommand(() -> where2goPub.set(1))
+//                ).withName("Single-Cube"))
+//                .withWidget(BuiltInWidgets.kToggleButton);
+//        loadingChooser.add(
+//                new InstantCommand(() -> where2goPub.set(0))
+//                    .withName("Ground"))
+//                    .withWidget(BuiltInWidgets.kToggleButton);
         Shuffleboard.update();
     }
 

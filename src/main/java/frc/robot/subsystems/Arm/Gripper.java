@@ -13,12 +13,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.LazySparkMax;
 import frc.lib.LazyTalonFX;
 import frc.robot.RobotMap.ArmPort;
 import frc.robot.Constants.ArmConstants;
+
+import java.sql.Driver;
 
 public class Gripper {
 
@@ -54,23 +57,36 @@ public class Gripper {
 //        rollProfiledPIDController.disableContinuousInput();
 
         distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);  
-        distanceSensor.setEnabled(true);
-        distanceSensor.setAutomaticMode(true);
-        distanceSensor.setDistanceUnits(Unit.kInches);
-        distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
-        distanceSensor.setMeasurementPeriod(0.05);
+//        distanceSensor.setEnabled(true);
+//        distanceSensor.setAutomaticMode(true);
+//        distanceSensor.setDistanceUnits(Unit.kInches);
+//        distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
+//        distanceSensor.setMeasurementPeriod(0.05);
 
         lastRange = 0;
         isEnable = true;
     }
 
-    // public void setDistanceEnable(boolean enable) {
-        // if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
-    // }
+    int status = 0;
+
+    public void autoSwitchDistance() {
+        if (DriverStation.isDisabled() && status == 0) {
+            status = 1;
+            distanceSensor.setAutomaticMode(false);
+        }
+        if (DriverStation.isEnabled() && status == 1) {
+            status = 0;
+            distanceSensor.setAutomaticMode(true);
+        }
+    }
+
+//     public void setDistanceEnable(boolean enable) {
+//         if (distanceSensor.isEnabled() != enable) distanceSensor.setEnabled(enable);
+//     }
 
     public void putSmartDashboard() {
-        SmartDashboard.putNumber("distance", distanceSensor.getRange());
-        SmartDashboard.putBoolean("isDistanceEnable", isEnable);    
+//        SmartDashboard.putNumber("distance", distanceSensor.getRange());
+        SmartDashboard.putBoolean("isDistanceEnable", isEnable);
     }
 
 
@@ -79,7 +95,7 @@ public class Gripper {
         // if (!distanceSensor.isEnabled()) distanceSensor.setEnabled(true);
         double range = 78.74;
         if (!isEnable) return range;
-        if (distanceSensor.isRangeValid()) range = distanceSensor.GetRange();
+        if (distanceSensor.isRangeValid()) range = distanceSensor.getRange();
         if (range == lastRange) return 78.74;
         lastRange = range;
         return range;

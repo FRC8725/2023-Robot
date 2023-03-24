@@ -53,7 +53,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator SwerveEstimator = new SwerveDrivePoseEstimator(DriveConstants.DRIVE_KINEMATICS, getRotation2d(), new SwerveModulePosition[]{
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
     }, new Pose2d());
-    private final Field2d field = new Field2d();
+//    private final Field2d field = new Field2d();
 
     public SwerveSubsystem() {
         new Thread(() -> {
@@ -101,10 +101,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveEstimator.update(getRotation2d(), new SwerveModulePosition[]{frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()});
         // var gloabalPose = vision.getEstimatedGlobalPose();
         // if (vision.hasTarget()) SwerveEstimator.addVisionMeasurement(gloabalPose.get().getFirst(), gloabalPose.get().getSecond());
-        SmartDashboard.putNumber("Robot Heading", getHeading());
+//        SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Robot Pitch", getPitch());
-        SmartDashboard.putData(field);
-        field.setRobotPose(getPose());
+//        SmartDashboard.putData(field);
+//        field.setRobotPose(getPose());
         backLeft.putDashboard();
         backRight.putDashboard();
         frontLeft.putDashboard();
