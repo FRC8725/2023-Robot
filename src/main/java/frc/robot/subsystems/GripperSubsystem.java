@@ -32,7 +32,7 @@ public class GripperSubsystem extends SubsystemBase {
 //    private boolean isResetting;
 
     private GripperSubsystem() {
-        Timer.delay(2);
+        Timer.delay(3.8);
         gripper = Gripper.getInstance();
         // lastUsedTime = Timer.getFPGATimestamp();
 //        reset();
@@ -63,7 +63,7 @@ public class GripperSubsystem extends SubsystemBase {
         //     firstLoop = false;
         // }
         // if (Timer.getFPGATimestamp() - startTime < 1) return false;
-        var isInRange = gripper.getDistanceSensor() < 8 + (isFar? 0.5: 0);
+        var isInRange = gripper.getDistanceSensor() < 7.5 + (isFar? 0.5: 0);
         if (isInRange) getItemPub.set(true);
 //        if (isInRange) led_nt.putValue("getItem", NetworkTableValue.makeBoolean(true, 2));
         return isInRange;

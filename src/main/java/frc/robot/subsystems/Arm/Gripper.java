@@ -38,7 +38,6 @@ public class Gripper {
     boolean isEnable;
 
     private Gripper() {
-        Timer.delay(2);
 //        rollMotor = new LazyTalonFX(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
 //        rollMotor = new LazySparkMax(ElevatorPort.ROLL_MOTOR, ElevatorConstants.ROLL_MOTOR_GEAR_RATIO);
 //        rollMotor.setNeutralMode(NeutralMode.Brake);
@@ -58,8 +57,8 @@ public class Gripper {
         distanceSensor.setEnabled(true);
         distanceSensor.setAutomaticMode(true);
         distanceSensor.setDistanceUnits(Unit.kInches);
-        distanceSensor.setMeasurementPeriod(0.2);
         distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
+        distanceSensor.setMeasurementPeriod(0.05);
 
         lastRange = 0;
         isEnable = true;
@@ -70,8 +69,8 @@ public class Gripper {
     // }
 
     public void putSmartDashboard() {
-        // SmartDashboard.putNumber("distance", distanceSensor.getRange());
-        SmartDashboard.putBoolean("isDistanceEnable", isEnable);
+        SmartDashboard.putNumber("distance", distanceSensor.getRange());
+        SmartDashboard.putBoolean("isDistanceEnable", isEnable);    
     }
 
 

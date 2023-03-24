@@ -92,8 +92,10 @@ public class AutoLEDs extends CommandBase {
             ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
             switch (where2go) {
                 case 0:
-                    ledSubsystem.setFrontColor(Color.fromHSV(0, 0, 0));
-                    ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0));
+                    ledSubsystem.setFrontColor(Color.fromHSV(0, 0, 0), 0);
+                    ledSubsystem.setFrontColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);
+                    ledSubsystem.setBackColor(Color.fromHSV(0, 0, 0), 0);
+                    ledSubsystem.setBackColor(what2Grab == 1? Color.kYellow: Color.kPurple, 1);     
                     break;
                 case 1:
                     ledSubsystem.setFrontColor(Color.kCyan, 0);

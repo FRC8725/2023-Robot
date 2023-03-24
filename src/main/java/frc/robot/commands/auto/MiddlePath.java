@@ -19,11 +19,12 @@ public class MiddlePath extends SequentialCommandGroup {
             new ReleaseGripper(pneumatics),
             new WaitCommand(0.5),
             new ResetArm(armSubsystem, gripperSubsystem, pneumatics),
+            // new WaitCommand(0.5),
+            //     new ParallelDeadlineGroup(
+            //             new WaitCommand(3),
+            //             new RepeatCommand(new InstantCommand(() -> swerveSubsystem.setModuleStates(Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-2., .0, .0), swerveSubsystem.getRotation2d())))))
+            //     ),
             new WaitCommand(1),
-                new ParallelDeadlineGroup(
-                        new WaitCommand(3),
-                        new RepeatCommand(new InstantCommand(() -> swerveSubsystem.setModuleStates(Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(-1.2, .0, .0), swerveSubsystem.getRotation2d())))))
-                ),
             new DriveUntilDocked(false, swerveSubsystem)
         );
     }

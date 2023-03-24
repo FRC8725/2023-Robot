@@ -88,7 +88,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (isElbowLocked) {
             elbow.setSetpoint(desiredElbowAngle - (winch.getAbsoluteEncoderRad() - desiredWinchAngle));
         }
-        SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
+        // SmartDashboard.putBoolean("atArmSetpoint", atSetpoint());
         elbow.calculate();
         winch.calculate();
     }
@@ -126,8 +126,8 @@ public class ArmSubsystem extends SubsystemBase {
         Translation2d point = vectorUpperArm.plus(vectorForearm);
         double x = -point.getX();
         double y = point.getY();
-        SmartDashboard.putNumber("xAxis", x);
-        SmartDashboard.putNumber("yAxis", y);
+        // SmartDashboard.putNumber("xAxis", x);
+        // SmartDashboard.putNumber("yAxis", y);
         return new Pair<>(x, y);
     }
 
@@ -149,10 +149,10 @@ public class ArmSubsystem extends SubsystemBase {
         else if (xAxis > ArmConstants.MAX_X_AXIS || xAxis < ArmConstants.MIN_X_AXIS) return;
         else if (yAxis > ArmConstants.MAX_Y_AXIS || yAxis < ArmConstants.MIN_Y_AXIS) return;
 
-        SmartDashboard.putNumber("setX", xAxis);
-        SmartDashboard.putNumber("setY", yAxis);
-        SmartDashboard.putNumber("lastX", lastX);
-        SmartDashboard.putNumber("lastY", lastY);
+        // SmartDashboard.putNumber("setX", xAxis);
+        // SmartDashboard.putNumber("setY", yAxis);
+        // SmartDashboard.putNumber("lastX", lastX);
+        // SmartDashboard.putNumber("lastY", lastY);
 
         double thetaElbow, thetaWinch;
         double l1 = ArmConstants.UPPER_ARM_LENGTH;
@@ -177,8 +177,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        SmartDashboard.putBoolean("atElbowSetpoint", elbow.atSetpoint());
-        SmartDashboard.putBoolean("atWinchSetpoint", winch.atSetpoint());
+        // SmartDashboard.putBoolean("atElbowSetpoint", elbow.atSetpoint());
+        // SmartDashboard.putBoolean("atWinchSetpoint", winch.atSetpoint());
         return elbow.atSetpoint() && winch.atSetpoint();
     }
 
@@ -282,6 +282,6 @@ public class ArmSubsystem extends SubsystemBase {
     public void stop() {
         elbow.stop();
         winch.stop();
-    }
+    }   
 }
 
