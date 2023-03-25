@@ -69,12 +69,12 @@ public class AutoLEDs extends CommandBase {
         if (isGetItem) {
             ledSubsystem.setBackColor(Color.kLimeGreen);
             ledSubsystem.setFrontColor(Color.kLimeGreen);
-            if (!isIn) {
-                startTime = Timer.getFPGATimestamp();
-            } else if (Timer.getFPGATimestamp() - startTime > 1.5) {
-                isGetItemPub.set(false);
-            }
-            isIn = true;
+            // if (!isIn) {
+            //     startTime = Timer.getFPGATimestamp();
+            // } else if (Timer.getFPGATimestamp() - startTime > 1) {
+            //     isGetItemPub.set(false);
+            // }
+            // isIn = true;
         } else if (isLimelight) {
             ledSubsystem.rainbow();
         } else {

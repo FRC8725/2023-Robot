@@ -36,13 +36,15 @@ public class GrabPiecesFromSingle extends CommandBase {
 
     @Override
     public void execute() {
-
+        if (Timer.getFPGATimestamp() - startTime < 1.5) return; 
+        gripperSubsystem.isPiecesInRange(true);
     }
 
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - startTime < 1) return false;
-        return gripperSubsystem.isPiecesInRange(true);
+        // if (Timer.getFPGATimestamp() - startTime < 1) return false;
+        // return gripperSubsystem.isPiecesInRange(true);
+        return false;
     }
 
     @Override

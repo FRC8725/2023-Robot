@@ -42,12 +42,12 @@ public class GrabPieces extends CommandBase {
     @Override
     public void execute() {
         if (armSubsystem.atElbowSetpoint()) armSubsystem.setSetpoint(Constants.PoseConstants.GROUND_ARM_POSE.getFirst(), Constants.PoseConstants.GROUND_ARM_POSE.getSecond());
+        if (Timer.getFPGATimestamp() - startTime > 1.5)gripperSubsystem.isPiecesInRange(false);
     }
 
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - startTime < 1) return false;
-        return gripperSubsystem.isPiecesInRange(false);
+        return false;
     }
 
     @Override

@@ -98,6 +98,7 @@ public class RobotContainer {
         autoCommand.addOption("(0)Nothing", new InstantCommand(swerveSubsystem::stopModules));
         autoCommand.addOption("(1)Wide", new WidePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(2)Middle", new MiddlePath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
+        autoCommand.addOption("(2)Middlewithiut dock", new MiddlePathWithoutDock(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
         autoCommand.addOption("(3)Narrow", new NarrowPath(swerveSubsystem, armSubsystem, gripperSubsystem, pneumatics));
 //        SmartDashboard.putData(autoCommand);
         ShuffleboardTab tab = Shuffleboard.getTab("Driver Mode");

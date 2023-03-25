@@ -49,7 +49,7 @@ public class DriveUntilDocked extends CommandBase {
             swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(-BalanceConstants.xSpeedMax * (reverse ? -1 : 1), .0, .0)), swerveSubsystem.getRotation2d())));
         }else if (Math.abs(swerveSubsystem.getPitch()) < BalanceConstants.pitchThreshold) {
             isClimbing = false;
-            controller.setP(BalanceConstants.P_BALANCE * 0.6);
+            controller.setP(BalanceConstants.P_BALANCE * 0.739);
             swerveSubsystem.setModuleStates(DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds((new ChassisSpeeds(controller.calculate(-swerveSubsystem.getPitch(), 0), .0, .0)), swerveSubsystem.getRotation2d())));
         } else if (isClimbing){
             controller.setP(BalanceConstants.P_BALANCE);

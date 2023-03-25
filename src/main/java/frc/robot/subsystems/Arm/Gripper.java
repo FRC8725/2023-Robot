@@ -39,6 +39,8 @@ public class Gripper {
     private final Rev2mDistanceSensor distanceSensor;
     double lastRange;
     boolean isEnable;
+    double range;
+    int status;
 
     private Gripper() {
 //        rollMotor = new LazyTalonFX(ArmPort.ROLL_MOTOR, ArmConstants.ROLL_MOTOR_GEAR_RATIO);
@@ -56,18 +58,20 @@ public class Gripper {
 //        rollProfiledPIDController.setTolerance(ArmConstants.PID_ROLL_ANGULAR_TOLERANCE_RADS);
 //        rollProfiledPIDController.disableContinuousInput();
 
-        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);  
+        distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kMXP);
 //        distanceSensor.setEnabled(true);
 //        distanceSensor.setAutomaticMode(true);
 //        distanceSensor.setDistanceUnits(Unit.kInches);
-//        distanceSensor.setRangeProfile(RangeProfile.kHighSpeed);
-//        distanceSensor.setMeasurementPeriod(0.05);
+    //    distanceSensor.setRangeProfile(RangeProfile.kDefault);
+    //    distanceSensor.setMeasurementPeriod(0.2);
 
         lastRange = 0;
+        range = 0;
+        status = 0;
         isEnable = true;
     }
 
-    int status = 0;
+    
 
     public void autoSwitchDistance() {
         if (DriverStation.isDisabled() && status == 0) {
@@ -75,9 +79,10 @@ public class Gripper {
             distanceSensor.setAutomaticMode(false);
         }
         if (DriverStation.isEnabled() && status == 1) {
-            status = 0;
+            status = 2;
             distanceSensor.setAutomaticMode(true);
         }
+        if (distanceSensor.isRangeValid() && DriverStation.isEnabled()) range = distanceSensor.getRange();
     }
 
 //     public void setDistanceEnable(boolean enable) {
@@ -93,10 +98,7 @@ public class Gripper {
     public double getDistanceSensor() {
 //        return distanceSensor.getRange();
         // if (!distanceSensor.isEnabled()) distanceSensor.setEnabled(true);
-        double range = 78.74;
-        if (!isEnable) return range;
-        if (distanceSensor.isRangeValid()) range = distanceSensor.getRange();
-        if (range == lastRange) return 78.74;
+        if (!isEnable || range == lastRange) return 78.74;
         lastRange = range;
         return range;
     }

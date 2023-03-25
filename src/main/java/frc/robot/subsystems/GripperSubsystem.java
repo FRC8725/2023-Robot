@@ -32,10 +32,12 @@ public class GripperSubsystem extends SubsystemBase {
 //    private boolean isResetting;
 
     private GripperSubsystem() {
-        Timer.delay(4);
+        Timer.delay(3);
         gripper = Gripper.getInstance();
         // lastUsedTime = Timer.getFPGATimestamp();
 //        reset();
+        rangeTimer.reset();
+        rangeTimer.start();
     }
 
     @Override
@@ -49,6 +51,7 @@ public class GripperSubsystem extends SubsystemBase {
         // }
         gripper.putSmartDashboard();
         gripper.autoSwitchDistance();
+        if (rangeTimer.get() > 0.1) getItemPub.set(false);
 //        gripper.calculate();
 //        if (gripper.atRollSetpoint()) isResetting = false;
         // gripper.enableDistance();
@@ -56,6 +59,7 @@ public class GripperSubsystem extends SubsystemBase {
 //        SmartDashboard.putBoolean("atRollSetpoint", atRollSetpoint());
     }
 
+    Timer rangeTimer = new Timer();
     public boolean isPiecesInRange(boolean isFar) {
         // gripper.setDistanceEnable(true);  
         // lastUsedTime = Timer.getFPGATimestamp();
@@ -65,7 +69,10 @@ public class GripperSubsystem extends SubsystemBase {
         // }
         // if (Timer.getFPGATimestamp() - startTime < 1) return false;
         var isInRange = gripper.getDistanceSensor() < 7.5 + (isFar? 0.5: 0);
-        if (isInRange) getItemPub.set(true);
+        if (isInRange) {
+            getItemPub.set(true);
+            rangeTimer.reset();
+        }
 //        if (isInRange) led_nt.putValue("getItem", NetworkTableValue.makeBoolean(true, 2));
         return isInRange;
     }

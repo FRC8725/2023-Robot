@@ -135,7 +135,7 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double P_BALANCE = 0.075;
+        public static final double P_BALANCE = 0.07;
         public static final double I_BALANCE = .0;
         public static final double D_BALANCE = .0;
         public static final double xSpeedMax = 1.8;

@@ -37,22 +37,24 @@ public class GrabPiecesFromDouble extends CommandBase {
 
     @Override
     public void execute() {
-        if (Timer.getFPGATimestamp() - startTime < 1) return;
-        if (gripperSubsystem.isPiecesInRange(false) && firstLoop) {
-            pneumatics.setGripper(false);
-            armSubsystem.setTransporting(true);
-            firstLoop = false;
-            startTime = Timer.getFPGATimestamp();
-        }
+        if (Timer.getFPGATimestamp() - startTime < 1.5) return;
+        gripperSubsystem.isPiecesInRange(false);
+        // if (gripperSubsystem.isPiecesInRange(false) && firstLoop) {
+        //     pneumatics.setGripper(false);
+        //     armSubsystem.setTransporting(true);
+        //     firstLoop = false;
+        //     startTime = Timer.getFPGATimestamp();
+        // }
     }
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime) > 1 && !firstLoop;
+        return false;
     }
 
     @Override
-    public void end(boolean interrupted) {   
+    public void end(boolean interrupted) {
+        pneumatics.setGripper(false);
         if (!interrupted) armSubsystem.reset();
     }
 }
